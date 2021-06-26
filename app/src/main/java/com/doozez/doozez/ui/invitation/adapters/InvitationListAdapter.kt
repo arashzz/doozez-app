@@ -1,4 +1,4 @@
-package com.doozez.doozez.ui.invitation
+package com.doozez.doozez.ui.invitation.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,9 +11,9 @@ import com.doozez.doozez.databinding.FragmentInvitationItemBinding
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class InvitationRecyclerViewAdapter(
+class InvitationListAdapter(
     private val values: List<InvitationDetailResponse>
-) : RecyclerView.Adapter<InvitationRecyclerViewAdapter.InvitationViewHolder>() {
+) : RecyclerView.Adapter<InvitationListAdapter.InvitationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InvitationViewHolder {
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.invitation.InvitationDetailResponse
+import com.doozez.doozez.ui.invitation.adapters.InvitationListAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +19,7 @@ import retrofit2.Response
 /**
  * A fragment representing a list of Items.
  */
-class InvitationFragment : Fragment() {
+class InvitationListFragment : Fragment() {
 
     private var columnCount = 1
 
@@ -47,7 +48,7 @@ class InvitationFragment : Fragment() {
                                 columnCount <= 1 -> LinearLayoutManager(context)
                                 else -> GridLayoutManager(context, columnCount)
                             }
-                            adapter = InvitationRecyclerViewAdapter(invites)
+                            adapter = InvitationListAdapter(invites)
                         }
                     }
                 }
@@ -71,7 +72,7 @@ class InvitationFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            InvitationFragment().apply {
+            InvitationListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }

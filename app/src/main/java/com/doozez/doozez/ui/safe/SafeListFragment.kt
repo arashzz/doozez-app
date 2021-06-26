@@ -16,6 +16,7 @@ import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafesListBinding
+import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
 import com.doozez.doozez.ui.safe.listeners.OnSafeCreatedListener
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 import com.google.android.material.snackbar.Snackbar
@@ -37,7 +38,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener, OnSafeCreatedListe
     ): View? {
         _binding = FragmentSafesListBinding.inflate(inflater, container, false)
         val view = binding.root
-        val call = ApiClient.safeService.getSafesForUser("1")
+        val call = ApiClient.safeService.getSafesForUser()
         call.enqueue(object : Callback<List<SafeDetailResponse>> {
             override fun onResponse(call: Call<List<SafeDetailResponse>>, response: Response<List<SafeDetailResponse>>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -45,7 +46,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener, OnSafeCreatedListe
                     // Set the adapter
                     with(binding.safesRecyclerView) {
                         layoutManager = LinearLayoutManager(context)
-                        adapter = SafesRecyclerViewAdapter(safes, _this)
+                        adapter = SafeListAdapter(safes, _this)
                     }
                 }
             }

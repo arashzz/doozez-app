@@ -14,7 +14,7 @@ class SafeDetailResponse {
     @SerializedName("status")
     var status: String? = null
 
-    @SerializedName("monthlyPayment")
+    @SerializedName("monthly_payment")
     var monthlyPayment: Long? = null
 
     @SerializedName("invitations")

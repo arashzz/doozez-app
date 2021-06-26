@@ -1,5 +1,6 @@
 package com.doozez.doozez.api.invitation
 
+import com.doozez.doozez.api.user.UserDetailResponse
 import com.google.gson.annotations.SerializedName
 
 class InvitationDetailResponse {
@@ -7,10 +8,10 @@ class InvitationDetailResponse {
     var id: Long? = null
 
     @SerializedName("recipient")
-    var recipient: String? = null
+    var recipient: UserDetailResponse? = null
 
     @SerializedName("sender")
-    var sender: String? = null
+    var sender: UserDetailResponse? = null
 
     @SerializedName("status")
     var status: String? = null

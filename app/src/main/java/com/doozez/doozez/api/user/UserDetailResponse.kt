@@ -2,7 +2,7 @@ package com.doozez.doozez.api.user
 
 import com.google.gson.annotations.SerializedName
 
-class UserItemResponse {
+class UserDetailResponse {
     @SerializedName("id")
     var id: Long? = null
 

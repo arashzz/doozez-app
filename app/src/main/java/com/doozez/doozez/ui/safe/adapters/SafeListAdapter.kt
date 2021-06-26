@@ -1,4 +1,4 @@
-package com.doozez.doozez.ui.safe
+package com.doozez.doozez.ui.safe.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeItemBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 
-class SafesRecyclerViewAdapter(
+class SafeListAdapter(
     private val values: List<SafeDetailResponse>, onClickListener: OnSafeItemClickListener
-) : RecyclerView.Adapter<SafesRecyclerViewAdapter.SafeViewHolder>() {
+) : RecyclerView.Adapter<SafeListAdapter.SafeViewHolder>() {
 
     private val onClickListener: OnSafeItemClickListener = onClickListener
 

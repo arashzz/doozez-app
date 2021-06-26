@@ -42,7 +42,6 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : DialogFragment() {
         }
         binding.safeCreateCreate.setOnClickListener {
             var req = SafeCreateRequest()
-            req.userId = 1
             req.name = binding.safeCreateName.text.toString()
             req.monthlyPayment = binding.safeCreateMonthlyPayment.text.toString().toLong()
 

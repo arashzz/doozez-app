@@ -87,4 +87,14 @@
                 />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/safe_detail_invite_list"
+        android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.safe.SafeDetailFragment"
+        tools:listitem="@layout/fragment_safe_detail_invite_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

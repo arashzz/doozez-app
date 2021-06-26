@@ -9,10 +9,13 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
+import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
+import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +39,7 @@ class SafeDetailFragment : Fragment() {
 
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
         val view = binding.root
-        val call = ApiClient.safeService.getSafeByIdForUser(1, safeId)
+        val call = ApiClient.safeService.getSafeByIdForUser(safeId)
         call.enqueue(object : Callback<SafeDetailResponse> {
             override fun onResponse(
                 call: Call<SafeDetailResponse>,
@@ -68,6 +71,11 @@ class SafeDetailFragment : Fragment() {
         binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
         binding.safeDetailStatus.text = detail.status
         binding.safeDetailTotalInvites.text = detail.invitations.size.toString() + " participants"
+
+        with(binding.safeDetailInviteList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = SafeDetailInviteListAdapter(detail.invitations)
+        }
 
     }
 }

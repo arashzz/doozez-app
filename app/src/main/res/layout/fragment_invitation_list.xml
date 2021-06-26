@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.invitation.InvitationFragment">
+    tools:context=".ui.invitation.InvitationListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +18,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.invitation.InvitationFragment"
+        tools:context=".ui.invitation.InvitationListFragment"
         tools:listitem="@layout/fragment_invitation_item" />
 
 </FrameLayout>

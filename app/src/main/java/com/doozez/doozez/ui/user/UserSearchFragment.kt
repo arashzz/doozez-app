@@ -7,16 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
-import com.doozez.doozez.api.safe.SafeDetailResponse
-import com.doozez.doozez.api.user.UserItemResponse
-import com.doozez.doozez.databinding.FragmentSafeDetailBinding
+import com.doozez.doozez.api.user.UserDetailResponse
 import com.doozez.doozez.databinding.FragmentUserSearchBinding
-import com.doozez.doozez.ui.safe.SafeListFragment
-import com.doozez.doozez.ui.safe.SafesRecyclerViewAdapter
+import com.doozez.doozez.ui.user.adapters.UserSearchAdapter
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -45,22 +40,22 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
                                        before: Int, count: Int) {
                 if(count >= 3) {
                     val call = ApiClient.userService.searchUsers(s.toString())
-                    call.enqueue(object : Callback<List<UserItemResponse>> {
+                    call.enqueue(object : Callback<List<UserDetailResponse>> {
                         override fun onResponse(
-                            call: Call<List<UserItemResponse>>,
-                            response: Response<List<UserItemResponse>>
+                            call: Call<List<UserDetailResponse>>,
+                            response: Response<List<UserDetailResponse>>
                         ) {
                             if (response.isSuccessful && response.body() != null) {
                                 var users = response.body().toMutableList()
                                 // Set the adapter
                                 with(binding.userSearchList) {
                                     layoutManager = LinearLayoutManager(context)
-                                    adapter = UserSearchRecyclerViewAdapter(users, _this)
+                                    adapter = UserSearchAdapter(users, _this)
                                 }
                             }
                         }
 
-                        override fun onFailure(call: Call<List<UserItemResponse>>, t: Throwable) {
+                        override fun onFailure(call: Call<List<UserDetailResponse>>, t: Throwable) {
                             var s = ""
                             var d = s
                         }
@@ -71,7 +66,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
         return view
     }
 
-    override fun userItemClicked(item: UserItemResponse) {
+    override fun userItemClicked(detail: UserDetailResponse) {
         Snackbar.make(binding.safeListContainer, "dummy invite added", Snackbar.LENGTH_SHORT).show()
     }
 }

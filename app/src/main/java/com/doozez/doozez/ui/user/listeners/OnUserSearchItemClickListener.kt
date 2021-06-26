@@ -1,8 +1,7 @@
 package com.doozez.doozez.ui.user.listeners
 
-import com.doozez.doozez.api.safe.SafeDetailResponse
-import com.doozez.doozez.api.user.UserItemResponse
+import com.doozez.doozez.api.user.UserDetailResponse
 
 interface OnUserSearchItemClickListener {
-    fun userItemClicked(item: UserItemResponse)
+    fun userItemClicked(detail: UserDetailResponse)
 }
