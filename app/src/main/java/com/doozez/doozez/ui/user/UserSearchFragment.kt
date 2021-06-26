@@ -38,7 +38,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                if(count >= 3) {
+                if(start >= 3) {
                     val call = ApiClient.userService.searchUsers(s.toString())
                     call.enqueue(object : Callback<List<UserDetailResponse>> {
                         override fun onResponse(
