@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/safe_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.user.UserSearchFragment">
+
+    <EditText
+        android:id="@+id/user_search_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/et_search_user_hint"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_search_list"
+        android:name="com.doozez.doozez.ui.UserSearchFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/user_search_email"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.user.UserSearchFragment"
+        tools:listitem="@layout/fragment_safe_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

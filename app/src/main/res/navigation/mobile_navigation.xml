@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.doozez.doozez.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_invitation"
+        android:name="com.doozez.doozez.ui.invitation.InvitationFragment"
+        android:label="@string/menu_invitation_list"
+        tools:layout="@layout/fragment_invitation_list" />
+
+    <fragment
+        android:id="@+id/nav_safe"
+        android:name="com.doozez.doozez.ui.safe.SafeListFragment"
+        android:label="@string/menu_safe_list"
+        tools:layout="@layout/fragment_safes_list" >
+
+        <action
+            android:id="@+id/action_nav_safe_to_nav_safe_create"
+            app:destination="@id/nav_safe_create" />
+
+        <action
+            android:id="@+id/action_nav_safe_to_nav_safe_detail"
+            app:destination="@id/nav_safe_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_safe_detail"
+        android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
+        android:label="@string/menu_safe_detail"
+        tools:layout="@layout/fragment_safe_detail" >
+
+        <action
+            android:id="@+id/action_nav_safe_to_nav_user_search"
+            app:destination="@id/nav_user_search" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/nav_safe_create"
+        android:name="com.doozez.doozez.ui.safe.SafeCreateFragment"
+        android:label="@string/menu_safe_create"
+        tools:layout="@layout/fragment_safe_create" />
+
+    <fragment
+        android:id="@+id/nav_user_search"
+        android:name="com.doozez.doozez.ui.user.UserSearchFragment"
+        android:label="@string/menu_user_search"
+        tools:layout="@layout/fragment_user_search" />
+
+
+</navigation>
