@@ -10,6 +10,7 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.safe.SafeCreateRequest
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeCreatedListener
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +20,7 @@ import retrofit2.Response
  * Use the [SafeCreateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SafeCreateFragment(listener: OnSafeCreatedListener) : DialogFragment() {
+class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFragment() {
     private var _binding: FragmentSafeCreateBinding? = null
     private val binding get() = _binding!!
     private val listener: OnSafeCreatedListener = listener
@@ -41,27 +42,44 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : DialogFragment() {
             dismiss()
         }
         binding.safeCreateCreate.setOnClickListener {
-            var req = SafeCreateRequest()
-            req.name = binding.safeCreateName.text.toString()
-            req.monthlyPayment = binding.safeCreateMonthlyPayment.text.toString().toLong()
+            if (validateInput()) {
+                var req = SafeCreateRequest()
+                req.name = binding.safeCreateName.editText?.text.toString()
+                req.monthlyPayment = binding.safeCreateMonthlyPayment.editText?.text.toString().toLong()
 
-            val call = ApiClient.safeService.createSafeForUser(req)
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        listener.onSuccessSafeCreate("Safe created successfully")
-                        //TODO: redirect to safe detail page
+                val call = ApiClient.safeService.createSafeForUser(req)
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            listener.onSuccessSafeCreate("Safe created successfully")
+                            //TODO: redirect to safe detail page
+                        } else {
+                            listener.onFailureSafeCreate("Failed to create Safe")
+                        }
+                        dismiss()
                     }
-                    else {
-                        listener.onFailureSafeCreate("Failed to create Safe")
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        listener.onFailureSafeCreate("ops something happened")
+                        dismiss()
                     }
-                    dismiss()
-                }
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    listener.onFailureSafeCreate("ops something happened")
-                    dismiss()
-                }
-            })
+                })
+            }
         }
+    }
+
+    private fun validateInput(): Boolean {
+        var name = binding.safeCreateName.editText?.text.toString()
+        var payment = binding.safeCreateMonthlyPayment.editText?.text.toString()
+        var valid = true
+        if(name.isNullOrBlank()) {
+            binding.safeCreateName.error = "This field is required"
+            valid = false
+        }
+        if(payment.isNullOrBlank()) {
+            binding.safeCreateMonthlyPayment.error = "This field is required"
+            valid = false
+        }
+        return valid
     }
 }

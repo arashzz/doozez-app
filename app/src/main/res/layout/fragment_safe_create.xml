@@ -16,60 +16,48 @@
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="vertical"
         android:padding="16dp">
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/safe_create_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="wrap_content"
+            android:hint="@string/safe_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_safe_name"
-                android:layout_weight="0.3"/>
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/safe_create_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_weight="0.7"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                />
-        </LinearLayout>
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/safe_create_monthly_payment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:hint="@string/safe_monthly_payment"
+            android:layout_marginVertical="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_safe_monthly_payment"
-                android:layout_weight="0.3"
-                android:textColor="@color/black"
-                />
-
-            <EditText
-                android:id="@+id/safe_create_monthly_payment"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:layout_weight="0.7"
-                android:textAppearance="?attr/textAppearanceHeadline6"
                 />
-        </LinearLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/safe_create_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/action_create"
+                android:layout_weight="0.5"
                 style="?attr/borderlessButtonStyle"
                 />
             <com.google.android.material.button.MaterialButton
@@ -77,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_cancel"
+                android:layout_weight="0.5"
                 style="?attr/borderlessButtonStyle"
                 />
         </LinearLayout>
