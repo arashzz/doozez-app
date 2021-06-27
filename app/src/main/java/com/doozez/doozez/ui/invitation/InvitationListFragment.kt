@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.invitation.InvitationDetailResponse
+import com.doozez.doozez.databinding.FragmentInvitationListBinding
+import com.doozez.doozez.databinding.FragmentSafeCreateBinding
 import com.doozez.doozez.ui.invitation.adapters.InvitationListAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,36 +22,26 @@ import retrofit2.Response
  * A fragment representing a list of Items.
  */
 class InvitationListFragment : Fragment() {
-
-    private var columnCount = 1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    private var _binding: FragmentInvitationListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_invitation_list, container, false)
+    ): View {
+        _binding = FragmentInvitationListBinding.inflate(inflater, container, false)
+        getInvites()
+        return binding.root
+    }
+
+    private fun getInvites() {
         val call = ApiClient.invitationService.getInvitationsForUser("1")
         call.enqueue(object : Callback<List<InvitationDetailResponse>> {
             override fun onResponse(call: Call<List<InvitationDetailResponse>>, response: Response<List<InvitationDetailResponse>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    var invites = response.body().toMutableList()
-                    // Set the adapter
-                    if (view is RecyclerView) {
-                        with(view) {
-                            layoutManager = when {
-                                columnCount <= 1 -> LinearLayoutManager(context)
-                                else -> GridLayoutManager(context, columnCount)
-                            }
-                            adapter = InvitationListAdapter(invites)
-                        }
+                    with(binding.inviteList) {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = InvitationListAdapter(response.body().toMutableList())
                     }
                 }
             }
@@ -57,25 +49,5 @@ class InvitationListFragment : Fragment() {
                 //TODO: do something
             }
         })
-        return view
-    }
-
-    suspend fun populateInvites(userId:String, view:View) {
-
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            InvitationListFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 }

@@ -10,6 +10,7 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.safe.SafeCreateRequest
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeCreatedListener
+import com.doozez.doozez.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,31 +44,38 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFra
         }
         binding.safeCreateCreate.setOnClickListener {
             if (validateInput()) {
-                var req = SafeCreateRequest()
-                req.name = binding.safeCreateName.editText?.text.toString()
-                req.monthlyPayment = binding.safeCreateMonthlyPayment.editText?.text.toString().toLong()
-
-                val call = ApiClient.safeService.createSafeForUser(req)
-                call.enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
-                            listener.onSuccessSafeCreate("Safe created successfully")
-                            //TODO: redirect to safe detail page
-                        } else {
-                            listener.onFailureSafeCreate("Failed to create Safe")
-                        }
-                        dismiss()
-                    }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        listener.onFailureSafeCreate("ops something happened")
-                        dismiss()
-                    }
-                })
+                createSafe(
+                    binding.safeCreateName.editText?.text.toString(),
+                    binding.safeCreateMonthlyPayment.editText?.text.toString().toLong())
             }
         }
     }
 
+    private fun createSafe(safeName: String, monthlyPayment: Long) {
+        var req = SafeCreateRequest()
+        req.name = safeName
+        req.monthlyPayment = monthlyPayment
+
+        val call = ApiClient.safeService.createSafeForUser(req)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    listener.onSuccessSafeCreate("Safe created successfully")
+                    //TODO: redirect to safe detail page
+                } else {
+                    listener.onFailureSafeCreate("Failed to create Safe")
+                }
+                dismiss()
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                listener.onFailureSafeCreate("ops something happened")
+                dismiss()
+            }
+        })
+    }
+
+    //TODO: improvement needed
     private fun validateInput(): Boolean {
         var name = binding.safeCreateName.editText?.text.toString()
         var payment = binding.safeCreateMonthlyPayment.editText?.text.toString()
@@ -78,6 +86,10 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFra
         }
         if(payment.isNullOrBlank()) {
             binding.safeCreateMonthlyPayment.error = "This field is required"
+            valid = false
+        }
+        else if (!Utils.isInteger(payment)) {
+            binding.safeCreateMonthlyPayment.error = "Only numbers are accepted"
             valid = false
         }
         return valid

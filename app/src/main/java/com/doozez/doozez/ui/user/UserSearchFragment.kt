@@ -3,6 +3,7 @@ package com.doozez.doozez.ui.user
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,11 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
     ): View? {
         _binding = FragmentUserSearchBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        return view
+    }
+
+    private fun addListeners() {
         binding.userSearchEmail.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
@@ -56,14 +62,13 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
                         }
 
                         override fun onFailure(call: Call<List<UserDetailResponse>>, t: Throwable) {
-                            var s = ""
-                            var d = s
+                            Log.e("UserSearchFragment", t.stackTrace.toString())
+                            Snackbar.make(binding.safeListContainer, "failed...", Snackbar.LENGTH_SHORT).show()
                         }
                     })
                 }
             }
         })
-        return view
     }
 
     override fun userItemClicked(detail: UserDetailResponse) {

@@ -2,6 +2,7 @@ package com.doozez.doozez.ui.safe
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,47 +39,47 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener, OnSafeCreatedListe
     ): View? {
         _binding = FragmentSafesListBinding.inflate(inflater, container, false)
         val view = binding.root
-        val call = ApiClient.safeService.getSafesForUser()
-        call.enqueue(object : Callback<List<SafeDetailResponse>> {
-            override fun onResponse(call: Call<List<SafeDetailResponse>>, response: Response<List<SafeDetailResponse>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    var safes = response.body().toMutableList()
-                    // Set the adapter
-                    with(binding.safesRecyclerView) {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = SafeListAdapter(safes, _this)
-                    }
-                }
-            }
-            override fun onFailure(call: Call<List<SafeDetailResponse>>, t: Throwable) {
-                //TODO: do something
-            }
-        })
-        binding.addSafe.setOnClickListener {
-            //val navController = findNavController()
-//            navController.navigate(R.id.action_nav_safe_to_nav_safe_create)
-            SafeCreateFragment(_this).show(childFragmentManager, "")
-        }
+        addListeners()
+        loadSafes()
         return view
     }
 
     override fun safeItemClicked(item: SafeDetailResponse) {
-        var navController = findNavController()
         val bundle = bundleOf("safeId" to item.id)
-        navController.navigate(R.id.action_nav_safe_to_nav_safe_detail, bundle)
+        findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundle)
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onSuccessSafeCreate(msg: String) {
-        var sb = Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT)
-//        sb.view.setBackgroundColor(R.color.light_blue_600)
-        sb.show()
+        Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT).show()
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onFailureSafeCreate(msg: String) {
-        var sb = Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT)
-//        sb.view.setBackgroundColor(R.color.design_default_color_error)
-        sb.show()
+        Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun addListeners() {
+        binding.addSafe.setOnClickListener {
+            SafeCreateFragment(_this).show(childFragmentManager, "")
+        }
+    }
+
+    private fun loadSafes() {
+        val call = ApiClient.safeService.getSafesForUser()
+        call.enqueue(object : Callback<List<SafeDetailResponse>> {
+            override fun onResponse(call: Call<List<SafeDetailResponse>>, response: Response<List<SafeDetailResponse>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    with(binding.safesRecyclerView) {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = SafeListAdapter(response.body().toMutableList(), _this)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<SafeDetailResponse>>, t: Throwable) {
+                Log.e("SafeListFragment", t.stackTrace.toString())
+                Snackbar.make(binding.safeListContainer, "failed...", Snackbar.LENGTH_SHORT).show()
+            }
+        })
     }
 }

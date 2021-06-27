@@ -1,13 +1,11 @@
 package com.doozez.doozez.ui.safe
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
@@ -15,7 +13,7 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
-import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,26 +33,11 @@ class SafeDetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
         val view = binding.root
-        val call = ApiClient.safeService.getSafeByIdForUser(safeId)
-        call.enqueue(object : Callback<SafeDetailResponse> {
-            override fun onResponse(
-                call: Call<SafeDetailResponse>,
-                response: Response<SafeDetailResponse>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    populateSafeDetails(response.body())
-                }
-            }
-
-            override fun onFailure(call: Call<SafeDetailResponse>, t: Throwable) {
-                //TODO: do something
-
-            }
-        })
+        getSafeDetails()
         addListeners()
         return view
     }
@@ -64,6 +47,27 @@ class SafeDetailFragment : Fragment() {
             val navController = findNavController()
             navController.navigate(R.id.action_nav_safe_to_nav_user_search)
         }
+    }
+
+    private fun getSafeDetails() {
+        val call = ApiClient.safeService.getSafeByIdForUser(safeId)
+        call.enqueue(
+            object : Callback<SafeDetailResponse> {
+                override fun onResponse(
+                    call: Call<SafeDetailResponse>,
+                    response: Response<SafeDetailResponse>,
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        populateSafeDetails(response.body())
+                    }
+                }
+
+                override fun onFailure(call: Call<SafeDetailResponse>, t: Throwable) {
+                    Log.e("SafeDetailFragment", t.stackTrace.toString())
+                    Snackbar.make(binding.safeDetailContainer, "failed...", Snackbar.LENGTH_SHORT).show()
+                }
+            },
+        )
     }
 
     private fun populateSafeDetails(detail: SafeDetailResponse) {
