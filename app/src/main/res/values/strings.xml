@@ -23,8 +23,8 @@
 
     <string name="et_search_user_hint">Enter email...</string>
 
-    <string name="tv_safe_name">Safe Name</string>
-    <string name="tv_safe_monthly_payment">Monthly Payment</string>
+    <string name="safe_name">Safe Name</string>
+    <string name="safe_monthly_payment">Monthly Payment</string>
     <string name="tv_safe_status">Status</string>
 
     <string name="title_activity_create_safe">CreateSafeActivity</string>

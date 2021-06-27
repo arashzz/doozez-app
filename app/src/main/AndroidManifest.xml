@@ -13,12 +13,9 @@
         android:theme="@style/Theme.Dooz"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".CreateSafeActivity"
-            android:label="@string/title_activity_create_safe"
-            android:theme="@style/Theme.Dooz.NoActionBar"></activity>
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Dooz.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
