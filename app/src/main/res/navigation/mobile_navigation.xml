@@ -15,7 +15,17 @@
         android:id="@+id/nav_invitation"
         android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
         android:label="@string/menu_invitation_list"
-        tools:layout="@layout/fragment_invitation_list" />
+        tools:layout="@layout/fragment_invitation_list" >
+
+        <action
+            android:id="@+id/action_nav_invitation_to_nav_payment_list"
+            app:destination="@id/nav_payment_list" />
+
+        <action
+            android:id="@+id/action_nav_invitation_to_nav_safe_detail"
+            app:destination="@id/nav_safe_detail" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_safe"
@@ -39,6 +49,9 @@
         tools:layout="@layout/fragment_safe_detail" >
 
         <action
+            android:id="@+id/action_nav_safe_to_nav_payment_list"
+            app:destination="@id/nav_payment_list" />
+        <action
             android:id="@+id/action_nav_safe_to_nav_user_search"
             app:destination="@id/nav_user_search" />
 
@@ -49,11 +62,20 @@
         android:label="@string/menu_safe_create"
         tools:layout="@layout/fragment_safe_create" />
 
+    <dialog
+        android:id="@+id/nav_payment_list"
+        android:name="com.doozez.doozez.ui.payment.PaymentListFragment"
+        tools:layout="@layout/fragment_payment_list" />
+
     <fragment
         android:id="@+id/nav_user_search"
         android:name="com.doozez.doozez.ui.user.UserSearchFragment"
         android:label="@string/menu_user_search"
         tools:layout="@layout/fragment_user_search" />
 
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.doozez.doozez.ui.setting.SettingsFragment"
+        android:label="@string/action_settings" />
 
 </navigation>

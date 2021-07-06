@@ -17,8 +17,10 @@
     <string name="action_add_invite">Invite</string>
     <string name="action_invite_accept">Accept</string>
     <string name="action_invite_reject">Reject</string>
+    <string name="action_invite_safe">Safe Details</string>
     <string name="action_create">Create</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_proceed">Proceed</string>
     <string name="action_add">Add</string>
 
     <string name="et_search_user_hint">Enter email...</string>
@@ -31,15 +33,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="countries_array">
-        <item>Afghanistan</item>
-        <item>Albania</item>
-        <item>Algeria</item>
-        <item>American Samoa</item>
-        <item>Andorra</item>
-        <item>Angola</item>
-        <item>Anguilla</item>
-        <item>Antarctica</item>
-    </string-array>
+    <string name="header_payment_list">Payment Methods</string>
+
+    <!-- Preference Titles -->
+    <string name="pref_profile_header">Profile</string>
+    <string name="sync_header">setting sample 2</string>
+
+    <!-- Profile Preferences -->
+    <string name="pref_email_title">Email</string>
+    <string name="pref_firstname_title">First Name</string>
+    <string name="pref_lastname_title">Last Name</string>
+    <string name="pref_dob_title">Date of Birth</string>
+
+    <!-- XXX Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>
