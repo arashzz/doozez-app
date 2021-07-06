@@ -1,85 +1,80 @@
 package com.doozez.doozez.ui.safe
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafesListBinding
 import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
-import com.doozez.doozez.ui.safe.listeners.OnSafeCreatedListener
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
+import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.ResultKey
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-/**
- * A fragment representing a list of Items.
- */
-class SafeListFragment : Fragment(), OnSafeItemClickListener, OnSafeCreatedListener {
+class SafeListFragment : Fragment(), OnSafeItemClickListener {
     private var _binding: FragmentSafesListBinding? = null
     private val binding get() = _binding!!
-    private val _this: SafeListFragment = this
+    private val adapter = SafeListAdapter(mutableListOf<SafeDetailResponse>(), this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSafesListBinding.inflate(inflater, container, false)
-        val view = binding.root
+        with(binding.safesRecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@SafeListFragment.adapter
+        }
         addListeners()
         loadSafes()
-        return view
+        return binding.root
     }
 
     override fun safeItemClicked(item: SafeDetailResponse) {
-        val bundle = bundleOf("safeId" to item.id)
+        val bundle = bundleOf(BundleKey.SAFE_ID to item.id)
         findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundle)
     }
 
-    @SuppressLint("ResourceAsColor")
-    override fun onSuccessSafeCreate(msg: String) {
-        Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT).show()
-    }
-
-    @SuppressLint("ResourceAsColor")
-    override fun onFailureSafeCreate(msg: String) {
-        Snackbar.make(binding.safeListContainer, msg, Snackbar.LENGTH_SHORT).show()
-    }
-
     private fun addListeners() {
-        binding.addSafe.setOnClickListener {
-            SafeCreateFragment(_this).show(childFragmentManager, "")
+        setFragmentResultListener(ResultKey.SAFE_ADDED) { _, bundle ->
+            var resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+            if (resultOk) {
+                loadNewSafe(
+                    bundle.getParcelable(BundleKey.SAFE_OBJECT)
+                )
+            }
         }
+        binding.addSafe.setOnClickListener {
+            SafeCreateFragment().show(parentFragmentManager, "")
+        }
+    }
+
+    private fun loadNewSafe(safe: SafeDetailResponse?) {
+        safe?.let { adapter.addItem(it) }
     }
 
     private fun loadSafes() {
         val call = ApiClient.safeService.getSafesForUser()
-        call.enqueue(object : Callback<List<SafeDetailResponse>> {
-            override fun onResponse(call: Call<List<SafeDetailResponse>>, response: Response<List<SafeDetailResponse>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    with(binding.safesRecyclerView) {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = SafeListAdapter(response.body().toMutableList(), _this)
-                    }
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful && it.body() != null) {
+                    adapter.addItems(it.body())
                 }
             }
-            override fun onFailure(call: Call<List<SafeDetailResponse>>, t: Throwable) {
-                Log.e("SafeListFragment", t.stackTrace.toString())
+            onFailure = {
+                Log.e("SafeListFragment", it?.stackTrace.toString())
                 Snackbar.make(binding.safeListContainer, "failed...", Snackbar.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 }

@@ -1,23 +1,36 @@
 package com.doozez.doozez.ui.safe.adapters
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeItemBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 
 class SafeListAdapter(
-    private val values: List<SafeDetailResponse>, onClickListener: OnSafeItemClickListener
-) : RecyclerView.Adapter<SafeListAdapter.SafeViewHolder>() {
+    private val values: MutableList<SafeDetailResponse>, onClickListener: OnSafeItemClickListener
+) : RecyclerView.Adapter<SafeListAdapter.ViewHolder>() {
 
     private val onClickListener: OnSafeItemClickListener = onClickListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SafeViewHolder {
+    fun addItems(items: List<SafeDetailResponse>) {
+        with(values) {
+            clear()
+            addAll(items)
+        }
+        notifyDataSetChanged()
+    }
 
-        return SafeViewHolder(
+    fun addItem(item: SafeDetailResponse) {
+        values.add(item)
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+        return ViewHolder(
             FragmentSafeItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -27,7 +40,7 @@ class SafeListAdapter(
 
     }
 
-    override fun onBindViewHolder(holder: SafeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
         holder.status.text = item.status
@@ -38,7 +51,8 @@ class SafeListAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class SafeViewHolder(binding: FragmentSafeItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(_binding: FragmentSafeItemBinding) : RecyclerView.ViewHolder(_binding.root) {
+        private val binding: FragmentSafeItemBinding = _binding
         val cardview: CardView = binding.safeCard
         val name: TextView = binding.safeItemName
         val status: TextView = binding.safeItemStatus
@@ -47,5 +61,4 @@ class SafeListAdapter(
             return super.toString() + " '"
         }
     }
-
 }
