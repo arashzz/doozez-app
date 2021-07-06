@@ -1,32 +1,32 @@
 package com.doozez.doozez.ui.safe
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.safe.SafeCreateRequest
+import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
-import com.doozez.doozez.ui.safe.listeners.OnSafeCreatedListener
+import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.ResultKey
 import com.doozez.doozez.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * A simple [Fragment] subclass.
  * Use the [SafeCreateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFragment() {
+class SafeCreateFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentSafeCreateBinding? = null
     private val binding get() = _binding!!
-    private val listener: OnSafeCreatedListener = listener
 
-    fun SafeCreateFragment(){ }
+//    fun SafeCreateFragment(){ }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +34,16 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFra
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSafeCreateBinding.inflate(inflater, container, false)
+        //TODO: implement for higher versions
+        // SOFT_INPUT_ADJUST_RESIZE is deprecated in version 30
+        // I'm using it for testing
+        when (Build.VERSION.SDK_INT) {
+            in 1..30 -> {
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            } else -> {
+                Log.i("do nothing","do nothing")
+            }
+        }
         addListeners()
         return binding.root
     }
@@ -57,22 +67,27 @@ class SafeCreateFragment(listener: OnSafeCreatedListener) : BottomSheetDialogFra
         req.monthlyPayment = monthlyPayment
 
         val call = ApiClient.safeService.createSafeForUser(req)
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    listener.onSuccessSafeCreate("Safe created successfully")
-                    //TODO: redirect to safe detail page
-                } else {
-                    listener.onFailureSafeCreate("Failed to create Safe")
-                }
+        call.enqueue {
+            onResponse = {
+                returnNewSafe(it.isSuccessful, it.body())
                 dismiss()
             }
+            onFailure = {
+                Log.e("SafeListFragment", it?.stackTrace.toString())
+                returnNewSafe(false, null)
+                dismiss()
+            }
+        }
+    }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                listener.onFailureSafeCreate("ops something happened")
-                dismiss()
-            }
-        })
+    private fun returnNewSafe(created: Boolean, safe: SafeDetailResponse?) {
+        setFragmentResult(
+            ResultKey.SAFE_ADDED,
+            bundleOf(
+                BundleKey.RESULT_OK to created,
+                BundleKey.SAFE_OBJECT to safe
+            )
+        )
     }
 
     //TODO: improvement needed
