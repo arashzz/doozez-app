@@ -1,26 +1,33 @@
 package com.doozez.doozez
 
 import android.os.Bundle
-import android.view.MenuItem
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import com.doozez.doozez.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    private var userId: Long = 0
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    fun getUserId(): Long {
+        return userId
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //admin
+//        userId = 1L
+
+        //arash
+        userId = 2L
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
