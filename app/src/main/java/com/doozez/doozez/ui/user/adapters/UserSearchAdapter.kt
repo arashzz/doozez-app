@@ -11,10 +11,15 @@ import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.google.android.material.button.MaterialButton
 
 class UserSearchAdapter(
-    private val values: List<UserDetailResponse>, onClickListener: OnUserSearchItemClickListener
+    private val values: MutableList<UserDetailResponse>, onClickListener: OnUserSearchItemClickListener
 ): RecyclerView.Adapter<UserSearchAdapter.UserViewHolder>() {
 
     private val onClickListener: OnUserSearchItemClickListener = onClickListener
+
+    fun addItems(items: List<UserDetailResponse>) {
+        values.clear()
+        values.addAll(items)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
 
