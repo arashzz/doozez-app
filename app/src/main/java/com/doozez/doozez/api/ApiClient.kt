@@ -1,6 +1,7 @@
 package com.doozez.doozez.api
 
 import com.doozez.doozez.api.invitation.InvitationV1Service
+import com.doozez.doozez.api.payments.PaymentV1Service
 import com.doozez.doozez.api.safe.SafeV1Service
 import com.doozez.doozez.api.user.UserV1Service
 import com.google.gson.Gson
@@ -19,7 +20,10 @@ object ApiClient {
     }
 
     private val httpClient : OkHttpClient by lazy {
-        OkHttpClient.Builder().build()
+        OkHttpClient
+            .Builder()
+            .addInterceptor(DoozInterceptor())
+            .build()
     }
 
     private val retrofit : Retrofit by lazy {
@@ -41,5 +45,9 @@ object ApiClient {
 
     val userService: UserV1Service by lazy {
         retrofit.create(UserV1Service::class.java)
+    }
+
+    val paymentService: PaymentV1Service by lazy {
+        retrofit.create(PaymentV1Service::class.java)
     }
 }

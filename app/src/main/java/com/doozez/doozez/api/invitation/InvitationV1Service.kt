@@ -4,11 +4,15 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface InvitationV1Service {
-    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
-    @GET("v1/invitations")
-    fun getInvitationsForUser(@Query("userId") userId: String): Call<List<InvitationDetailResponse>>
+    @GET("v1/invitations/")
+    fun getInvitations(): Call<List<InvitationDetailResponse>>
 
-    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
-    @POST("v1/invitations")
-    fun createInvitationForUser(@Body body: InvitationCreateRequest): Call<Void>
+    @GET("v1/invitations/")
+    fun getInvitationsForSafe(@Query("safe") safeId: Long): Call<List<InvitationDetailResponse>>
+
+    @POST("v1/invitations/")
+    fun createInvitation(@Body body: InvitationCreateRequest): Call<Void>
+
+    @PATCH("v1/invitations/{id}/")
+    fun updateInvitationForAction(@Path("id") id: Long, @Body body: InvitationActionReq): Call<InvitationActionResp>
 }

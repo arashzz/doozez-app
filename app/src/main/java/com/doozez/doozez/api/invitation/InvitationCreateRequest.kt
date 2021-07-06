@@ -3,12 +3,9 @@ package com.doozez.doozez.api.invitation
 import com.google.gson.annotations.SerializedName
 
 class InvitationCreateRequest {
-    @SerializedName("safeId")
+    @SerializedName("safe")
     var safeId: Long? = null
 
-    @SerializedName("senderId")
-    var senderId: Long? = null
-
-    @SerializedName("recipientId")
+    @SerializedName("recipient")
     var recipientId: Long? = null
 }
