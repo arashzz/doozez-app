@@ -24,6 +24,7 @@ class SafeDetailFragment : Fragment() {
     private var userId: Long = 0
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
+    private var isInitiator = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,22 +44,13 @@ class SafeDetailFragment : Fragment() {
         return view
     }
 
-    private fun addListeners(isInitiator: Boolean) {
-        if (isInitiator) {
-            binding.safeDetailAddInvite.setOnClickListener {
-                val navController = findNavController()
-                navController.navigate(
-                    R.id.action_nav_safe_to_nav_user_search, bundleOf(
-                        BundleKey.SAFE_ID to safeId
-                    )
-                )
-            }
-        }
-//        setFragmentResultListener(ResultKey.SEARCHED_USER_SELECTED) { _, bundle ->
-//            var user = bundle.getParcelable<UserDetailResponse>(BundleKey.MODEL_OBJECT)
-//            addInvite(user?.id!!, user?.firstName!!)
-//        }
-    }
+//    private fun addListeners(isInitiator: Boolean) {
+//
+////        setFragmentResultListener(ResultKey.SEARCHED_USER_SELECTED) { _, bundle ->
+////            var user = bundle.getParcelable<UserDetailResponse>(BundleKey.MODEL_OBJECT)
+////            addInvite(user?.id!!, user?.firstName!!)
+////        }
+//    }
 
 //    private fun addInvite(recipientId: Long, recipientFirstName: String) {
 //        var body = InvitationCreateRequest()
@@ -94,14 +86,11 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun populateSafeDetails(detail: SafeDetailResponse) {
+        isInitiator = detail.initiator == userId
         binding.safeDetailName.text = detail.name
         binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
         binding.safeDetailStatus.text = SafeStatus.getStatusTextForCode(detail.status!!)
-        val isInitiator = detail.initiator != userId
-        if(!isInitiator) {
-            (binding.safeDetailAddInvite.parent as? ViewGroup)?.removeView(binding.safeDetailAddInvite)
-        }
-        addListeners(isInitiator)
+        applyUserRoleRules()
     }
 
     private fun populateTabs() {
@@ -115,5 +104,20 @@ class SafeDetailFragment : Fragment() {
             }
             tab.text = tabName
         }.attach()
+    }
+
+    private fun applyUserRoleRules() {
+        if(!isInitiator) {
+            (binding.safeDetailAddInvite.parent as? ViewGroup)?.removeView(binding.safeDetailAddInvite)
+        } else {
+            binding.safeDetailAddInvite.setOnClickListener {
+                val navController = findNavController()
+                navController.navigate(
+                    R.id.action_nav_safe_to_nav_user_search, bundleOf(
+                        BundleKey.SAFE_ID to safeId
+                    )
+                )
+            }
+        }
     }
 }

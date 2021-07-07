@@ -32,6 +32,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     private val binding get() = _binding!!
     private var adapter: InvitationListAdapter? = null
     private var ctx: Context? = null
+    private var userId: Long = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,7 +46,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var userId = (activity as MainActivity).getUserId()
+        userId = (activity as MainActivity).getUserId()
         arguments?.let {
             userId = it.getLong(BundleKey.USER_ID)
         }
@@ -147,7 +148,10 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     }
 
     override fun inviteSafeClicked(invite: InvitationDetailResponse) {
-        val bundle = bundleOf(BundleKey.SAFE_ID to invite.safe?.id)
+        val bundle = bundleOf(
+            BundleKey.SAFE_ID to invite.safe?.id,
+            BundleKey.USER_ID to userId
+        )
         findNavController().navigate(R.id.action_nav_invitation_to_nav_safe_detail, bundle)
     }
 }
