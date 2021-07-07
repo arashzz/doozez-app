@@ -7,94 +7,106 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.safe.SafeDetailFragment">
-
-    <com.google.android.material.card.MaterialCardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/safe_detail_card"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
-        card_view:cardElevation="6dp"
-        card_view:cardCornerRadius="4dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginVertical="8dp">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/safe_detail_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            card_view:cardElevation="8dp"
+            card_view:cardCornerRadius="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/safe_detail_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="left"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    />
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/safe_detail_status"
+                    <TextView
+                        android:id="@+id/safe_detail_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="left"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+
+                    <TextView
+                        android:id="@+id/safe_detail_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="right"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/safe_detail_monthly_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="left"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+
+                    <TextView
+                        android:id="@+id/safe_detail_total_invites"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="right"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        />
+                </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/safe_detail_add_invite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="right"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/action_add_invite"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_weight="0.4"
                     />
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/safe_detail_monthly_payment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="left"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/safe_detail_total_invites"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="right"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    />
-            </LinearLayout>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/safe_detail_add_invite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/action_add_invite"
-                style="?attr/borderlessButtonStyle"
-                android:layout_weight="0.4"
-                />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/safe_detail_invite_list"
-        android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.safe.SafeDetailFragment"
-        tools:listitem="@layout/fragment_safe_detail_invite_item" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
