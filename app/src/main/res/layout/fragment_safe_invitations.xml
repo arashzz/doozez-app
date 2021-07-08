@@ -8,5 +8,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.safe.SafeInvitationsFragment"
+    tools:context=".ui.safe.SafeInvitationsTabFragment"
     tools:listitem="@layout/fragment_safe_detail_invite_item" />

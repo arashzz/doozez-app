@@ -47,9 +47,6 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userId = (activity as MainActivity).getUserId()
-        arguments?.let {
-            userId = it.getLong(BundleKey.USER_ID)
-        }
         adapter = InvitationListAdapter(mutableListOf(), userId, this, ctx!!)
     }
 
@@ -134,8 +131,9 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    //adapter?.itemStatusChanged(inviteId, it.body().status)
-                    adapter?.itemStatusChanged(inviteId, InvitationStatus.ACCEPTED)
+                    adapter?.itemStatusChanged(
+                        inviteId,
+                        InvitationStatus.getStatusFromResponse(it.body().status))
                     Snackbar.make(binding.inviteListContainer, "Invite updated", Snackbar.LENGTH_SHORT).show()
                 }
             }
