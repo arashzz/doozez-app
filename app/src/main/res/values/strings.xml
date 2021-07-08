@@ -22,6 +22,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_proceed">Proceed</string>
     <string name="action_add">Add</string>
+    <string name="action_edit">Edit</string>
 
     <string name="et_search_user_hint">Enter email...</string>
 

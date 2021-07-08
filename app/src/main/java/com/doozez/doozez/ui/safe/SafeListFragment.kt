@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.doozez.doozez.MainActivity
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
@@ -24,12 +25,18 @@ import com.google.android.material.snackbar.Snackbar
 class SafeListFragment : Fragment(), OnSafeItemClickListener {
     private var _binding: FragmentSafesListBinding? = null
     private val binding get() = _binding!!
-    private val adapter = SafeListAdapter(mutableListOf<SafeDetailResponse>(), this)
+    private val adapter = SafeListAdapter(mutableListOf(), this)
+    private var userId = 0L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userId = (activity as MainActivity).getUserId()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSafesListBinding.inflate(inflater, container, false)
         with(binding.safesRecyclerView) {
             layoutManager = LinearLayoutManager(context)
@@ -41,13 +48,15 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
     }
 
     override fun safeItemClicked(item: SafeDetailResponse) {
-        val bundle = bundleOf(BundleKey.SAFE_ID to item.id)
-        findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundle)
+        findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundleOf(
+            BundleKey.SAFE_ID to item.id,
+            BundleKey.USER_ID to userId
+        ))
     }
 
     private fun addListeners() {
         setFragmentResultListener(ResultKey.SAFE_ADDED) { _, bundle ->
-            var resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
             if (resultOk) {
                 loadNewSafe(
                     bundle.getParcelable(BundleKey.SAFE_OBJECT)
