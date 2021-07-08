@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/safe_detail_participant_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:minHeight="64dp">
+
+    <ImageView
+        android:id="@+id/safe_detail_participant_item_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_round_account_circle_36"
+        android:padding="16dp"/>
+
+    <TextView
+        android:id="@+id/safe_detail_participant_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/safe_detail_participant_item_avatar"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textColor="@color/mtrl_list_item_tint"/>
+
+    <TextView
+        android:id="@+id/safe_detail_participant_item_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/safe_detail_participant_item_name"
+        android:layout_gravity="center_vertical"
+        android:layout_toEndOf="@id/safe_detail_participant_item_avatar"
+        android:paddingEnd="16dp"
+        android:maxLines="2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="@color/mtrl_list_item_tint"/>
+
+
+</RelativeLayout>
