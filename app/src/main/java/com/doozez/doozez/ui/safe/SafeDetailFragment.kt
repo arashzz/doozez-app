@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
+import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
@@ -25,6 +26,7 @@ class SafeDetailFragment : Fragment() {
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
     private var isInitiator = false
+    private var viewPagerAdapter: SafeDetailPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,7 @@ class SafeDetailFragment : Fragment() {
             safeId = it.getLong(BundleKey.SAFE_ID)
             userId = it.getLong(BundleKey.USER_ID)
         }
+        viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -41,34 +44,9 @@ class SafeDetailFragment : Fragment() {
         val view = binding.root
         populateTabs()
         getSafeDetails()
+        getPaymentMethod()
         return view
     }
-
-//    private fun addListeners(isInitiator: Boolean) {
-//
-////        setFragmentResultListener(ResultKey.SEARCHED_USER_SELECTED) { _, bundle ->
-////            var user = bundle.getParcelable<UserDetailResponse>(BundleKey.MODEL_OBJECT)
-////            addInvite(user?.id!!, user?.firstName!!)
-////        }
-//    }
-
-//    private fun addInvite(recipientId: Long, recipientFirstName: String) {
-//        var body = InvitationCreateRequest()
-//        body.recipientId = recipientId
-//        body.safeId = safeId
-//        val call = ApiClient.invitationService.createInvitation(body)
-//        call.enqueue {
-//            onResponse = {
-//                Snackbar.make(binding.safeDetailContainer,
-//                    "Successfully invited $recipientFirstName", Snackbar.LENGTH_SHORT).show()
-//            }
-//            onFailure = {
-//                Log.e("SafeDetailFragment-add-invite", it?.stackTrace.toString())
-//                Snackbar.make(binding.safeDetailContainer,
-//                    "Failed to invite $recipientFirstName", Snackbar.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
 
     private fun getSafeDetails() {
         val call = ApiClient.safeService.getSafeByIdForUser(safeId)
@@ -76,6 +54,11 @@ class SafeDetailFragment : Fragment() {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
                     populateSafeDetails(it.body())
+                } else {
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Failed get safe details",
+                        Snackbar.LENGTH_SHORT).show()
                 }
             }
             onFailure = {
@@ -94,11 +77,11 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun populateTabs() {
-        binding.pager.adapter = SafeDetailPagerAdapter(this, safeId)
+        binding.pager.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             var tabName = ""
             when(position) {
-                SafeDetailPagerAdapter.TAB_DETAILS -> tabName = SafeDetailPagerAdapter.TAB_DETAILS_NAME
+                //SafeDetailPagerAdapter.TAB_DETAILS -> tabName = SafeDetailPagerAdapter.TAB_DETAILS_NAME
                 SafeDetailPagerAdapter.TAB_INVITATIONS -> tabName = SafeDetailPagerAdapter.TAB_INVITATIONS_NAME
                 SafeDetailPagerAdapter.TAB_PARTICIPANTS -> tabName = SafeDetailPagerAdapter.TAB_PARTICIPANTS_NAME
             }
@@ -119,5 +102,66 @@ class SafeDetailFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun getPaymentMethod() {
+        val call = ApiClient.participationService.getParticipationsForSafe(safeId)
+        call.enqueue {
+            onResponse = { it ->
+                if (it.isSuccessful && it.body() != null) {
+                    val participation = it.body().find { it.user?.id == userId }
+                    if (participation != null) {
+                        loadPaymentMethodForParticipant(participation.id!!)
+                    } else {
+                        Snackbar.make(
+                            binding.safeDetailContainer,
+                            "Failed get to participants for safe",
+                            Snackbar.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Failed get to participants for safe",
+                        Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            onFailure = {
+                Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    "Failed get to participants for safe",
+                    Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun loadPaymentMethodForParticipant(participationId: Long) {
+        val pCall = ApiClient.participationService.getParticipationByID(participationId)
+        pCall.enqueue {
+            onResponse = {
+                if (it.isSuccessful && it.body() != null && it.body().paymentMethod != null) {
+                    populatePaymentMethod(it.body().paymentMethod!!)
+                } else {
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Failed get to payment method for user",
+                        Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            onFailure = {
+                Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    "Failed get to participation for user",
+                    Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun populatePaymentMethod(item: PaymentDetailResp) {
+        binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
+        binding.safeDetailPaymentMethodNumber.isEnabled = true
+        binding.safeDetailPaymentMethodEdit.isEnabled = true
+        binding.safeDetailPaymentMethodNumber.text = item.cardNumber
     }
 }
