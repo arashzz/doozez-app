@@ -23,11 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //admin
-//        userId = 1L
 
         //arash
-        userId = 2L
+        userId = 1L
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -16,4 +16,6 @@ class PaymentDetailResp {
     @SerializedName("is_default")
     var isDefault: Boolean = true
 
+    @SerializedName("redirect_url")
+    var redirectURL: String? = null
 }

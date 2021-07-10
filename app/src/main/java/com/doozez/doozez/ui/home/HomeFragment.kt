@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.doozez.doozez.R
 import com.doozez.doozez.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -34,6 +36,9 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+        binding.homeCreatePayment.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_home_to_nav_payment_create)
+        }
         return root
     }
 

@@ -10,11 +10,11 @@ class DoozInterceptor: Interceptor {
 //        val header1 = "YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA"
 
         //arash
-        val header2 = "YXJhc2hAZG9vemV6LmNvbTphcmFzaDEyM0A="
+        val header2 = "5583b4fd8e14f9231a1c27f5b725c9e130a424cd"
 
         val original = chain.request()
         val requestBuilder: Request.Builder = original.newBuilder()
-        requestBuilder.addHeader("Authorization", "Basic $header2")
+        requestBuilder.addHeader("Authorization", "Token $header2")
         return chain.proceed(requestBuilder.build())
     }
 }
