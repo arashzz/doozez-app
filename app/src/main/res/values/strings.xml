@@ -18,11 +18,16 @@
     <string name="action_invite_accept">Accept</string>
     <string name="action_invite_reject">Reject</string>
     <string name="action_invite_safe">Safe Details</string>
+    <string name="action_login">Login</string>
+    <string name="action_register">Register</string>
     <string name="action_create">Create</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_proceed">Proceed</string>
     <string name="action_add">Add</string>
     <string name="action_edit">Edit</string>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
 
     <string name="et_search_user_hint">Enter email...</string>
 
