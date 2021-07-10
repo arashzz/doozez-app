@@ -3,7 +3,6 @@ package com.doozez.doozez.api.participation
 import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.user.UserDetailResponse
 import com.google.gson.annotations.SerializedName
-import org.json.JSONObject
 
 class ParticipationResp() {
 

@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.invitation.InvitationDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeInvitationsBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
 import com.doozez.doozez.utils.BundleKey

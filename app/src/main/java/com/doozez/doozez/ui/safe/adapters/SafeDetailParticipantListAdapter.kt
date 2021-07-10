@@ -2,16 +2,11 @@ package com.doozez.doozez.ui.safe.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.R
-import com.doozez.doozez.api.invitation.InvitationDetailResponse
 import com.doozez.doozez.api.participation.ParticipationResp
-import com.doozez.doozez.databinding.FragmentSafeDetailInviteItemBinding
 import com.doozez.doozez.databinding.FragmentSafeDetailParticipantItemBinding
-import com.doozez.doozez.utils.InvitationStatus
 
 class SafeDetailParticipantListAdapter(
     private val values: MutableList<ParticipationResp>):

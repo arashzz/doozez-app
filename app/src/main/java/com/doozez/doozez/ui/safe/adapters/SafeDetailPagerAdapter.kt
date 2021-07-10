@@ -2,7 +2,6 @@ package com.doozez.doozez.ui.safe.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.doozez.doozez.ui.safe.SafeDetailsTabFragment
 import com.doozez.doozez.ui.safe.SafeInvitationsTabFragment
 import com.doozez.doozez.ui.safe.SafeParticipantsTabFragment
 

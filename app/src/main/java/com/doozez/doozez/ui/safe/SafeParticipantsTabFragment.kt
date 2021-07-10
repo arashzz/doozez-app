@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.FragmentTabSafeParticipantsBinding
-import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
 import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
 import com.doozez.doozez.utils.BundleKey
 import com.google.android.material.snackbar.Snackbar
