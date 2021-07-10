@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
-import com.doozez.doozez.MainActivity
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.payments.PaymentCreateReq
@@ -37,6 +37,12 @@ class PaymentCreateFragment : Fragment() {
                     val webView: WebView = binding.paymentCreateView
                     val webSettings: WebSettings = webView.settings
                     webSettings.javaScriptEnabled = true
+                    webView.webViewClient = object : WebViewClient() {
+                        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                            view.loadUrl(url)
+                            return false
+                        }
+                    }
                     webView.loadUrl(it.body().redirectURL!!)
                 }
             }
