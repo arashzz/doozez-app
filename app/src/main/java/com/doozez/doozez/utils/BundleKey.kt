@@ -7,4 +7,5 @@ object BundleKey {
     const val SAFE_ID = "safe_id"
     const val USER_ID = "user_id"
     const val SAFE_OBJECT = "safe-object"
+    const val EMAIL = "email"
 }
