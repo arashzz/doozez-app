@@ -139,11 +139,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin(email: String) {
-        val intent = Intent(this, LoginActivity::class.java).apply {
+        Intent(this, LoginActivity::class.java).apply {
             bundleOf(BundleKey.EMAIL to email)
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }.also { startActivity(it) }
+        finish()
     }
 
     private fun validatePasswords(): Boolean {
