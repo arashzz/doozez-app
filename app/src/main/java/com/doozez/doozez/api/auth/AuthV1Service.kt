@@ -8,4 +8,7 @@ interface AuthV1Service {
 
     @POST("/auth/registration/")
     fun register(@Body body: RegisterCreateReq): Call<Void>
+
+    @POST("/auth/login/")
+    fun login(@Body body: LoginCreateReq): Call<LoginCreateResp>
 }
