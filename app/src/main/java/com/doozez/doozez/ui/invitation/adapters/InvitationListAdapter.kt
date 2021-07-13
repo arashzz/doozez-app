@@ -20,7 +20,10 @@ class InvitationListAdapter(
 ) : RecyclerView.Adapter<InvitationListAdapter.InvitationViewHolder>() {
 
     fun addItems(items: List<InvitationDetailResponse>) {
-        values.addAll(items)
+        with(values) {
+            clear()
+            addAll(items)
+        }.also { notifyDataSetChanged() }
     }
 
     fun itemStatusChanged(itemId: Int, status: String) {

@@ -19,8 +19,8 @@ class SafeListAdapter(
         with(values) {
             clear()
             addAll(items)
-        }
-        notifyDataSetChanged()
+        }.also { notifyDataSetChanged() }
+
     }
 
     fun addItem(item: SafeDetailResponse) {
