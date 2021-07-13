@@ -5,24 +5,26 @@ import com.doozez.doozez.api.user.UserDetailResponse
 import com.doozez.doozez.utils.InvitationStatus
 import com.google.gson.annotations.SerializedName
 
-class InvitationDetailResponse: Comparable<InvitationDetailResponse> {
+class InvitationDetailResponse (
     @SerializedName("id")
-    var id: Long? = null
+    var id: Int,
 
     @SerializedName("recipient")
-    var recipient: UserDetailResponse? = null
+    var recipient: UserDetailResponse,
 
     @SerializedName("initiator")
-    var initiator: UserDetailResponse? = null
+    var initiator: UserDetailResponse,
 
     @SerializedName("status")
-    var status: String? = null
+    var status: String,
 
     @SerializedName("monthlyPayment")
-    var monthlyPayment: Long? = null
+    var monthlyPayment: Long,
 
     @SerializedName("safe")
-    var safe: SafeDetailResponse? = null
+    var safe: SafeDetailResponse
+
+        ): Comparable<InvitationDetailResponse> {
     override fun compareTo(other: InvitationDetailResponse): Int {
         if (status == other.status) {
             return 0

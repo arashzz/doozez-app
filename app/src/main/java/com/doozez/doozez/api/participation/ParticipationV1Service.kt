@@ -7,8 +7,8 @@ import retrofit2.http.Query
 
 interface ParticipationV1Service {
     @GET("v1/participations/")
-    fun getParticipationsForSafe(@Query("safe") safeId: Long): Call<List<ParticipationResp>>
+    fun getParticipationsForSafe(@Query("safe") safeId: Int): Call<List<ParticipationResp>>
 
     @GET("v1/participations/{id}")
-    fun getParticipationByID(@Path("id") id: Long): Call<ParticipationResp>
+    fun getParticipationByID(@Path("id") id: Int): Call<ParticipationResp>
 }

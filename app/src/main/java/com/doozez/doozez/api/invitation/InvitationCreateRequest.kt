@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 class InvitationCreateRequest {
     @SerializedName("safe")
-    var safeId: Long? = null
+    var safeId: Int? = null
 
     @SerializedName("recipient")
-    var recipientId: Long? = null
+    var recipientId: Int? = null
 }
