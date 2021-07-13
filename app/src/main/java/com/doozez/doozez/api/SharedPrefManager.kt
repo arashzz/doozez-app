@@ -27,7 +27,7 @@ object SharedPrefManager {
         )
     }
 
-    fun put(key: String, value: String, encrypted: Boolean = false) {
+    fun putString(key: String, value: String, encrypted: Boolean = false) {
         val prefs = if (!encrypted) sharedPrefs else encryptedSharedPrefs
         with(prefs.edit()) {
             putString(key, value)
@@ -35,9 +35,22 @@ object SharedPrefManager {
         }
     }
 
-    fun get(key: String, default: String? = null, encrypted: Boolean = false): String? {
+    fun getString(key: String, default: String? = null, encrypted: Boolean = false): String? {
         val prefs = if (!encrypted) sharedPrefs else encryptedSharedPrefs
         return prefs.getString(key, default)
+    }
+
+    fun putInt(key: String, value: Int, encrypted: Boolean = false) {
+        val prefs = if (!encrypted) sharedPrefs else encryptedSharedPrefs
+        with(prefs.edit()) {
+            putInt(key, value)
+            commit()
+        }
+    }
+
+    fun getInt(key: String, default: Int = 0, encrypted: Boolean = false): Int {
+        val prefs = if (!encrypted) sharedPrefs else encryptedSharedPrefs
+        return prefs.getInt(key, default)
     }
 
     fun clear() {

@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName
 class SafeDetailResponse() : Parcelable {
 
     @SerializedName("id")
-    var id: Long? = null
+    var id: Int? = null
 
     @SerializedName("initiator")
-    var initiator: Long? = null
+    var initiator: Int? = null
 
     @SerializedName("name")
     var name: String? = null
@@ -22,7 +22,7 @@ class SafeDetailResponse() : Parcelable {
     var monthlyPayment: Long? = null
 
     constructor(parcel: Parcel) : this() {
-        id = parcel.readValue(Long::class.java.classLoader) as? Long
+        id = parcel.readValue(Int::class.java.classLoader) as? Int
         name = parcel.readString()
         status = parcel.readString()
         monthlyPayment = parcel.readValue(Long::class.java.classLoader) as? Long

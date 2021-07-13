@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val apiKey = SharedPrefManager.get(SharedPrerfKey.API_KEY, null, true)
+        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
         if(!apiKey.isNullOrBlank()) {
             navigateToMain()
         }
@@ -88,7 +88,8 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.put(SharedPrerfKey.API_KEY, it.body().apiKey, true)
+                    SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
+                    SharedPrefManager.putInt(SharedPrerfKey.USER_ID, 1, false)
                     navigateToMain()
                 } else {
                     Snackbar.make(

@@ -17,7 +17,7 @@ import com.doozez.doozez.utils.BundleKey
 import com.google.android.material.snackbar.Snackbar
 
 class SafeInvitationsTabFragment() : Fragment() {
-    private var safeId: Long = 0
+    private var safeId: Int = 0
     private var _binding: FragmentSafeInvitationsBinding? = null
     private val binding get() = _binding!!
     private val adapter = SafeDetailInviteListAdapter(mutableListOf())
@@ -25,7 +25,7 @@ class SafeInvitationsTabFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getLong(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID)
         }
     }
 
@@ -63,7 +63,7 @@ class SafeInvitationsTabFragment() : Fragment() {
     }
 
     companion object {
-        fun newInstance(safeId: Long) = SafeInvitationsTabFragment().apply {
+        fun newInstance(safeId: Int) = SafeInvitationsTabFragment().apply {
             arguments = bundleOf(BundleKey.SAFE_ID to safeId)
         }
     }

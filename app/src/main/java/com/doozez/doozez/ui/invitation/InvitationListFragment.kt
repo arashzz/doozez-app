@@ -15,16 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.MainActivity
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.invitation.InvitationActionReq
 import com.doozez.doozez.api.invitation.InvitationDetailResponse
 import com.doozez.doozez.databinding.FragmentInvitationListBinding
 import com.doozez.doozez.ui.invitation.adapters.InvitationListAdapter
 import com.doozez.doozez.ui.invitation.listeners.OnInviteActionClickListener
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.InvitationAction
-import com.doozez.doozez.utils.InvitationStatus
-import com.doozez.doozez.utils.ResultKey
+import com.doozez.doozez.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class InvitationListFragment : Fragment(), OnInviteActionClickListener {
@@ -32,7 +30,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     private val binding get() = _binding!!
     private var adapter: InvitationListAdapter? = null
     private var ctx: Context? = null
-    private var userId: Long = 0
+    private var userId: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,7 +44,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = (activity as MainActivity).getUserId()
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
         adapter = InvitationListAdapter(mutableListOf(), userId, this, ctx!!)
     }
 
@@ -67,8 +65,8 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     private fun addListeners() {
         setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
             if (bundle.getBoolean(BundleKey.RESULT_OK)) {
-                val inviteId = bundle.getLong(BundleKey.INVITE_ID)
-                val paymentId = bundle.getLong(BundleKey.PAYMENT_METHOD_ID)
+                val inviteId = bundle.getInt(BundleKey.INVITE_ID)
+                val paymentId = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
                 if (inviteId > 0 && paymentId > 0) {
                     updateInvite(inviteId, paymentId, InvitationAction.ACCEPT)
                 }
@@ -97,7 +95,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             .setTitle("some title")
             .setMessage("Are you sure you want to accept this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
-                loadPaymentMethodsForInvite(invite.id!!)
+                loadPaymentMethodsForInvite(invite.id)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -110,7 +108,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             .setTitle("some title")
             .setMessage("Are you sure you want to reject this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
-                updateInvite(invite.id!!, 0, InvitationAction.DECLINE)
+                updateInvite(invite.id, 0, InvitationAction.DECLINE)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -118,13 +116,13 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             }.show()
     }
 
-    private fun loadPaymentMethodsForInvite(inviteId: Long) {
+    private fun loadPaymentMethodsForInvite(inviteId: Int) {
         findNavController().navigate(R.id.action_nav_invitation_to_nav_payment_list, bundleOf(
             BundleKey.INVITE_ID to inviteId
         ))
     }
 
-    private fun updateInvite(inviteId: Long, paymentId: Long, action: String) {
+    private fun updateInvite(inviteId: Int, paymentId: Int, action: String) {
         val call = ApiClient.invitationService.updateInvitationForAction(
             inviteId,
             InvitationActionReq(action, paymentId))

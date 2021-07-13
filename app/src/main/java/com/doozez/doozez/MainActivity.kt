@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkAuthentication() {
-        val apiKey = SharedPrefManager.get(SharedPrerfKey.API_KEY, null, true)
+        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
         if (apiKey.isNullOrEmpty()) {
             redirectToLogin()
         }

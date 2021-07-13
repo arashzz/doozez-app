@@ -5,20 +5,19 @@ import com.doozez.doozez.api.user.UserDetailResponse
 import com.google.gson.annotations.SerializedName
 import org.json.JSONObject
 
-class ParticipationResp() {
-
+class ParticipationResp(
     @SerializedName("id")
-    val id: Long? = null
+    val id: Int,
 
     @SerializedName("user_role")
-    var userRole: String? = null
+    var userRole: String,
 
     @SerializedName("user")
-    var user: UserDetailResponse? = null
+    var user: UserDetailResponse,
 
     @SerializedName("payment_method")
-    var paymentMethod: PaymentDetailResp? = null
+    var paymentMethod: PaymentDetailResp,
 
     @SerializedName("win_sequence")
-    var winSequence: Long? = null
-}
+    var winSequence: Int
+)
