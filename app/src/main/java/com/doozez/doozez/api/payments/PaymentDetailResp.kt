@@ -14,5 +14,8 @@ class PaymentDetailResp(
     var type: String = "VISA",
 
     @SerializedName("is_default")
-    var isDefault: Boolean = true
+    var isDefault: Boolean = true,
+
+    @SerializedName("redirect_url")
+    var redirectURL: String
 )

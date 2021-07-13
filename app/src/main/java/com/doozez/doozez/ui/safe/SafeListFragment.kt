@@ -30,7 +30,6 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = (activity as MainActivity).getUserId()
     }
 
     override fun onCreateView(
