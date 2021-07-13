@@ -15,7 +15,7 @@ import com.google.android.material.button.MaterialButton
 
 class InvitationListAdapter(
     private val values: MutableList<InvitationDetailResponse>,
-    private val userId: Long, private val listener: OnInviteActionClickListener,
+    private val userId: Int, private val listener: OnInviteActionClickListener,
     private val ctx: Context
 ) : RecyclerView.Adapter<InvitationListAdapter.InvitationViewHolder>() {
 
@@ -23,7 +23,7 @@ class InvitationListAdapter(
         values.addAll(items)
     }
 
-    fun itemStatusChanged(itemId: Long, status: String) {
+    fun itemStatusChanged(itemId: Int, status: String) {
         values.forEachIndexed { index, it ->
             if(it.id == itemId) {
                 it.status = status
@@ -50,7 +50,7 @@ class InvitationListAdapter(
         holder.name.text = item.safe?.name
         holder.monthlyPayment.text = item.safe?.monthlyPayment.toString()
         addListeners(holder, item)
-        if (userId != item.recipient?.id) {
+        if (userId != item.recipient.id) {
             (holder.acceptBtn.parent as? ViewGroup)?.removeView(holder.acceptBtn)
             (holder.declineBtn.parent as? ViewGroup)?.removeView(holder.declineBtn)
             senderMsg = "Invite sent to"

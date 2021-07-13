@@ -18,5 +18,5 @@ interface SafeV1Service {
 
 //    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
     @GET("v1/safes/{safeId}/")
-    fun getSafeByIdForUser(@Path("safeId") safeId: Long): Call<SafeDetailResponse>
+    fun getSafeByIdForUser(@Path("safeId") safeId: Int): Call<SafeDetailResponse>
 }

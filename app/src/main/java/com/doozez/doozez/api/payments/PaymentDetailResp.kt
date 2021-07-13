@@ -2,20 +2,20 @@ package com.doozez.doozez.api.payments
 
 import com.google.gson.annotations.SerializedName
 
-class PaymentDetailResp {
+class PaymentDetailResp(
 
     @SerializedName("id")
-    var id: Long? = null
+    var id: Int,
 
     @SerializedName("card_number")
-    var cardNumber: String? = "1111 2222 3333 4444"
+    var cardNumber: String = "1111 2222 3333 4444",
 
     @SerializedName("type")
-    var type: String? = "VISA"
+    var type: String = "VISA",
 
     @SerializedName("is_default")
-    var isDefault: Boolean = true
+    var isDefault: Boolean = true,
 
     @SerializedName("redirect_url")
-    var redirectURL: String? = null
-}
+    var redirectURL: String
+)

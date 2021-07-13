@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResponse
@@ -17,12 +18,13 @@ import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
 import com.doozez.doozez.utils.BundleKey
 import com.doozez.doozez.utils.SafeStatus
+import com.doozez.doozez.utils.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SafeDetailFragment : Fragment() {
-    private var safeId: Long = 0
-    private var userId: Long = 0
+    private var safeId: Int = 0
+    private var userId: Int = 0
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
     private var isInitiator = false
@@ -31,9 +33,9 @@ class SafeDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getLong(BundleKey.SAFE_ID)
-            userId = it.getLong(BundleKey.USER_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID)
         }
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
         viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
     }
 
@@ -135,7 +137,7 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
-    private fun loadPaymentMethodForParticipant(participationId: Long) {
+    private fun loadPaymentMethodForParticipant(participationId: Int) {
         val pCall = ApiClient.participationService.getParticipationByID(participationId)
         pCall.enqueue {
             onResponse = {

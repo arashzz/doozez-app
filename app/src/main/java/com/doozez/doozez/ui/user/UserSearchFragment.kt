@@ -22,7 +22,7 @@ import com.doozez.doozez.utils.BundleKey
 import com.google.android.material.snackbar.Snackbar
 
 class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
-    private var safeId: Long = 0
+    private var safeId: Int = 0
     private var _binding: FragmentUserSearchBinding? = null
     private val binding get() = _binding!!
     private val adapter = UserSearchAdapter(mutableListOf(), this)
@@ -32,7 +32,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getLong(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID)
         }
     }
 

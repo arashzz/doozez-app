@@ -9,15 +9,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.FragmentTabSafeParticipantsBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
 
 class SafeParticipantsTabFragment() : Fragment() {
-    private var safeId: Long = 0
-    private var userId: Long = 0
+    private var safeId: Int = 0
+    private var userId: Int = 0
     private var _binding: FragmentTabSafeParticipantsBinding? = null
     private val binding get() = _binding!!
     private val adapter = SafeDetailParticipantListAdapter(mutableListOf())
@@ -25,9 +27,9 @@ class SafeParticipantsTabFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getLong(BundleKey.SAFE_ID)
-            userId = it.getLong(BundleKey.USER_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID)
         }
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
     }
 
     override fun onCreateView(
@@ -64,11 +66,8 @@ class SafeParticipantsTabFragment() : Fragment() {
     }
 
     companion object {
-        fun newInstance(safeId: Long, userId: Long) = SafeParticipantsTabFragment().apply {
-            arguments = bundleOf(
-                BundleKey.SAFE_ID to safeId,
-                BundleKey.USER_ID to userId
-            )
+        fun newInstance(safeId: Int) = SafeParticipantsTabFragment().apply {
+            arguments = bundleOf(BundleKey.SAFE_ID to safeId)
         }
     }
 }
