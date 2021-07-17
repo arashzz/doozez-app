@@ -9,13 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.doozez.doozez.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
-
-        <action
-            android:id="@+id/action_nav_home_to_nav_payment_create"
-            app:destination="@id/nav_payment_create" />
-
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_invitation"
@@ -25,11 +19,19 @@
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_payment_list"
-            app:destination="@id/nav_payment_list" />
+            app:destination="@id/nav_payment_list"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_safe_detail"
-            app:destination="@id/nav_safe_detail" />
+            app:destination="@id/nav_safe_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
     </fragment>
 
@@ -41,11 +43,19 @@
 
         <action
             android:id="@+id/action_nav_safe_to_nav_safe_create"
-            app:destination="@id/nav_safe_create" />
+            app:destination="@id/nav_safe_create"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
         <action
             android:id="@+id/action_nav_safe_to_nav_safe_detail"
-            app:destination="@id/nav_safe_detail" />
+            app:destination="@id/nav_safe_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -56,26 +66,43 @@
 
         <action
             android:id="@+id/action_nav_safe_to_nav_payment_list"
-            app:destination="@id/nav_payment_list" />
+            app:destination="@id/nav_payment_list"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_nav_safe_to_nav_user_search"
-            app:destination="@id/nav_user_search" />
+            app:destination="@id/nav_user_search"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
     </fragment>
-    <dialog
+    <fragment
         android:id="@+id/nav_safe_create"
         android:name="com.doozez.doozez.ui.safe.SafeCreateFragment"
         android:label="@string/menu_safe_create"
-        tools:layout="@layout/fragment_safe_create" />
+        tools:layout="@layout/fragment_safe_create" >
 
-    <dialog
+        <action
+            android:id="@+id/action_nav_safe_create_to_nav_payment_create"
+            app:destination="@id/nav_payment_create"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_payment_list"
         android:name="com.doozez.doozez.ui.payment.PaymentListFragment"
         tools:layout="@layout/fragment_payment_list" />
 
     <fragment
         android:id="@+id/nav_payment_create"
-        android:name="com.doozez.doozez.ui.payment.PaymentCreateFragment"
+        android:name="com.doozez.doozez.ui.payment.PaymentCreateRedirectFragment"
         tools:layout="@layout/fragment_payment_create" />
 
     <fragment

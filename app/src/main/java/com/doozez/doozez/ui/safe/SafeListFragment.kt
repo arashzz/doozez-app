@@ -19,6 +19,7 @@ import com.doozez.doozez.databinding.FragmentSafesListBinding
 import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.PaymentType
 import com.doozez.doozez.utils.ResultKey
 import com.google.android.material.snackbar.Snackbar
 
@@ -63,7 +64,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
             }
         }
         binding.addSafe.setOnClickListener {
-            SafeCreateFragment().show(parentFragmentManager, "")
+            findNavController().navigate(R.id.action_nav_safe_to_nav_safe_create)
         }
     }
 
