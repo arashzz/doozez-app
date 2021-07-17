@@ -8,4 +8,6 @@ object BundleKey {
     const val USER_ID = "user_id"
     const val SAFE_OBJECT = "safe-object"
     const val EMAIL = "email"
+    const val PAYMENT_METHOD_TYPE = "payment_type"
+    const val FAIL_REASON = "fail_reason"
 }
