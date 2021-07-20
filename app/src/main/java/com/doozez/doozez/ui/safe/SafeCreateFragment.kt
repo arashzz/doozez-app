@@ -18,10 +18,7 @@ import com.doozez.doozez.api.safe.SafeCreateRequest
 import com.doozez.doozez.api.safe.SafeDetailResponse
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
 import com.doozez.doozez.ui.payment.PaymentCreateRedirectFragment
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentType
-import com.doozez.doozez.utils.ResultKey
-import com.doozez.doozez.utils.Utils
+import com.doozez.doozez.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,6 +26,7 @@ class SafeCreateFragment : Fragment() {
     private var _binding: FragmentSafeCreateBinding? = null
     private val binding get() = _binding!!
     private var paymentID: Int? = null
+    private var paymentCompleted = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +52,8 @@ class SafeCreateFragment : Fragment() {
         setFragmentResultListener(ResultKey.PAYMENT_METHOD_CREATE_INITIATED) { _, bundle ->
             val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
             if (resultOk) {
-                paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
-                //TODO: check payment method status
+                val paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
+                checkPaymentStatus(paymentID)
 
             } else {
                 var reason = bundle.getString(BundleKey.FAIL_REASON)
@@ -68,9 +66,6 @@ class SafeCreateFragment : Fragment() {
                     Snackbar.LENGTH_SHORT).show()
             }
         }
-//        binding.safeCreateCancel.setOnClickListener {
-//            dismiss()
-//        }
         binding.safeCreatePaymentCreate.setOnClickListener {
             findNavController().navigate(
                 R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
@@ -81,15 +76,43 @@ class SafeCreateFragment : Fragment() {
             if (validateInput()) {
                 createSafe(
                     binding.safeCreateName.editText?.text.toString(),
-                    binding.safeCreateMonthlyPayment.editText?.text.toString().toLong())
+                    binding.safeCreateMonthlyPayment.editText?.text.toString().toInt())
             }
         }
     }
 
-    private fun createSafe(safeName: String, monthlyPayment: Long) {
-        var req = SafeCreateRequest()
-        req.name = safeName
-        req.monthlyPayment = monthlyPayment
+    private fun checkPaymentStatus(id: Int) {
+        if(id > 0) {
+            val call = ApiClient.paymentService.getPaymentById(id)
+            call.enqueue {
+                onResponse = {
+                    if(it.isSuccessful &&
+                        it.body() != null &&
+                        it.body().status == PaymentStatus.EXTERNAL_APPROVAL_SUCCESS) {
+                        paymentCompleted = true
+                        paymentID = id
+                    } else {
+                        Snackbar.make(
+                            binding.safeCreateContainer,
+                            "Payment method successfully added",
+                            Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                onFailure = {
+                    Log.e("SafeListFragment", it?.stackTrace.toString())
+                    returnNewSafe(false, null)
+                }
+            }
+        } else {
+            Snackbar.make(
+                binding.safeCreateContainer,
+                "Invalid Payment selected",
+                Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun createSafe(safeName: String, monthlyPayment: Int) {
+        var req = SafeCreateRequest(safeName, monthlyPayment, paymentID!!)
 
         val call = ApiClient.safeService.createSafeForUser(req)
         call.enqueue {
@@ -111,10 +134,7 @@ class SafeCreateFragment : Fragment() {
                 BundleKey.SAFE_OBJECT to safe
             )
         )
-        childFragmentManager.beginTransaction()
-            .add(PaymentCreateRedirectFragment(), "some-tag")
-            .commit()
-
+        findNavController().popBackStack()
     }
 
     //TODO: improvement needed
@@ -122,7 +142,7 @@ class SafeCreateFragment : Fragment() {
         var name = binding.safeCreateName.editText?.text.toString()
         var payment = binding.safeCreateMonthlyPayment.editText?.text.toString()
         var valid = true
-        if (paymentID == null) {
+        if (paymentID == null || !paymentCompleted) {
             valid = false
             Snackbar.make(
                 binding.safeCreateContainer,
