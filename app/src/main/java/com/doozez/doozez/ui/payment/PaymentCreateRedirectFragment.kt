@@ -80,19 +80,25 @@ class PaymentCreateRedirectFragment : Fragment() {
 
     private fun initiatePaymentCreation(url: String) {
 //        paymentID = PaymentUtils.getPaymentIdFromUrlForType(url, type!!)
-        if (paymentID == null) {
-            Log.e(BundleReason.INVALID_PAYMENT_METHOD_ID.toString(),
-                "Payment method id for type ${type.toString()} is null")
-            setResult(bundleOf(
-                BundleKey.RESULT_OK to false,
-                BundleKey.FAIL_REASON to BundleReason.INVALID_PAYMENT_METHOD_ID
-            ))
-        }
+//        if (paymentID == null) {
+//            Log.e(BundleReason.INVALID_PAYMENT_METHOD_ID.toString(),
+//                "Payment method id for type ${type.toString()} is null")
+//            setResult(bundleOf(
+//                BundleKey.RESULT_OK to false,
+//                BundleKey.FAIL_REASON to BundleReason.INVALID_PAYMENT_METHOD_ID
+//            ))
+//        }
         loadRedirectView(url)
         setResult(bundleOf(
-            BundleKey.RESULT_OK to false,
-            BundleKey.PAYMENT_METHOD_ID to paymentID
+            BundleKey.RESULT_OK to true,
+            BundleKey.SAFE_ID to safeId,
+            BundleKey.PAYMENT_METHOD_ID to paymentID,
+            BundleKey.PAYMENT_METHOD_TYPE to type
         ))
+//        setResult(bundleOf(
+//            BundleKey.RESULT_OK to false,
+//            BundleKey.PAYMENT_METHOD_ID to paymentID
+//        ))
     }
 
     private fun loadRedirectView(url: String) {
@@ -105,12 +111,6 @@ class PaymentCreateRedirectFragment : Fragment() {
                 return false
             }
         }
-        setResult(bundleOf(
-            BundleKey.RESULT_OK to true,
-            BundleKey.SAFE_ID to safeId,
-            BundleKey.PAYMENT_METHOD_ID to paymentID,
-            BundleKey.PAYMENT_METHOD_TYPE to type
-        ))
         webView.loadUrl(url)
     }
 
