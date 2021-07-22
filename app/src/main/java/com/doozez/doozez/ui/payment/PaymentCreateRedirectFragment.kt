@@ -31,12 +31,14 @@ class PaymentCreateRedirectFragment : Fragment() {
     private var type: PaymentType? = null
     private var paymentID: Int? = null
     private var safeId: Int? = null
+    private var inviteId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             type = it.get(BundleKey.PAYMENT_METHOD_TYPE) as PaymentType
             safeId = it.getInt(BundleKey.SAFE_ID)
+            inviteId = it.getInt(BundleKey.INVITE_ID)
         }
     }
 
@@ -79,26 +81,15 @@ class PaymentCreateRedirectFragment : Fragment() {
     }
 
     private fun initiatePaymentCreation(url: String) {
-//        paymentID = PaymentUtils.getPaymentIdFromUrlForType(url, type!!)
-//        if (paymentID == null) {
-//            Log.e(BundleReason.INVALID_PAYMENT_METHOD_ID.toString(),
-//                "Payment method id for type ${type.toString()} is null")
-//            setResult(bundleOf(
-//                BundleKey.RESULT_OK to false,
-//                BundleKey.FAIL_REASON to BundleReason.INVALID_PAYMENT_METHOD_ID
-//            ))
-//        }
+
         loadRedirectView(url)
         setResult(bundleOf(
             BundleKey.RESULT_OK to true,
             BundleKey.SAFE_ID to safeId,
+            BundleKey.INVITE_ID to inviteId,
             BundleKey.PAYMENT_METHOD_ID to paymentID,
             BundleKey.PAYMENT_METHOD_TYPE to type
         ))
-//        setResult(bundleOf(
-//            BundleKey.RESULT_OK to false,
-//            BundleKey.PAYMENT_METHOD_ID to paymentID
-//        ))
     }
 
     private fun loadRedirectView(url: String) {

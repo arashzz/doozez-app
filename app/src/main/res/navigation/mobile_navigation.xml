@@ -18,12 +18,12 @@
         tools:layout="@layout/fragment_invitation_list" >
 
         <action
-            android:id="@+id/action_nav_invitation_to_nav_payment_list"
-            app:destination="@id/nav_payment_list"
+            android:id="@+id/action_nav_safe_create_to_nav_payment_create"
+            app:destination="@id/nav_payment_create"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_safe_detail"

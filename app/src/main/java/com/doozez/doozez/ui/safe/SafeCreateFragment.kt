@@ -70,7 +70,8 @@ class SafeCreateFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
                     BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
-                ))
+                )
+            )
         }
         binding.safeCreateCreate.setOnClickListener {
             if (validateInput()) {
