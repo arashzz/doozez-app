@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.databinding.FragmentHomeBinding
+import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.PaymentType
 
 class HomeFragment : Fragment() {
 
@@ -37,7 +40,7 @@ class HomeFragment : Fragment() {
             textView.text = it
         })
         binding.homeCreatePayment.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_home_to_nav_payment_create)
+
         }
         return root
     }

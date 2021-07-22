@@ -2,11 +2,14 @@ package com.doozez.doozez.api.safe
 
 import com.google.gson.annotations.SerializedName
 
-class SafeCreateRequest {
+class SafeCreateRequest(
 
     @SerializedName("name")
-    var name: String? = null
+    var name: String,
 
     @SerializedName("monthly_payment")
-    var monthlyPayment: Long? = null
-}
+    var monthlyPayment: Int,
+
+    @SerializedName("payment_method_id")
+    var paymentMethodId: Int,
+)

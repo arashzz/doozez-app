@@ -3,6 +3,7 @@ package com.doozez.doozez
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.widget.doOnTextChanged
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
@@ -22,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
         val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
         if(!apiKey.isNullOrBlank()) {
-            navigateToMain()
+            navigateToActivity(MainActivity::class.java)
         }
 
         val email = intent.getStringExtra(BundleKey.EMAIL)
@@ -68,6 +69,9 @@ class LoginActivity : AppCompatActivity() {
                 binding.loginPassword.error = null
             }
         }
+        binding.loginRegister.setOnClickListener {
+            navigateToActivity(RegisterActivity::class.java)
+        }
     }
 
     private fun validateForm(): Boolean {
@@ -75,8 +79,8 @@ class LoginActivity : AppCompatActivity() {
                 binding.loginPassword.error == null
     }
 
-    private fun navigateToMain() {
-        Intent(this@LoginActivity, MainActivity::class.java).apply {
+    private fun <T> navigateToActivity(cls: Class<T>) {
+        Intent(this@LoginActivity, cls).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also { startActivity(it) }
@@ -90,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                 if(it.isSuccessful && it.body() != null) {
                     SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
                     SharedPrefManager.putInt(SharedPrerfKey.USER_ID, 1, false)
-                    navigateToMain()
+                    navigateToActivity(MainActivity::class.java)
                 } else {
                     Snackbar.make(
                         binding.loginContainer,
@@ -100,7 +104,12 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
             onFailure = {
-
+                Log.e("LoginActivity", it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.loginContainer,
+                    "failed to login",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
