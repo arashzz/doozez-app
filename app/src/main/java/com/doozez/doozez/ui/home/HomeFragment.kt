@@ -39,9 +39,6 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        binding.homeCreatePayment.setOnClickListener {
-
-        }
         return root
     }
 

@@ -2,6 +2,7 @@ package com.doozez.doozez
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -68,5 +70,13 @@ class MainActivity : AppCompatActivity() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also { startActivity(it) }
         finish()
+    }
+
+    fun triggerOverlay() {
+        var visibility = View.GONE
+        if (binding.appBarMain.contentMain.overlayLoader.progressView.visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        binding.appBarMain.contentMain.overlayLoader.progressView.visibility = visibility
     }
 }

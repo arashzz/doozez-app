@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.widget.doOnTextChanged
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
@@ -20,12 +21,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
-        if(!apiKey.isNullOrBlank()) {
-            navigateToActivity(MainActivity::class.java)
-        }
-
         val email = intent.getStringExtra(BundleKey.EMAIL)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -89,11 +84,20 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login(body: LoginCreateReq) {
         val call = ApiClient.authService.login(body)
+        triggerOverlay()
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
+                    //TODO: remove this later
+                    var userId = 1
+                    if(body.email == "arash2@doozez.com") {
+                        userId = 2
+                    }
+                    //
+
                     SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
-                    SharedPrefManager.putInt(SharedPrerfKey.USER_ID, 1, false)
+                    SharedPrefManager.putInt(SharedPrerfKey.USER_ID, userId, false)
+                    triggerOverlay()
                     navigateToActivity(MainActivity::class.java)
                 } else {
                     Snackbar.make(
@@ -104,6 +108,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
             onFailure = {
+                triggerOverlay()
                 Log.e("LoginActivity", it?.stackTrace.toString())
                 Snackbar.make(
                     binding.loginContainer,
@@ -112,5 +117,13 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun triggerOverlay() {
+        var visibility = View.GONE
+        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        binding.overlayLoader.progressView.visibility = visibility
     }
 }
