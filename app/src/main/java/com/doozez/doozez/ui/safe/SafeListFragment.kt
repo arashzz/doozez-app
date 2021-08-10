@@ -10,16 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.doozez.doozez.MainActivity
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.safe.SafeDetailResponse
+import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafesListBinding
 import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentType
 import com.doozez.doozez.utils.ResultKey
 import com.google.android.material.snackbar.Snackbar
 
@@ -47,7 +45,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
         return binding.root
     }
 
-    override fun safeItemClicked(item: SafeDetailResponse) {
+    override fun safeItemClicked(item: SafeDetailResp) {
         findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundleOf(
             BundleKey.SAFE_ID to item.id,
             BundleKey.USER_ID to userId
@@ -68,7 +66,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
         }
     }
 
-    private fun loadNewSafe(safe: SafeDetailResponse?) {
+    private fun loadNewSafe(safe: SafeDetailResp?) {
         safe?.let { adapter.addItem(it) }
     }
 

@@ -13,10 +13,11 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.payments.PaymentDetailResp
-import com.doozez.doozez.api.safe.SafeDetailResponse
+import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.PaymentType
 import com.doozez.doozez.utils.SafeStatus
 import com.doozez.doozez.utils.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
@@ -70,7 +71,7 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
-    private fun populateSafeDetails(detail: SafeDetailResponse) {
+    private fun populateSafeDetails(detail: SafeDetailResp) {
         isInitiator = detail.initiator == userId
         binding.safeDetailName.text = detail.name
         binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
@@ -79,7 +80,11 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun populateTabs() {
-        binding.pager.adapter = viewPagerAdapter
+        with(binding.pager) {
+            adapter = viewPagerAdapter
+            isUserInputEnabled = false
+        }
+
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             var tabName = ""
             when(position) {
@@ -93,8 +98,21 @@ class SafeDetailFragment : Fragment() {
 
     private fun applyUserRoleRules() {
         if(!isInitiator) {
-            (binding.safeDetailAddInvite.parent as? ViewGroup)?.removeView(binding.safeDetailAddInvite)
+            binding.safeDetailLeave.visibility = View.VISIBLE
+            binding.safeDetailLeave.setOnClickListener {
+                Snackbar.make(binding.safeDetailContainer, "dummy leave", Snackbar.LENGTH_SHORT).show()
+            }
         } else {
+            binding.safeDetailStart.visibility = View.VISIBLE
+            binding.safeDetailAddInvite.visibility = View.VISIBLE
+            binding.safeDetailCancel.visibility = View.VISIBLE
+            binding.safeDetailCancel.setOnClickListener {
+                Snackbar.make(binding.safeDetailContainer, "dummy cancel", Snackbar.LENGTH_SHORT).show()
+            }
+            binding.safeDetailStart.setOnClickListener {
+                Snackbar.make(binding.safeDetailContainer, "dummy start", Snackbar.LENGTH_SHORT).show()
+            }
+
             binding.safeDetailAddInvite.setOnClickListener {
                 val navController = findNavController()
                 navController.navigate(
@@ -141,8 +159,8 @@ class SafeDetailFragment : Fragment() {
         val pCall = ApiClient.participationService.getParticipationByID(participationId)
         pCall.enqueue {
             onResponse = {
-                if (it.isSuccessful && it.body() != null && it.body().paymentMethod != null) {
-                    populatePaymentMethod(it.body().paymentMethod!!)
+                if (it.isSuccessful && it.body() != null) {
+                    populatePaymentMethod(it.body().paymentMethod)
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -162,8 +180,10 @@ class SafeDetailFragment : Fragment() {
 
     private fun populatePaymentMethod(item: PaymentDetailResp) {
         binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
-        binding.safeDetailPaymentMethodNumber.isEnabled = true
-        binding.safeDetailPaymentMethodEdit.isEnabled = true
-        binding.safeDetailPaymentMethodNumber.text = item.cardNumber
+        binding.safeDetailPaymentMethodName.isEnabled = true
+        binding.safeDetailPaymentMethodName.text = PaymentType.getPaymentName(PaymentType.DIRECT_DEBIT)
+        binding.safeDetailPaymentMethodContainer.setOnClickListener {
+            Snackbar.make(binding.safeDetailContainer, "change payment method", Snackbar.LENGTH_SHORT).show()
+        }
     }
 }

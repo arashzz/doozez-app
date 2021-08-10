@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-class UserDetailResponse(
+class UserDetailResp(
     @SerializedName("id")
     var id: Int,
 

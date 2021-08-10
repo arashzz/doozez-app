@@ -7,15 +7,15 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.R
-import com.doozez.doozez.api.invitation.InvitationDetailResponse
+import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailInviteItemBinding
 import com.doozez.doozez.utils.InvitationStatus
 
 class SafeDetailInviteListAdapter(
-    private val values: MutableList<InvitationDetailResponse>):
+    private val values: MutableList<InviteDetailResp>):
         RecyclerView.Adapter<SafeDetailInviteListAdapter.ViewHolder>() {
 
-    fun addItems(items: List<InvitationDetailResponse>) {
+    fun addItems(items: List<InviteDetailResp>) {
         values.clear()
         values.addAll(items)
     }
@@ -43,7 +43,7 @@ class SafeDetailInviteListAdapter(
         var id = R.drawable.ic_baseline_access_time_24
         if (code == InvitationStatus.ACCEPTED) {
             id = R.drawable.ic_round_check_24
-        } else if (code == InvitationStatus.DECLINED) {
+        } else if (code == InvitationStatus.DECLINED || code == InvitationStatus.CANCELLED) {
             id = R.drawable.ic_baseline_clear_24
         }
         return id

@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.api.safe.SafeDetailResponse
+import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeItemBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
 
 class SafeListAdapter(
-    private val values: MutableList<SafeDetailResponse>, onClickListener: OnSafeItemClickListener
+    private val values: MutableList<SafeDetailResp>, onClickListener: OnSafeItemClickListener
 ) : RecyclerView.Adapter<SafeListAdapter.ViewHolder>() {
 
     private val onClickListener: OnSafeItemClickListener = onClickListener
 
-    fun addItems(items: List<SafeDetailResponse>) {
+    fun addItems(items: List<SafeDetailResp>) {
         with(values) {
             clear()
             addAll(items)
@@ -23,7 +23,7 @@ class SafeListAdapter(
 
     }
 
-    fun addItem(item: SafeDetailResponse) {
+    fun addItem(item: SafeDetailResp) {
         values.add(item)
         notifyDataSetChanged()
     }

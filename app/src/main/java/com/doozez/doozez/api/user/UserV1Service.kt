@@ -8,7 +8,7 @@ interface UserV1Service {
 
 //    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
     @GET("v1/users/")
-    fun searchUsers(@Query("email") email: String): Call<List<UserDetailResponse>>
+    fun searchUsers(@Query("email") email: String): Call<List<UserDetailResp>>
 
 
 }

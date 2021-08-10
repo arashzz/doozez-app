@@ -1,7 +1,7 @@
 package com.doozez.doozez.api.participation
 
 import com.doozez.doozez.api.payments.PaymentDetailResp
-import com.doozez.doozez.api.user.UserDetailResponse
+import com.doozez.doozez.api.user.UserDetailResp
 import com.google.gson.annotations.SerializedName
 
 class ParticipationResp(
@@ -12,7 +12,7 @@ class ParticipationResp(
     var userRole: String,
 
     @SerializedName("user")
-    var user: UserDetailResponse,
+    var user: UserDetailResp,
 
     @SerializedName("payment_method")
     var paymentMethod: PaymentDetailResp,

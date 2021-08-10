@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-class SafeDetailResponse() : Parcelable {
+class SafeDetailResp() : Parcelable {
 
     @SerializedName("id")
     var id: Int? = null
@@ -39,12 +39,12 @@ class SafeDetailResponse() : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<SafeDetailResponse> {
-        override fun createFromParcel(parcel: Parcel): SafeDetailResponse {
-            return SafeDetailResponse(parcel)
+    companion object CREATOR : Parcelable.Creator<SafeDetailResp> {
+        override fun createFromParcel(parcel: Parcel): SafeDetailResp {
+            return SafeDetailResp(parcel)
         }
 
-        override fun newArray(size: Int): Array<SafeDetailResponse?> {
+        override fun newArray(size: Int): Array<SafeDetailResp?> {
             return arrayOfNulls(size)
         }
     }

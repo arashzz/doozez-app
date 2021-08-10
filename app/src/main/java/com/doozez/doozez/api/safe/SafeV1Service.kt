@@ -10,13 +10,13 @@ interface SafeV1Service {
 
 //    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
     @GET("v1/safes/")
-    fun getSafesForUser(): Call<List<SafeDetailResponse>>
+    fun getSafesForUser(): Call<List<SafeDetailResp>>
 
 //    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
     @POST("v1/safes/")
-    fun createSafeForUser(@Body body: SafeCreateRequest): Call<SafeDetailResponse>
+    fun createSafeForUser(@Body body: SafeCreateReq): Call<SafeDetailResp>
 
 //    @Headers("Authorization: Basic YWRtaW5AZG9vemV6LmNvbTpqZXJtaW4xMjNA")
     @GET("v1/safes/{safeId}/")
-    fun getSafeByIdForUser(@Path("safeId") safeId: Int): Call<SafeDetailResponse>
+    fun getSafeByIdForUser(@Path("safeId") safeId: Int): Call<SafeDetailResp>
 }

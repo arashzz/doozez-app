@@ -2,7 +2,7 @@ package com.doozez.doozez.api.safe
 
 import com.google.gson.annotations.SerializedName
 
-class SafeCreateRequest(
+class SafeCreateReq(
 
     @SerializedName("name")
     var name: String,

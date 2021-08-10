@@ -1,25 +1,20 @@
 package com.doozez.doozez.ui.safe
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.payments.PaymentCreateReq
-import com.doozez.doozez.api.safe.SafeCreateRequest
-import com.doozez.doozez.api.safe.SafeDetailResponse
+import com.doozez.doozez.api.safe.SafeCreateReq
+import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
-import com.doozez.doozez.ui.payment.PaymentCreateRedirectFragment
 import com.doozez.doozez.utils.*
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
 class SafeCreateFragment : Fragment() {
@@ -113,7 +108,7 @@ class SafeCreateFragment : Fragment() {
     }
 
     private fun createSafe(safeName: String, monthlyPayment: Int) {
-        var req = SafeCreateRequest(safeName, monthlyPayment, paymentID!!)
+        var req = SafeCreateReq(safeName, monthlyPayment, paymentID!!)
 
         val call = ApiClient.safeService.createSafeForUser(req)
         call.enqueue {
@@ -127,7 +122,7 @@ class SafeCreateFragment : Fragment() {
         }
     }
 
-    private fun returnNewSafe(created: Boolean, safe: SafeDetailResponse?) {
+    private fun returnNewSafe(created: Boolean, safe: SafeDetailResp?) {
         setFragmentResult(
             ResultKey.SAFE_ADDED,
             bundleOf(

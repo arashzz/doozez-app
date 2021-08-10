@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
@@ -16,6 +18,7 @@ import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
 import com.doozez.doozez.utils.BundleKey
 import com.doozez.doozez.utils.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
+
 
 class SafeParticipantsTabFragment() : Fragment() {
     private var safeId: Int = 0
@@ -41,6 +44,27 @@ class SafeParticipantsTabFragment() : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SafeParticipantsTabFragment.adapter
         }
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                when(direction) {
+                    ItemTouchHelper.LEFT -> Snackbar.make(
+                        binding.safeDetailParticipantsList,
+                        "swiped left",
+                        Snackbar.LENGTH_SHORT)
+                }
+            }
+        }).attachToRecyclerView(binding.safeDetailParticipantsList)
+
         loadParticipants()
         return binding.root
     }

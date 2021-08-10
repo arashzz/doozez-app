@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.invitation.InvitationCreateRequest
-import com.doozez.doozez.api.user.UserDetailResponse
+import com.doozez.doozez.api.invitation.InviteCreateReq
+import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.databinding.FragmentUserSearchBinding
 import com.doozez.doozez.ui.user.adapters.UserSearchAdapter
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
@@ -85,8 +85,8 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
         }
     }
 
-    private fun addInvite(user: UserDetailResponse) {
-        var body = InvitationCreateRequest()
+    private fun addInvite(user: UserDetailResp) {
+        var body = InviteCreateReq()
         body.recipientId = user.id
         body.safeId = safeId
         val call = ApiClient.invitationService.createInvitation(body)
@@ -114,7 +114,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
         }
     }
 
-    override fun userItemClicked(user: UserDetailResponse) {
+    override fun userItemClicked(user: UserDetailResp) {
         addInvite(user)
     }
 }

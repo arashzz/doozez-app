@@ -5,18 +5,18 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.api.user.UserDetailResponse
+import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.databinding.FragmentUserSearchItemBinding
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.google.android.material.button.MaterialButton
 
 class UserSearchAdapter(
-    private val values: MutableList<UserDetailResponse>, onClickListener: OnUserSearchItemClickListener
+    private val values: MutableList<UserDetailResp>, onClickListener: OnUserSearchItemClickListener
 ): RecyclerView.Adapter<UserSearchAdapter.UserViewHolder>() {
 
     private val onClickListener: OnUserSearchItemClickListener = onClickListener
 
-    fun addItems(items: List<UserDetailResponse>) {
+    fun addItems(items: List<UserDetailResp>) {
         values.clear()
         values.addAll(items)
     }
