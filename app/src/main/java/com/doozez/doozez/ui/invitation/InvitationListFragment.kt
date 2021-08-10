@@ -12,13 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.doozez.doozez.MainActivity
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.invitation.InvitationActionReq
-import com.doozez.doozez.api.invitation.InvitationDetailResponse
+import com.doozez.doozez.api.invitation.InviteActionReq
+import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.databinding.FragmentInvitationListBinding
 import com.doozez.doozez.ui.invitation.adapters.InvitationListAdapter
 import com.doozez.doozez.ui.invitation.listeners.OnInviteActionClickListener
@@ -128,7 +127,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
         }
     }
 
-    override fun inviteAccepted(invite: InvitationDetailResponse) {
+    override fun inviteAccepted(invite: InviteDetailResp) {
         AlertDialog.Builder(ctx)
             .setTitle("some title")
             .setMessage("Are you sure you want to accept this invitation?")
@@ -141,12 +140,25 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             }.show()
     }
 
-    override fun inviteDeclined(invite: InvitationDetailResponse) {
+    override fun inviteDeclined(invite: InviteDetailResp) {
         AlertDialog.Builder(ctx)
             .setTitle("some title")
             .setMessage("Are you sure you want to reject this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
                 updateInvite(invite.id, 0, InvitationAction.DECLINE)
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
+    override fun inviteCancelled(invite: InviteDetailResp) {
+        AlertDialog.Builder(ctx)
+            .setTitle("some title")
+            .setMessage("Are you sure you want to cancel this invitation?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                updateInvite(invite.id, 0, InvitationAction.REMOVE)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -166,7 +178,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     private fun updateInvite(inviteId: Int, paymentId: Int, action: String) {
         val call = ApiClient.invitationService.updateInvitationForAction(
             inviteId,
-            InvitationActionReq(action, paymentId))
+            InviteActionReq(action, paymentId))
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
@@ -184,7 +196,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
 
     }
 
-    override fun inviteSafeClicked(invite: InvitationDetailResponse) {
+    override fun inviteSafeClicked(invite: InviteDetailResp) {
         val bundle = bundleOf(
             BundleKey.SAFE_ID to invite.safe?.id,
             BundleKey.USER_ID to userId

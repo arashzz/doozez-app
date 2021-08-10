@@ -69,6 +69,17 @@
             style="?attr/borderlessButtonStyle"
             />
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/invite_detail_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"
+            android:layout_alignBaseline="@id/invite_detail_safe"
+            android:layout_toLeftOf="@+id/invite_detail_safe"
+            android:text="@string/action_invite_cancel"
+            style="?attr/borderlessButtonStyle"
+            />
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/invite_detail_safe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

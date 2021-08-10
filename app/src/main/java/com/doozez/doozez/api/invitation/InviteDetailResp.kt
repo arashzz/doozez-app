@@ -1,19 +1,19 @@
 package com.doozez.doozez.api.invitation
 
-import com.doozez.doozez.api.safe.SafeDetailResponse
-import com.doozez.doozez.api.user.UserDetailResponse
+import com.doozez.doozez.api.safe.SafeDetailResp
+import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.utils.InvitationStatus
 import com.google.gson.annotations.SerializedName
 
-class InvitationDetailResponse (
+class InviteDetailResp (
     @SerializedName("id")
     var id: Int,
 
     @SerializedName("recipient")
-    var recipient: UserDetailResponse,
+    var recipient: UserDetailResp,
 
     @SerializedName("initiator")
-    var initiator: UserDetailResponse,
+    var initiator: UserDetailResp,
 
     @SerializedName("status")
     var status: String,
@@ -22,10 +22,10 @@ class InvitationDetailResponse (
     var monthlyPayment: Long,
 
     @SerializedName("safe")
-    var safe: SafeDetailResponse
+    var safe: SafeDetailResp
 
-        ): Comparable<InvitationDetailResponse> {
-    override fun compareTo(other: InvitationDetailResponse): Int {
+        ): Comparable<InviteDetailResp> {
+    override fun compareTo(other: InviteDetailResp): Int {
         if (status == other.status) {
             return 0
         } else if (status != InvitationStatus.PENDING && other.status == InvitationStatus.PENDING) {

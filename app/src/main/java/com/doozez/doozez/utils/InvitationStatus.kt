@@ -4,6 +4,7 @@ object InvitationStatus {
     const val PENDING = "PND"
     const val ACCEPTED = "ACC"
     const val DECLINED = "DEC"
+    const val CANCELLED = "RBS"
 
     fun getStatusFromResponse(respStatus: String): String {
         var status = PENDING
@@ -11,6 +12,8 @@ object InvitationStatus {
             status = ACCEPTED
         } else if (respStatus == "Declined") {
             status = DECLINED
+        } else if (respStatus == "RemovedBySender") {
+            status = CANCELLED
         }
         return status
     }

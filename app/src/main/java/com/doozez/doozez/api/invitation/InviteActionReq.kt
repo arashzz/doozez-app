@@ -3,7 +3,7 @@ package com.doozez.doozez.api.invitation
 import com.google.gson.annotations.SerializedName
 import org.json.JSONObject
 
-class InvitationActionReq(act: String, paymentId: Int) {
+class InviteActionReq(act: String, paymentId: Int) {
 
     @SerializedName("action")
     val action: String = act

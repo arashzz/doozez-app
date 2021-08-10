@@ -13,9 +13,12 @@
     <string name="menu_safe_detail">Safe Information</string>
     <string name="menu_user_search">Search Users</string>
 
+    <string name="action_leave">Leave</string>
+    <string name="action_start">Start</string>
     <string name="action_add_invite">Invite</string>
     <string name="action_invite_accept">Accept</string>
     <string name="action_invite_reject">Reject</string>
+    <string name="action_invite_cancel">Cancel</string>
     <string name="action_invite_safe">Safe Details</string>
     <string name="action_login">Login</string>
     <string name="action_register">Register</string>
@@ -69,5 +72,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="desc_invite_participants">Add more participants</string>
 
 </resources>

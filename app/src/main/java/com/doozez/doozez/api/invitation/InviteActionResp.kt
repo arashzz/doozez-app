@@ -2,7 +2,7 @@ package com.doozez.doozez.api.invitation
 
 import com.google.gson.annotations.SerializedName
 
-class InvitationActionResp(
+class InviteActionResp(
     @SerializedName("status")
     var status: String
 )

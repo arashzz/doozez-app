@@ -2,7 +2,7 @@ package com.doozez.doozez.api.invitation
 
 import com.google.gson.annotations.SerializedName
 
-class InvitationCreateRequest {
+class InviteCreateReq {
     @SerializedName("safe")
     var safeId: Int? = null
 
