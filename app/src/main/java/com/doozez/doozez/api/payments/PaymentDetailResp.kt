@@ -7,14 +7,14 @@ class PaymentDetailResp(
     @SerializedName("id")
     var id: Int,
 
-    @SerializedName("card_number")
-    var cardNumber: String = "1111 2222 3333 4444",
+    @SerializedName("name")
+    var name: String,
 
     @SerializedName("type")
-    var type: String = "VISA",
+    var type: String = "DIRECT_DEBIT",
 
     @SerializedName("is_default")
-    var isDefault: Boolean = true,
+    var isDefault: Boolean,
 
     @SerializedName("redirect_url")
     var redirectURL: String,
