@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        checkAuthentication()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe
+                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -56,14 +54,14 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun checkAuthentication() {
-        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
-        if (apiKey.isNullOrEmpty()) {
-            redirectToLogin()
-        }
-    }
+//    private fun checkAuthentication() {
+//        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
+//        if (apiKey.isNullOrEmpty()) {
+//            redirectToLogin()
+//        }
+//    }
 
-    fun redirectToLogin() {
+    private fun redirectToLogin() {
         SharedPrefManager.clear()
         Intent(this@MainActivity, LoginActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

@@ -88,17 +88,8 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    //TODO: remove this later
-                    var userId = 1
-                    if(body.email == "arash2@doozez.com") {
-                        userId = 2
-                    }
-                    //
-
                     SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
-                    SharedPrefManager.putInt(SharedPrerfKey.USER_ID, userId, false)
-                    triggerOverlay()
-                    navigateToActivity(MainActivity::class.java)
+                    getUserForToken(it.body().apiKey)
                 } else {
                     Snackbar.make(
                         binding.loginContainer,
@@ -115,6 +106,27 @@ class LoginActivity : AppCompatActivity() {
                     "failed to login",
                     Snackbar.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    private fun getUserForToken(apiToken: String) {
+        val call = ApiClient.authService.validateToken()
+        call.enqueue {
+            onResponse = {
+                if(it.isSuccessful && it.body() != null) {
+                    SharedPrefManager.putUser(it.body())
+                    triggerOverlay()
+                    navigateToActivity(MainActivity::class.java)
+                }
+            }
+            onFailure = {
+                triggerOverlay()
+                Log.e("loginContainer", it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.loginContainer,
+                    "Unknown Error",
+                    Snackbar.LENGTH_SHORT).show()
             }
         }
     }
