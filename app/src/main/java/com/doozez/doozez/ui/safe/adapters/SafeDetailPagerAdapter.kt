@@ -6,7 +6,8 @@ import com.doozez.doozez.ui.safe.SafeInvitationsTabFragment
 import com.doozez.doozez.ui.safe.SafeParticipantsTabFragment
 
 class SafeDetailPagerAdapter(fragment: Fragment,
-        var safeId: Int, var userId: Int)
+        var safeId: Int, var userId: Int
+)
     : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 2

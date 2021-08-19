@@ -1,5 +1,7 @@
 package com.doozez.doozez.ui.safe
 
+import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,24 +14,34 @@ import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
+import com.doozez.doozez.api.participation.ParticipationActionReq
 import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentType
-import com.doozez.doozez.utils.SafeStatus
-import com.doozez.doozez.utils.SharedPrerfKey
+import com.doozez.doozez.utils.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SafeDetailFragment : Fragment() {
     private var safeId: Int = 0
     private var userId: Int = 0
+    private var participationId: Int = 0
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
     private var isInitiator = false
     private var viewPagerAdapter: SafeDetailPagerAdapter? = null
+    private var ctx: Context? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        ctx = context
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        ctx = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +112,16 @@ class SafeDetailFragment : Fragment() {
         if(!isInitiator) {
             binding.safeDetailLeave.visibility = View.VISIBLE
             binding.safeDetailLeave.setOnClickListener {
-                Snackbar.make(binding.safeDetailContainer, "dummy leave", Snackbar.LENGTH_SHORT).show()
+                AlertDialog.Builder(ctx)
+                    .setTitle("some title")
+                    .setMessage("Are you sure you want to leave this safe?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        leaveSafe()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
             }
         } else {
             binding.safeDetailStart.visibility = View.VISIBLE
@@ -114,8 +135,7 @@ class SafeDetailFragment : Fragment() {
             }
 
             binding.safeDetailAddInvite.setOnClickListener {
-                val navController = findNavController()
-                navController.navigate(
+                findNavController().navigate(
                     R.id.action_nav_safe_to_nav_user_search, bundleOf(
                         BundleKey.SAFE_ID to safeId
                     )
@@ -129,9 +149,11 @@ class SafeDetailFragment : Fragment() {
         call.enqueue {
             onResponse = { it ->
                 if (it.isSuccessful && it.body() != null) {
-                    val participation = it.body().find { it.user?.id == userId }
+                    val participation = it.body().find { it.user.id == userId }
                     if (participation != null) {
-                        loadPaymentMethodForParticipant(participation.id!!)
+                        participationId = participation.id
+                        binding.safeDetailLeave.isEnabled = true
+                        loadPaymentMethodForParticipant(participation.id)
                     } else {
                         Snackbar.make(
                             binding.safeDetailContainer,
@@ -184,6 +206,19 @@ class SafeDetailFragment : Fragment() {
         binding.safeDetailPaymentMethodName.text = PaymentType.getPaymentName(PaymentType.DIRECT_DEBIT)
         binding.safeDetailPaymentMethodContainer.setOnClickListener {
             Snackbar.make(binding.safeDetailContainer, "change payment method", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun leaveSafe() {
+        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful) {
+                    findNavController().navigate(SafeDetailFragmentDirections.actionNavSafeDetailToNavHome())
+                } else {
+                    Snackbar.make(binding.safeDetailContainer, "Failed to leave Safe", Snackbar.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

@@ -61,13 +61,13 @@ class SafeCreateFragment : Fragment() {
                     Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.safeCreatePaymentCreate.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
-                    BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
-                )
-            )
-        }
+//        binding.safeCreatePaymentCreate.setOnClickListener {
+//            findNavController().navigate(
+//                R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
+//                    BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
+//                )
+//            )
+//        }
         binding.safeCreateCreate.setOnClickListener {
             if (validateInput()) {
                 createSafe(
@@ -108,9 +108,7 @@ class SafeCreateFragment : Fragment() {
     }
 
     private fun createSafe(safeName: String, monthlyPayment: Int) {
-        var req = SafeCreateReq(safeName, monthlyPayment, paymentID!!)
-
-        val call = ApiClient.safeService.createSafeForUser(req)
+        val call = ApiClient.safeService.createSafeForUser(SafeCreateReq(safeName, monthlyPayment, paymentID!!))
         call.enqueue {
             onResponse = {
                 returnNewSafe(it.isSuccessful, it.body())
