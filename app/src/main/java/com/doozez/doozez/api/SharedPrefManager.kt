@@ -5,6 +5,8 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.doozez.doozez.MyApplication
+import com.doozez.doozez.api.user.UserDetailResp
+import com.doozez.doozez.utils.SharedPrerfKey
 
 object SharedPrefManager {
 
@@ -51,6 +53,16 @@ object SharedPrefManager {
     fun getInt(key: String, default: Int = 0, encrypted: Boolean = false): Int {
         val prefs = if (!encrypted) sharedPrefs else encryptedSharedPrefs
         return prefs.getInt(key, default)
+    }
+
+    fun putUser(user: UserDetailResp) {
+        with(sharedPrefs.edit()) {
+            putInt(SharedPrerfKey.USER_ID, user.id)
+            putString(SharedPrerfKey.EMAIL, user.email)
+            putString(SharedPrerfKey.FIRST_NAME, user.firstName)
+            putString(SharedPrerfKey.LAST_NAME, user.lastName)
+        }
+
     }
 
     fun clear() {

@@ -167,12 +167,12 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     }
 
     private fun createPaymentMethodForInvite(inviteId: Int) {
-        findNavController().navigate(
-            R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
-                BundleKey.INVITE_ID to inviteId,
-                BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
-            )
-        )
+//        findNavController().navigate(
+//            R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
+//                BundleKey.INVITE_ID to inviteId,
+//                BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
+//            )
+//        )
     }
 
     private fun updateInvite(inviteId: Int, paymentId: Int, action: String) {

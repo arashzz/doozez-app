@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/payment_methods_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="4dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/payment_methods_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_credit_card_36"
+            android:layout_alignParentStart="true"
+            android:layout_margin="8dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/payment_methods_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/payment_methods_item_icon"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:layout_centerVertical="true"
+            tools:text="@tools:sample/cities" />
+
+        <TextView
+            android:id="@+id/payment_methods_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_alignStart="@+id/payment_methods_item_name"
+            android:layout_below="@+id/payment_methods_item_icon"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:text="@tools:sample/cities" />
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

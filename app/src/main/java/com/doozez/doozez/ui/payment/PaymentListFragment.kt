@@ -37,7 +37,7 @@ class PaymentListFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //TODO: implement for higher versions
         // SOFT_INPUT_ADJUST_RESIZE is deprecated in version 30
         // I'm using it for testing

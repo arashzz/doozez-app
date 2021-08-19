@@ -43,18 +43,18 @@ class PaymentListAdapter(private val values: MutableList<PaymentDetailResp>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.paymentNumber.text = item.cardNumber
-        if (selectedItem == null && item.isDefault) {
-            selectedItem = item
-        }
-        holder.selected.isChecked = item.id == selectedItem?.id
-        holder.container.setOnClickListener {
-            selectedItemChanged(item)
-        }
-        holder.selected.setOnClickListener {
-            selectedItemChanged(item)
-        }
+//        val item = values[position]
+//        holder.paymentNumber.text = item.cardNumber
+//        if (selectedItem == null && item.isDefault) {
+//            selectedItem = item
+//        }
+//        holder.selected.isChecked = item.id == selectedItem?.id
+//        holder.container.setOnClickListener {
+//            selectedItemChanged(item)
+//        }
+//        holder.selected.setOnClickListener {
+//            selectedItemChanged(item)
+//        }
     }
 
     override fun getItemCount(): Int = values.size
@@ -66,8 +66,8 @@ class PaymentListAdapter(private val values: MutableList<PaymentDetailResp>)
 
     inner class ViewHolder(_binding: FragmentPaymentListItemBinding) : RecyclerView.ViewHolder(_binding.root) {
         private val binding: FragmentPaymentListItemBinding = _binding
-        val container: RelativeLayout = binding.paymentListItemContainer
-        val paymentNumber: TextView = binding.paymentListItemNumber
-        val selected: RadioButton = binding.paymentListItemSelected
+//        val container: RelativeLayout = binding.paymentListItemContainer
+//        val paymentNumber: TextView = binding.paymentListItemNumber
+//        val selected: RadioButton = binding.paymentListItemSelected
     }
 }
