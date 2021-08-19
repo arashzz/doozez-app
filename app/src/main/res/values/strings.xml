@@ -9,9 +9,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_invitation_list">Invitations</string>
     <string name="menu_safe_list">Safes</string>
+    <string name="menu_payment_methods">Payment Methods</string>
     <string name="menu_safe_create">Create Safe</string>
     <string name="menu_safe_detail">Safe Information</string>
     <string name="menu_user_search">Search Users</string>
+
 
     <string name="action_leave">Leave</string>
     <string name="action_start">Start</string>
@@ -45,6 +47,9 @@
     <string name="hint_last_name">Last Name</string>
 
     <string name="et_search_user_hint">Enter email…</string>
+
+    <string name="payment_method_name">Payment Method Name</string>
+    <string name="payment_methods">Payment Methods</string>
 
     <string name="safe_name">Safe Name</string>
     <string name="safe_monthly_payment">Monthly Payment</string>

@@ -12,18 +12,42 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_invitation"
-        android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
-        android:label="@string/menu_invitation_list"
-        tools:layout="@layout/fragment_invitation_list" >
+        android:id="@+id/nav_payment_methods"
+        android:name="com.doozez.doozez.ui.payment.PaymentMethodsFragment"
+        android:label="@string/menu_payment_methods"
+        tools:layout="@layout/fragment_payment_methods" >
 
         <action
-            android:id="@+id/action_nav_safe_create_to_nav_payment_create"
-            app:destination="@id/nav_payment_create"
+            android:id="@+id/nav_payment_methods_to_nav_payment_create"
+            app:destination="@id/nav_payment_method_create"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/nav_payment_method_create"
+        android:name="com.doozez.doozez.ui.payment.PaymentMethodCreateFragment"
+        android:label="@string/menu_payment_methods"
+        tools:layout="@layout/fragment_payment_method_create" >
+
+        <action
+            android:id="@+id/nav_payment_method_create_to_nav_payment_create_redirect"
+            app:destination="@id/nav_payment_create_redirect"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </dialog>
+
+    <fragment
+        android:id="@+id/nav_invitation"
+        android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
+        android:label="@string/menu_invitation_list"
+        tools:layout="@layout/fragment_invitation_list" >
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_safe_detail"
@@ -65,6 +89,16 @@
         tools:layout="@layout/fragment_safe_detail" >
 
         <action
+            android:id="@+id/action_nav_safe_detail_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@+id/nav_home"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
             android:id="@+id/action_nav_safe_to_nav_payment_list"
             app:destination="@id/nav_payment_list"
             app:enterAnim="@anim/slide_in_right"
@@ -84,16 +118,7 @@
         android:id="@+id/nav_safe_create"
         android:name="com.doozez.doozez.ui.safe.SafeCreateFragment"
         android:label="@string/menu_safe_create"
-        tools:layout="@layout/fragment_safe_create" >
-
-        <action
-            android:id="@+id/action_nav_safe_create_to_nav_payment_create"
-            app:destination="@id/nav_payment_create"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
+        tools:layout="@layout/fragment_safe_create" />
 
     <fragment
         android:id="@+id/nav_payment_list"
@@ -101,9 +126,9 @@
         tools:layout="@layout/fragment_payment_list" />
 
     <fragment
-        android:id="@+id/nav_payment_create"
-        android:name="com.doozez.doozez.ui.payment.PaymentCreateRedirectFragment"
-        tools:layout="@layout/fragment_payment_create" />
+        android:id="@+id/nav_payment_create_redirect"
+        android:name="com.doozez.doozez.ui.payment.PaymentMethodRedirectFragment"
+        tools:layout="@layout/fragment_payment_create_redirect" />
 
     <fragment
         android:id="@+id/nav_user_search"
