@@ -36,19 +36,25 @@ class SplashActivity : AppCompatActivity() {
                 onResponse = {
                     if(it.isSuccessful && it.body() != null) {
                         SharedPrefManager.putUser(it.body())
-                        loadActivity(intentMain)
+                        loadActivity(intentMain, false)
+                    } else {
+                        loadActivity(intentLogin, true)
                     }
                 }
                 onFailure = {
-                    loadActivity(intentLogin)
+                    loadActivity(intentLogin, true)
+
                 }
             }
         } else {
-            loadActivity(intentLogin)
+            loadActivity(intentLogin, true)
         }
     }
 
-    private fun loadActivity(intent: Intent) {
+    private fun loadActivity(intent: Intent, clearSharedPref: Boolean) {
+        if(clearSharedPref) {
+            SharedPrefManager.clear()
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
