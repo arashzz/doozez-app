@@ -61,8 +61,8 @@ object SharedPrefManager {
             putString(SharedPrerfKey.EMAIL, user.email)
             putString(SharedPrerfKey.FIRST_NAME, user.firstName)
             putString(SharedPrerfKey.LAST_NAME, user.lastName)
+            commit()
         }
-
     }
 
     fun clear() {

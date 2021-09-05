@@ -10,7 +10,7 @@ class PaymentDetailResp(
     @SerializedName("name")
     var name: String,
 
-    @SerializedName("type")
+    //@SerializedName("type")
     var type: String = "DIRECT_DEBIT",
 
     @SerializedName("is_default")

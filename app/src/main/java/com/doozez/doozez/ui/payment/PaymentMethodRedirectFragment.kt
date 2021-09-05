@@ -10,20 +10,20 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.doozez.doozez.databinding.FragmentPaymentCreateRedirectBinding
 import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentType
+import com.doozez.doozez.utils.PaymentMethodType
 
 
 class PaymentMethodRedirectFragment : Fragment() {
     private var _binding: FragmentPaymentCreateRedirectBinding? = null
     private val binding get() = _binding!!
-    private var type: PaymentType? = null
+    private var methodType: PaymentMethodType? = null
     private var paymentMethodID: Int? = null
     private var redirectURL: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            type = it.get(BundleKey.PAYMENT_METHOD_TYPE) as PaymentType
+            methodType = it.get(BundleKey.PAYMENT_METHOD_TYPE) as PaymentMethodType
             paymentMethodID = it.getInt(BundleKey.PAYMENT_METHOD_ID)
             redirectURL = it.getString(BundleKey.PAYMENT_METHOD_REDIRECT_URL)
         }

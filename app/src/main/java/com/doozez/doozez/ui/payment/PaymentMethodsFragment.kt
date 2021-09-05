@@ -7,22 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.payments.PaymentDetailResp
-import com.doozez.doozez.databinding.FragmentPaymentListBinding
 import com.doozez.doozez.databinding.FragmentPaymentMethodsBinding
-import com.doozez.doozez.ui.payment.adapters.PaymentListAdapter
 import com.doozez.doozez.ui.payment.adapters.PaymentMethodsAdapter
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentStatus
-import com.doozez.doozez.utils.PaymentType
-import com.doozez.doozez.utils.ResultKey
+import com.doozez.doozez.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
@@ -52,7 +46,9 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
 
     private fun addListeners() {
         binding.addPaymentMethod.setOnClickListener {
-            findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create)
+            findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
+                BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.CREATE
+            ))
         }
     }
 
@@ -72,6 +68,9 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
     }
 
     override fun paymentMethodClicked(paymentMethod: PaymentDetailResp) {
-        TODO("Not yet implemented")
+        findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
+            BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.EDIT,
+            BundleKey.PAYMENT_METHOD_ID to paymentMethod.id
+        ))
     }
 }
