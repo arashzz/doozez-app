@@ -26,6 +26,7 @@
     <string name="action_register">Register</string>
     <string name="action_already_have_account">I already have an account</string>
     <string name="action_create">Create</string>
+    <string name="action_update">Update</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_proceed">Proceed</string>
     <string name="action_add">Add</string>

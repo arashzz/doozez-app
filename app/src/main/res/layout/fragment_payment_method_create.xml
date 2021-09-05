@@ -42,12 +42,22 @@
 
     </RelativeLayout>
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/payment_method_create"
+        android:id="@+id/payment_method_create_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_gravity="center_horizontal"
         android:text="@string/action_create"
+        style="?attr/borderlessButtonStyle"
+        />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/payment_method_create_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:text="@string/action_update"
         style="?attr/borderlessButtonStyle"
         />
 </LinearLayout>
