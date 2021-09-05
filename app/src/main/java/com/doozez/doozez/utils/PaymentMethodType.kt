@@ -1,13 +1,13 @@
 package com.doozez.doozez.utils
 
-enum class PaymentType {
+enum class PaymentMethodType {
     DIRECT_DEBIT;
 
     companion object {
         fun getPaymentName(type: String): String {
-            return getPaymentName(PaymentType.DIRECT_DEBIT)
+            return getPaymentName(PaymentMethodType.DIRECT_DEBIT)
         }
-        fun getPaymentName(type: PaymentType): String {
+        fun getPaymentName(methodType: PaymentMethodType): String {
             return "Direct Debit"
         }
     }

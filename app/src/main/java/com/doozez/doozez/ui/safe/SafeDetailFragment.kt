@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
@@ -88,6 +89,7 @@ class SafeDetailFragment : Fragment() {
         binding.safeDetailName.text = detail.name
         binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
         binding.safeDetailStatus.text = SafeStatus.getStatusTextForCode(detail.status!!)
+        addGeneralListeners()
         applyUserRoleRules()
     }
 
@@ -106,6 +108,39 @@ class SafeDetailFragment : Fragment() {
             }
             tab.text = tabName
         }.attach()
+    }
+
+    private fun addGeneralListeners() {
+        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
+            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+            if (resultOk) {
+                val paymentMethodID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
+                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME)
+                if (!paymentMethodName.isNullOrBlank()) {
+                    binding.safeDetailPaymentMethodName.text = paymentMethodName
+                }
+                if(paymentMethodID > 0) {
+                    updatePaymentMethod(paymentMethodID)
+                } else {
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Selected payment method is invalid",
+                        Snackbar.LENGTH_SHORT).show()
+                }
+            } else {
+                var reason = bundle.getString(BundleKey.FAIL_REASON)
+                if (reason == null) {
+                    reason = "unknown error"
+                }
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    reason,
+                    Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        binding.safeDetailPaymentMethodContainer.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_safe_detail_to_nav_payment_method_list)
+        }
     }
 
     private fun applyUserRoleRules() {
@@ -136,7 +171,7 @@ class SafeDetailFragment : Fragment() {
 
             binding.safeDetailAddInvite.setOnClickListener {
                 findNavController().navigate(
-                    R.id.action_nav_safe_to_nav_user_search, bundleOf(
+                    R.id.action_nav_safe_detail_to_nav_user_search, bundleOf(
                         BundleKey.SAFE_ID to safeId
                     )
                 )
@@ -177,6 +212,13 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
+    private fun updatePaymentMethod(paymentMethodId: Int) {
+        Snackbar.make(
+            binding.safeDetailContainer,
+            "Dummy participant update",
+            Snackbar.LENGTH_SHORT).show()
+    }
+
     private fun loadPaymentMethodForParticipant(participationId: Int) {
         val pCall = ApiClient.participationService.getParticipationByID(participationId)
         pCall.enqueue {
@@ -203,10 +245,7 @@ class SafeDetailFragment : Fragment() {
     private fun populatePaymentMethod(item: PaymentDetailResp) {
         binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
         binding.safeDetailPaymentMethodName.isEnabled = true
-        binding.safeDetailPaymentMethodName.text = PaymentType.getPaymentName(PaymentType.DIRECT_DEBIT)
-        binding.safeDetailPaymentMethodContainer.setOnClickListener {
-            Snackbar.make(binding.safeDetailContainer, "change payment method", Snackbar.LENGTH_SHORT).show()
-        }
+        binding.safeDetailPaymentMethodName.text = item.name
     }
 
     private fun leaveSafe() {

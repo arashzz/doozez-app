@@ -30,6 +30,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     private var adapter: InvitationListAdapter? = null
     private var ctx: Context? = null
     private var userId: Int = 0
+    private var selectedInviteId: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,13 +63,11 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
     }
 
     private fun addListeners() {
-        setFragmentResultListener(ResultKey.PAYMENT_METHOD_CREATE_INITIATED) { _, bundle ->
+        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
             val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
             if (resultOk) {
                 val paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
-                val inviteID = bundle.getInt(BundleKey.INVITE_ID)
-                checkPaymentStatus(paymentID, inviteID)
-
+                acceptInvite(selectedInviteId, paymentID)
             } else {
                 var reason = bundle.getString(BundleKey.FAIL_REASON)
                 if (reason == null) {
@@ -80,36 +79,54 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
                     Snackbar.LENGTH_SHORT).show()
             }
         }
+//        setFragmentResultListener(ResultKey.PAYMENT_METHOD_CREATE_INITIATED) { _, bundle ->
+//            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+//            if (resultOk) {
+//                val paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
+//                val inviteID = bundle.getInt(BundleKey.INVITE_ID)
+//                checkPaymentStatus(paymentID, inviteID)
+//
+//            } else {
+//                var reason = bundle.getString(BundleKey.FAIL_REASON)
+//                if (reason == null) {
+//                    reason = "unknown error"
+//                }
+//                Snackbar.make(
+//                    binding.inviteListContainer,
+//                    reason,
+//                    Snackbar.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
-    private fun checkPaymentStatus(paymentId: Int, inviteId: Int) {
-        if(paymentId > 0) {
-            val call = ApiClient.paymentService.getPaymentById(paymentId)
-            call.enqueue {
-                onResponse = {
-                    if(it.isSuccessful &&
-                        it.body() != null &&
-                        it.body().status == PaymentStatus.EXTERNAL_APPROVAL_SUCCESS) {
-                        updateInvite(inviteId, paymentId, InvitationAction.ACCEPT)
-                    } else {
-                        Snackbar.make(
-                            binding.inviteListContainer,
-                            "Payment method successfully added",
-                            Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-                onFailure = {
-                    Log.e("SafeListFragment", it?.stackTrace.toString())
-
-                }
-            }
-        } else {
-            Snackbar.make(
-                binding.inviteListContainer,
-                "Invalid Payment selected",
-                Snackbar.LENGTH_SHORT).show()
-        }
-    }
+//    private fun checkPaymentStatus(paymentId: Int, inviteId: Int) {
+//        if(paymentId > 0) {
+//            val call = ApiClient.paymentService.getPaymentById(paymentId)
+//            call.enqueue {
+//                onResponse = {
+////                    if(it.isSuccessful &&
+////                        it.body() != null &&
+////                        it.body().status == PaymentStatus.EXTERNAL_APPROVAL_SUCCESS) {
+////                        updateInvite(inviteId, paymentId, InvitationAction.ACCEPT)
+////                    } else {
+////                        Snackbar.make(
+////                            binding.inviteListContainer,
+////                            "Payment method successfully added",
+////                            Snackbar.LENGTH_SHORT).show()
+////                    }
+//                }
+//                onFailure = {
+//                    Log.e("SafeListFragment", it?.stackTrace.toString())
+//
+//                }
+//            }
+//        } else {
+//            Snackbar.make(
+//                binding.inviteListContainer,
+//                "Invalid Payment selected",
+//                Snackbar.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun getInvites() {
         val call = ApiClient.invitationService.getInvitations()
@@ -117,7 +134,6 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
                     adapter?.addItems(it.body().sortedByDescending { sit -> sit.status })
-                    adapter?.notifyDataSetChanged()
                 }
             }
             onFailure = {
@@ -132,7 +148,8 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             .setTitle("some title")
             .setMessage("Are you sure you want to accept this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
-                createPaymentMethodForInvite(invite.id)
+                selectedInviteId = invite.id
+                findNavController().navigate(R.id.action_nav_invitation_to_nav_payment_method_list)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -145,7 +162,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             .setTitle("some title")
             .setMessage("Are you sure you want to reject this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
-                updateInvite(invite.id, 0, InvitationAction.DECLINE)
+                declineInvite(invite.id)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -158,7 +175,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             .setTitle("some title")
             .setMessage("Are you sure you want to cancel this invitation?")
             .setPositiveButton("Yes") { dialog, _ ->
-                updateInvite(invite.id, 0, InvitationAction.REMOVE)
+                cancelInvite(invite.id)
                 dialog.dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
@@ -166,13 +183,16 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
             }.show()
     }
 
-    private fun createPaymentMethodForInvite(inviteId: Int) {
-//        findNavController().navigate(
-//            R.id.action_nav_safe_create_to_nav_payment_create, bundleOf(
-//                BundleKey.INVITE_ID to inviteId,
-//                BundleKey.PAYMENT_METHOD_TYPE to PaymentType.DIRECT_DEBIT
-//            )
-//        )
+    private fun acceptInvite(inviteId: Int, paymentId: Int) {
+        updateInvite(inviteId, paymentId, InvitationAction.ACCEPT)
+    }
+
+    private fun declineInvite(inviteId: Int) {
+        updateInvite(inviteId, 0, InvitationAction.DECLINE)
+    }
+
+    private fun cancelInvite(inviteId: Int) {
+        updateInvite(inviteId, 0, InvitationAction.REMOVE)
     }
 
     private fun updateInvite(inviteId: Int, paymentId: Int, action: String) {
@@ -198,8 +218,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
 
     override fun inviteSafeClicked(invite: InviteDetailResp) {
         val bundle = bundleOf(
-            BundleKey.SAFE_ID to invite.safe?.id,
-            BundleKey.USER_ID to userId
+            BundleKey.SAFE_ID to invite.safe.id
         )
         findNavController().navigate(R.id.action_nav_invitation_to_nav_safe_detail, bundle)
     }
