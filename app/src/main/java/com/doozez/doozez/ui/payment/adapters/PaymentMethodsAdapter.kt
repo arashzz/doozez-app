@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodsItemBinding
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
-import com.doozez.doozez.utils.PaymentType
+import com.doozez.doozez.utils.PaymentMethodStatus
+import com.doozez.doozez.utils.PaymentMethodType
 
 class PaymentMethodsAdapter
 (
@@ -50,7 +51,9 @@ class PaymentMethodsAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
-        holder.type.text = PaymentType.getPaymentName(item.type)
+//        holder.type.text = PaymentType.getPaymentName(item.type)
+        holder.type.text = PaymentMethodType.getPaymentName("DIRECT_DEBIT")
+        holder.status.text = PaymentMethodStatus.getPaymentStatus(item.status)
         holder.container.setOnClickListener {
             listener.paymentMethodClicked(item)
         }
@@ -67,5 +70,6 @@ class PaymentMethodsAdapter
         val container: CardView = binding.paymentMethodsItemContainer
         val name: TextView = binding.paymentMethodsItemName
         val type: TextView = binding.paymentMethodsItemType
+        val status: TextView = binding.paymentMethodsItemStatus
     }
 }

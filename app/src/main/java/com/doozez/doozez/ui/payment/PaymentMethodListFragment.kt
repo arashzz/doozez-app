@@ -13,24 +13,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.payments.PaymentDetailResp
-import com.doozez.doozez.databinding.FragmentPaymentListBinding
-import com.doozez.doozez.ui.payment.adapters.PaymentListAdapter
+import com.doozez.doozez.databinding.FragmentPaymentMethodListBinding
+import com.doozez.doozez.ui.payment.adapters.PaymentMethodListAdapter
+import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.PaymentMethodStatus
 import com.doozez.doozez.utils.ResultKey
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
-class PaymentListFragment : BottomSheetDialogFragment() {
-    private var _binding: FragmentPaymentListBinding? = null
+class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItemListener {
+    private var _binding: FragmentPaymentMethodListBinding? = null
     private val binding get() = _binding!!
-    private var adapter: PaymentListAdapter? = null
-    private var inviteId: Long? = null
+    private var adapter: PaymentMethodListAdapter? = null
+    private var inviteId = -1
+    private var selectedPaymentMethod: PaymentDetailResp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = PaymentListAdapter(mutableListOf())
+        adapter = PaymentMethodListAdapter(mutableListOf(), this)
         arguments?.let {
-            inviteId = it.getLong(BundleKey.INVITE_ID)
+            inviteId = it.getInt(BundleKey.INVITE_ID)
         }
     }
 
@@ -48,10 +51,10 @@ class PaymentListFragment : BottomSheetDialogFragment() {
             Log.i("do nothing","do nothing")
         }
         }
-        _binding = FragmentPaymentListBinding.inflate(inflater, container, false)
-        with(binding.paymentListList) {
+        _binding = FragmentPaymentMethodListBinding.inflate(inflater, container, false)
+        with(binding.paymentMethodListList) {
             layoutManager = LinearLayoutManager(context)
-            adapter = this@PaymentListFragment.adapter
+            adapter = this@PaymentMethodListFragment.adapter
         }
         loadPayments()
         addListeners()
@@ -63,7 +66,10 @@ class PaymentListFragment : BottomSheetDialogFragment() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    adapter?.addItems(it.body())
+                    val eligibleMethods = it.body().filter { pd ->
+                        pd.status == PaymentMethodStatus.EAS.name
+                    }
+                    adapter?.addItems(eligibleMethods)
                 }
             }
             onFailure = {
@@ -74,10 +80,9 @@ class PaymentListFragment : BottomSheetDialogFragment() {
     }
 
     private fun addListeners() {
-        binding.paymentListAccept.setOnClickListener {
-            var selectedPayment = adapter?.getSelectedItem()
-            if (selectedPayment != null) {
-                returnSelectedPayment(true, selectedPayment)
+        binding.paymentListProceed.setOnClickListener {
+            if (selectedPaymentMethod != null && selectedPaymentMethod!!.id > 0) {
+                returnSelectedPayment()
                 dismiss()
             } else {
                 Snackbar.make(binding.paymentListContainer,
@@ -87,18 +92,18 @@ class PaymentListFragment : BottomSheetDialogFragment() {
             }
         }
         binding.paymentListCancel.setOnClickListener {
-            returnSelectedPayment(false, null)
             dismiss()
         }
     }
 
-    private fun returnSelectedPayment(selected: Boolean, payment: PaymentDetailResp?) {
+    private fun returnSelectedPayment() {
         setFragmentResult(
             ResultKey.PAYMENT_METHOD_SELECTED,
             bundleOf(
-                BundleKey.RESULT_OK to selected,
+                BundleKey.RESULT_OK to true,
                 BundleKey.INVITE_ID to inviteId,
-                BundleKey.PAYMENT_METHOD_ID to payment?.id
+                BundleKey.PAYMENT_METHOD_ID to selectedPaymentMethod!!.id,
+                BundleKey.PAYMENT_METHOD_NAME  to selectedPaymentMethod!!.name
             )
         )
     }
@@ -106,5 +111,9 @@ class PaymentListFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun paymentMethodClicked(paymentMethod: PaymentDetailResp) {
+        selectedPaymentMethod = paymentMethod
     }
 }
