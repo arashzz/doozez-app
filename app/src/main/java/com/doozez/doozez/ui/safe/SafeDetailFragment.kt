@@ -17,6 +17,7 @@ import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.participation.ParticipationActionReq
 import com.doozez.doozez.api.payments.PaymentDetailResp
+import com.doozez.doozez.api.safe.SafeActionReq
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
@@ -167,6 +168,30 @@ class SafeDetailFragment : Fragment() {
             }
             binding.safeDetailStart.setOnClickListener {
                 Snackbar.make(binding.safeDetailContainer, "dummy start", Snackbar.LENGTH_SHORT).show()
+                val body = SafeActionReq(SafeAction.START.name, true)
+                val call = ApiClient.safeService.updateSafeForAction(safeId, body)
+                call.enqueue {
+                    onResponse = {
+                        if (it.isSuccessful && it.body() != null) {
+                            Snackbar.make(
+                                binding.safeDetailContainer,
+                                it.body().id,
+                                Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            Snackbar.make(
+                                binding.safeDetailContainer,
+                                "Failed start safe",
+                                Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+                    onFailure = {
+                        Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                        Snackbar.make(
+                            binding.safeDetailContainer,
+                            "Failed start safe",
+                            Snackbar.LENGTH_SHORT).show()
+                    }
+                }
             }
 
             binding.safeDetailAddInvite.setOnClickListener {
@@ -249,15 +274,15 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun leaveSafe() {
-        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
-        call.enqueue {
-            onResponse = {
-                if (it.isSuccessful) {
-                    findNavController().navigate(SafeDetailFragmentDirections.actionNavSafeDetailToNavHome())
-                } else {
-                    Snackbar.make(binding.safeDetailContainer, "Failed to leave Safe", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        }
+//        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
+//        call.enqueue {
+//            onResponse = {
+//                if (it.isSuccessful) {
+//                    findNavController().navigate(SafeDetailFragmentDirections.actionNavSafeDetailToNavHome())
+//                } else {
+//                    Snackbar.make(binding.safeDetailContainer, "Failed to leave Safe", Snackbar.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
     }
 }
