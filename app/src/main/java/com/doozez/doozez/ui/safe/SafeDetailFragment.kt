@@ -18,6 +18,7 @@ import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.participation.ParticipationActionReq
 import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.safe.SafeActionReq
+import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
@@ -267,7 +268,7 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
-    private fun populatePaymentMethod(item: PaymentDetailResp) {
+    private fun populatePaymentMethod(item: PaymentMethodDetailResp) {
         binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
         binding.safeDetailPaymentMethodName.isEnabled = true
         binding.safeDetailPaymentMethodName.text = item.name

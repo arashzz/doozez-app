@@ -3,7 +3,7 @@ package com.doozez.doozez.api
 import com.doozez.doozez.api.auth.AuthV1Service
 import com.doozez.doozez.api.invitation.InvitationV1Service
 import com.doozez.doozez.api.participation.ParticipationV1Service
-import com.doozez.doozez.api.payments.PaymentV1Service
+import com.doozez.doozez.api.paymentMethod.PaymentMethodV1Service
 import com.doozez.doozez.api.safe.SafeV1Service
 import com.doozez.doozez.api.user.UserV1Service
 import com.google.gson.Gson
@@ -49,8 +49,8 @@ object ApiClient {
         retrofit.create(UserV1Service::class.java)
     }
 
-    val paymentService: PaymentV1Service by lazy {
-        retrofit.create(PaymentV1Service::class.java)
+    val PAYMENT_METHOD_SERVICE: PaymentMethodV1Service by lazy {
+        retrofit.create(PaymentMethodV1Service::class.java)
     }
 
     val participationService: ParticipationV1Service by lazy {

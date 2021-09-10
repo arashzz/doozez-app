@@ -12,7 +12,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.payments.PaymentDetailResp
+import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodListBinding
 import com.doozez.doozez.ui.payment.adapters.PaymentMethodListAdapter
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
@@ -27,7 +27,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
     private val binding get() = _binding!!
     private var adapter: PaymentMethodListAdapter? = null
     private var inviteId = -1
-    private var selectedPaymentMethod: PaymentDetailResp? = null
+    private var selectedPaymentMethod: PaymentMethodDetailResp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
     }
 
     private fun loadPayments() {
-        val call = ApiClient.paymentService.getPayments()
+        val call = ApiClient.PAYMENT_METHOD_SERVICE.getPayments()
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
@@ -113,7 +113,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
         _binding = null
     }
 
-    override fun paymentMethodClicked(paymentMethod: PaymentDetailResp) {
+    override fun paymentMethodClicked(paymentMethod: PaymentMethodDetailResp) {
         selectedPaymentMethod = paymentMethod
     }
 }

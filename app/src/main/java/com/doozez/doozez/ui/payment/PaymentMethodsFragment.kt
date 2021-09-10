@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.payments.PaymentDetailResp
+import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodsBinding
 import com.doozez.doozez.ui.payment.adapters.PaymentMethodsAdapter
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
@@ -53,7 +53,7 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
     }
 
     private fun loadPayments() {
-        val call = ApiClient.paymentService.getPayments()
+        val call = ApiClient.PAYMENT_METHOD_SERVICE.getPayments()
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
@@ -67,7 +67,7 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
         }
     }
 
-    override fun paymentMethodClicked(paymentMethod: PaymentDetailResp) {
+    override fun paymentMethodClicked(paymentMethod: PaymentMethodDetailResp) {
         findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
             BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.EDIT,
             BundleKey.PAYMENT_METHOD_ID to paymentMethod.id

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.api.payments.PaymentDetailResp
+import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodsItemBinding
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
 import com.doozez.doozez.utils.PaymentMethodStatus
@@ -13,18 +13,18 @@ import com.doozez.doozez.utils.PaymentMethodType
 
 class PaymentMethodsAdapter
 (
-    private val values: MutableList<PaymentDetailResp>,
+    private val values: MutableList<PaymentMethodDetailResp>,
     private val listener: PaymentMethodItemListener
 )
     : RecyclerView.Adapter<PaymentMethodsAdapter.ViewHolder>() {
 
-    private var selectedItem: PaymentDetailResp? = null
+    private var selectedItem: PaymentMethodDetailResp? = null
 
-    fun getSelectedItem(): PaymentDetailResp? {
+    fun getSelectedItem(): PaymentMethodDetailResp? {
         return selectedItem
     }
 
-    fun addItems(items: List<PaymentDetailResp>) {
+    fun addItems(items: List<PaymentMethodDetailResp>) {
         with(values) {
             clear()
             addAll(items)
@@ -32,7 +32,7 @@ class PaymentMethodsAdapter
         }
     }
 
-    fun addItem(item: PaymentDetailResp) {
+    fun addItem(item: PaymentMethodDetailResp) {
         values.add(item)
         notifyItemChanged(values.size-1)
     }
@@ -61,7 +61,7 @@ class PaymentMethodsAdapter
 
     override fun getItemCount(): Int = values.size
 
-    private fun selectedItemChanged(item: PaymentDetailResp) {
+    private fun selectedItemChanged(item: PaymentMethodDetailResp) {
         selectedItem = item
     }
 

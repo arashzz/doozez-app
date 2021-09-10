@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.api.payments.PaymentCreateReq
+import com.doozez.doozez.api.paymentMethod.PaymentMethodCreateReq
 import com.doozez.doozez.databinding.FragmentPaymentMethodCreateBinding
 import com.doozez.doozez.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -72,8 +72,8 @@ class PaymentMethodCreateFragment : BottomSheetDialogFragment() {
 //            val call = ApiClient.paymentService.
 //        }
         binding.paymentMethodCreateCreate.setOnClickListener {
-            val body = PaymentCreateReq(binding.paymentMethodName.editText?.text.toString(), false)
-            val call = ApiClient.paymentService.createPayment(body)
+            val body = PaymentMethodCreateReq(binding.paymentMethodName.editText?.text.toString(), false)
+            val call = ApiClient.PAYMENT_METHOD_SERVICE.createPayment(body)
             call.enqueue {
                 onResponse = {
                     if(it.isSuccessful && it.body() != null) {

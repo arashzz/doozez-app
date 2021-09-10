@@ -1,8 +1,8 @@
-package com.doozez.doozez.api.payments
+package com.doozez.doozez.api.paymentMethod
 
 import com.google.gson.annotations.SerializedName
 
-class PaymentCreateReq(
+class PaymentMethodCreateReq(
 
     @SerializedName("name")
     var name: String,

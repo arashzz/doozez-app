@@ -6,19 +6,19 @@ import android.widget.RadioButton
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.api.payments.PaymentDetailResp
+import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodListItemBinding
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
 import com.doozez.doozez.utils.PaymentMethodType
 
 class PaymentMethodListAdapter
-    (private val values: MutableList<PaymentDetailResp>,
+    (private val values: MutableList<PaymentMethodDetailResp>,
      private val listener: PaymentMethodItemListener)
     : RecyclerView.Adapter<PaymentMethodListAdapter.ViewHolder>() {
 
     private var selectedItemIndex = -1
 
-    fun addItems(items: List<PaymentDetailResp>) {
+    fun addItems(items: List<PaymentMethodDetailResp>) {
         with(values) {
             clear()
             addAll(items)
