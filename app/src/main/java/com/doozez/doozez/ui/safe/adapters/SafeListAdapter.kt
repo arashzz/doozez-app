@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeItemBinding
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
+import com.doozez.doozez.utils.SafeStatus
 
 class SafeListAdapter(
     private val values: MutableList<SafeDetailResp>, onClickListener: OnSafeItemClickListener
@@ -43,7 +44,7 @@ class SafeListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
-        holder.status.text = item.status
+        holder.status.text = SafeStatus.getStatusForCode(item.status!!).description
         holder.cardview.setOnClickListener {
             onClickListener.safeItemClicked(item)
         }

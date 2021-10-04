@@ -1,16 +1,15 @@
 package com.doozez.doozez.api.job
 
-import com.doozez.doozez.utils.JobStatus
 import com.doozez.doozez.utils.TaskStatus
 import com.google.gson.annotations.SerializedName
 
-class JobDetailResp (
+class TaskDetail (
     @SerializedName("id")
     var id: Int,
 
     @SerializedName("status")
-    var status: JobStatus,
+    var status: TaskStatus,
 
-    @SerializedName("jobs_tasks")
-    var tasks: List<TaskDetail>
-    )
+    @SerializedName("task_type")
+    var type: String
+)

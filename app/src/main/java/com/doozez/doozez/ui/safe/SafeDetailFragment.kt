@@ -16,7 +16,6 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.participation.ParticipationActionReq
-import com.doozez.doozez.api.payments.PaymentDetailResp
 import com.doozez.doozez.api.safe.SafeActionReq
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResp
@@ -59,11 +58,10 @@ class SafeDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
-        val view = binding.root
         populateTabs()
         getSafeDetails()
         getPaymentMethod()
-        return view
+        return binding.root
     }
 
     private fun getSafeDetails() {
@@ -90,7 +88,12 @@ class SafeDetailFragment : Fragment() {
         isInitiator = detail.initiator == userId
         binding.safeDetailName.text = detail.name
         binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
-        binding.safeDetailStatus.text = SafeStatus.getStatusTextForCode(detail.status!!)
+        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(detail.status!!).description
+        binding.safeDetailStatus.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_safe_to_nav_task_list, bundleOf(
+                BundleKey.SAFE_ID to safeId
+            ))
+        }
         addGeneralListeners()
         applyUserRoleRules()
     }
@@ -174,14 +177,15 @@ class SafeDetailFragment : Fragment() {
                 call.enqueue {
                     onResponse = {
                         if (it.isSuccessful && it.body() != null) {
+
                             Snackbar.make(
                                 binding.safeDetailContainer,
-                                it.body().id,
+                                "Safe started successfully",
                                 Snackbar.LENGTH_SHORT).show()
                         } else {
                             Snackbar.make(
                                 binding.safeDetailContainer,
-                                "Failed start safe",
+                                "Failed to start safe",
                                 Snackbar.LENGTH_SHORT).show()
                         }
                     }

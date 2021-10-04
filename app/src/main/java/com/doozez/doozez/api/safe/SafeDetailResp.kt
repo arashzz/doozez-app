@@ -2,6 +2,7 @@ package com.doozez.doozez.api.safe
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.doozez.doozez.api.job.JobDetailResp
 import com.google.gson.annotations.SerializedName
 
 class SafeDetailResp() : Parcelable {

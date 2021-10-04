@@ -13,4 +13,5 @@ object BundleKey {
     const val EMAIL = "email"
     const val PAYMENT_METHOD_TYPE = "payment_type"
     const val FAIL_REASON = "fail_reason"
+    const val JOB_ID = "job_id"
 }

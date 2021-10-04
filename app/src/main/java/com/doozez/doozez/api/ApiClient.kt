@@ -2,6 +2,7 @@ package com.doozez.doozez.api
 
 import com.doozez.doozez.api.auth.AuthV1Service
 import com.doozez.doozez.api.invitation.InvitationV1Service
+import com.doozez.doozez.api.job.JobV1Service
 import com.doozez.doozez.api.participation.ParticipationV1Service
 import com.doozez.doozez.api.paymentMethod.PaymentMethodV1Service
 import com.doozez.doozez.api.safe.SafeV1Service
@@ -59,5 +60,9 @@ object ApiClient {
 
     val authService: AuthV1Service by lazy {
         retrofit.create(AuthV1Service::class.java)
+    }
+
+    val jobService: JobV1Service by lazy {
+        retrofit.create(JobV1Service::class.java)
     }
 }
