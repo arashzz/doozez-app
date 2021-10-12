@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "483171139503",
+    "project_id": "cellular-cider-325915",
+    "storage_bucket": "cellular-cider-325915.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483171139503:android:18497081f14dcb9869f95a",
+        "android_client_info": {
+          "package_name": "com.doozez.doozez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "483171139503-knptpejd34k7l61t6l69srplpb3uvlmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVXmnC2aBtcY3rr21GruUsmi2TVBJ7DEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "483171139503-knptpejd34k7l61t6l69srplpb3uvlmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

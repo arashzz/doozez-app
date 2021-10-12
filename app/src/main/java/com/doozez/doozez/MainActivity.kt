@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -17,7 +19,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.databinding.ActivityMainBinding
 import com.doozez.doozez.utils.SharedPrerfKey
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,16 +56,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
 
-        val name = getString(R.string.action_add)
-        val descriptionText = getString(R.string.action_add)
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("1", name, importance).apply {
-            description = descriptionText
-        }
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
 
 
     }

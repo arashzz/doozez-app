@@ -1,10 +1,14 @@
 package com.doozez.doozez
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
@@ -13,7 +17,9 @@ import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.ActivityLoginBinding
 import com.doozez.doozez.utils.BundleKey
 import com.doozez.doozez.utils.SharedPrerfKey
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
         if (!email.isNullOrEmpty()) {
             binding.loginEmail.editText?.setText(email)
         }
+        registerFCM()
         addListeners()
     }
 
@@ -138,4 +145,36 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.overlayLoader.progressView.visibility = visibility
     }
+
+    private fun registerFCM() {
+        //TODO: move out
+        val name = getString(R.string.action_add)
+        val descriptionText = getString(R.string.action_add)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("1", name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+
+
+        //TODO: move out
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = token
+            Log.d("TAG", token!!)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
+
 }
