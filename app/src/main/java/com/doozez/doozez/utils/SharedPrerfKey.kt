@@ -6,4 +6,5 @@ object SharedPrerfKey {
     const val EMAIL = "email"
     const val FIRST_NAME = "first_name"
     const val LAST_NAME = "last_name"
+    const val FCM_REGISTRATION_ID = "fcm_reg_id"
 }

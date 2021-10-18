@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.databinding.ActivityMainBinding
+import com.doozez.doozez.services.NotificationService
 import com.doozez.doozez.utils.SharedPrerfKey
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
@@ -55,9 +56,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
-
-
+        NotificationService.registerChannels(this)
+        NotificationService.registerDevice()
     }
 
     override fun onSupportNavigateUp(): Boolean {

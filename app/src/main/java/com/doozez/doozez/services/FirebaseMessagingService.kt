@@ -7,13 +7,21 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import androidx.work.OneTimeWorkRequest
 import com.doozez.doozez.R
 import com.doozez.doozez.SplashActivity
+import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.SharedPrefManager
+import com.doozez.doozez.api.device.DeviceCreateReq
+import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.utils.NotificationChannel
+import com.doozez.doozez.utils.SharedPrerfKey
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class FirebaseMessagingService : FirebaseMessagingService() {
@@ -70,12 +78,11 @@ class FirebaseMessagingService : FirebaseMessagingService() {
      * FCM registration token is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
-
+        Log.i(TAG, "Received a new FCM token with the value [$token]")
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
-        sendRegistrationToServer(token)
+        NotificationService.sendRegistrationToServer(token)
     }
     // [END on_new_token]
 
@@ -94,19 +101,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
      */
     private fun handleNow() {
         Log.d(TAG, "Short lived task is done.")
-    }
-
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM registration token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
     /**
@@ -145,6 +139,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
 
-        private const val TAG = "MyFirebaseMsgService"
+        private const val TAG = "FirebaseMessagingService"
     }
 }
