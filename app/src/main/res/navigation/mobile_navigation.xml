@@ -170,5 +170,10 @@
         android:name="com.doozez.doozez.ui.setting.SettingsFragment"
         android:label="@string/action_settings" />
 
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.doozez.doozez.ui.user.ProfileFragment"
+        android:label="@string/action_profile" />
+
 
 </navigation>

@@ -2,15 +2,21 @@ package com.doozez.doozez.ui.safe
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
@@ -20,20 +26,28 @@ import com.doozez.doozez.api.safe.SafeActionReq
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
+import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
 import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
+import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
 import com.doozez.doozez.utils.*
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialArcMotion
+import com.google.android.material.transition.MaterialContainerTransform
 
 class SafeDetailFragment : Fragment() {
     private var safeId: Int = 0
+    private var safe: SafeDetailResp? = null
     private var userId: Int = 0
     private var participationId: Int = 0
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
     private var isInitiator = false
-    private var viewPagerAdapter: SafeDetailPagerAdapter? = null
+    private val inviteAdapter = SafeDetailInviteListAdapter(mutableListOf())
+    private val participantsAdapter = SafeDetailParticipantListAdapter(mutableListOf())
     private var ctx: Context? = null
+    private val TAG = "SafeDetailFragment"
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,16 +65,14 @@ class SafeDetailFragment : Fragment() {
             safeId = it.getInt(BundleKey.SAFE_ID)
         }
         userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
-        viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
+        //viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
-        populateTabs()
         getSafeDetails()
-        getPaymentMethod()
         return binding.root
     }
 
@@ -69,7 +81,10 @@ class SafeDetailFragment : Fragment() {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
+                    safe = it.body()
                     populateSafeDetails(it.body())
+                    populateList(it.body())
+                    getPaymentMethod()
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -78,17 +93,17 @@ class SafeDetailFragment : Fragment() {
                 }
             }
             onFailure = {
-                Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(binding.safeDetailContainer, "failed...", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun populateSafeDetails(detail: SafeDetailResp) {
-        isInitiator = detail.initiator == userId
-        binding.safeDetailName.text = detail.name
-        binding.safeDetailMonthlyPayment.text = detail.monthlyPayment.toString()
-        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(detail.status!!).description
+    private fun populateSafeDetails(safe: SafeDetailResp) {
+        isInitiator = safe.initiator == userId
+        binding.safeDetailName.text = safe.name
+        binding.safeDetailMonthlyPayment.text = safe.monthlyPayment.toString()
+        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(safe.status!!).description
         binding.safeDetailStatus.setOnClickListener {
             findNavController().navigate(R.id.action_nav_safe_to_nav_task_list, bundleOf(
                 BundleKey.SAFE_ID to safeId
@@ -98,22 +113,88 @@ class SafeDetailFragment : Fragment() {
         applyUserRoleRules()
     }
 
-    private fun populateTabs() {
-        with(binding.pager) {
-            adapter = viewPagerAdapter
-            isUserInputEnabled = false
+    private fun populateList(safe: SafeDetailResp) {
+        if(safe.status == SafeStatus.PENDING_PARTICIPANTS.code) {
+            populateInviteList(safe.id!!)
+        } else {
+            populateParticipantList(safe.id!!)
         }
-
-        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-            var tabName = ""
-            when(position) {
-                //SafeDetailPagerAdapter.TAB_DETAILS -> tabName = SafeDetailPagerAdapter.TAB_DETAILS_NAME
-                SafeDetailPagerAdapter.TAB_INVITATIONS -> tabName = SafeDetailPagerAdapter.TAB_INVITATIONS_NAME
-                SafeDetailPagerAdapter.TAB_PARTICIPANTS -> tabName = SafeDetailPagerAdapter.TAB_PARTICIPANTS_NAME
-            }
-            tab.text = tabName
-        }.attach()
     }
+
+    private fun populateInviteList(safeId: Int) {
+        with(binding.safeDetailUserList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@SafeDetailFragment.inviteAdapter
+        }
+        loadInvites(safeId)
+    }
+
+    private fun populateParticipantList(safeId: Int) {
+        with(binding.safeDetailUserList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@SafeDetailFragment.participantsAdapter
+        }
+        loadParticipants(safeId)
+    }
+
+    private fun loadInvites(safeId: Int) {
+        val call = ApiClient.invitationService.getInvitationsForSafe(safeId)
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful && it.body() != null) {
+                    inviteAdapter.addItems(it.body())
+                    inviteAdapter.notifyDataSetChanged()
+                }
+            }
+            onFailure = {
+                Log.e(TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailUserList,
+                    "Failed to load Invitation list",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun loadParticipants(safeId: Int) {
+        val call = ApiClient.participationService.getParticipationsForSafe(safeId)
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful && it.body() != null) {
+                    participantsAdapter.addItems(it.body())
+                    participantsAdapter.notifyDataSetChanged()
+                }
+            }
+            onFailure = {
+                Log.e(TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailUserList,
+                    "Failed to load Participation list",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+
+//    private fun populateTabs() {
+//        with(binding.pager) {
+//            adapter = viewPagerAdapter
+//            isUserInputEnabled = false
+//        }
+//
+//        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+//            var tabName = ""
+//            when(position) {
+//                //SafeDetailPagerAdapter.TAB_DETAILS -> tabName = SafeDetailPagerAdapter.TAB_DETAILS_NAME
+//                SafeDetailPagerAdapter.TAB_INVITATIONS -> tabName = SafeDetailPagerAdapter.TAB_INVITATIONS_NAME
+//                SafeDetailPagerAdapter.TAB_PARTICIPANTS -> tabName = SafeDetailPagerAdapter.TAB_PARTICIPANTS_NAME
+//            }
+//            tab.text = tabName
+//        }.attach()
+//    }
+
 
     private fun addGeneralListeners() {
         setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
@@ -149,7 +230,7 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun applyUserRoleRules() {
-        if(!isInitiator) {
+        if(!isInitiator && safe!!.status!! == SafeStatus.PENDING_PARTICIPANTS.code) {
             binding.safeDetailLeave.visibility = View.VISIBLE
             binding.safeDetailLeave.setOnClickListener {
                 AlertDialog.Builder(ctx)
@@ -163,15 +244,20 @@ class SafeDetailFragment : Fragment() {
                         dialog.dismiss()
                     }.show()
             }
-        } else {
+        } else if(safe!!.status!! == SafeStatus.PENDING_PARTICIPANTS.code) {
             binding.safeDetailStart.visibility = View.VISIBLE
             binding.safeDetailAddInvite.visibility = View.VISIBLE
             binding.safeDetailCancel.visibility = View.VISIBLE
             binding.safeDetailCancel.setOnClickListener {
-                Snackbar.make(binding.safeDetailContainer, "dummy cancel", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    "dummy cancel",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
             binding.safeDetailStart.setOnClickListener {
-                Snackbar.make(binding.safeDetailContainer, "dummy start", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.safeDetailContainer, "dummy start", Snackbar.LENGTH_SHORT)
+                    .show()
                 val body = SafeActionReq(SafeAction.START.name, true)
                 val call = ApiClient.safeService.updateSafeForAction(safeId, body)
                 call.enqueue {
@@ -181,20 +267,23 @@ class SafeDetailFragment : Fragment() {
                             Snackbar.make(
                                 binding.safeDetailContainer,
                                 "Safe started successfully",
-                                Snackbar.LENGTH_SHORT).show()
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         } else {
                             Snackbar.make(
                                 binding.safeDetailContainer,
                                 "Failed to start safe",
-                                Snackbar.LENGTH_SHORT).show()
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     onFailure = {
-                        Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                        Log.e(TAG, it?.stackTrace.toString())
                         Snackbar.make(
                             binding.safeDetailContainer,
                             "Failed start safe",
-                            Snackbar.LENGTH_SHORT).show()
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -233,7 +322,7 @@ class SafeDetailFragment : Fragment() {
                 }
             }
             onFailure = {
-                Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(
                     binding.safeDetailContainer,
                     "Failed get to participants for safe",
@@ -263,7 +352,7 @@ class SafeDetailFragment : Fragment() {
                 }
             }
             onFailure = {
-                Log.e("SafeDetailFragment", it?.stackTrace.toString())
+                Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(
                     binding.safeDetailContainer,
                     "Failed get to participation for user",

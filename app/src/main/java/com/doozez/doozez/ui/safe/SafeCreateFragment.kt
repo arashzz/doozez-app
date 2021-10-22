@@ -26,7 +26,7 @@ class SafeCreateFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSafeCreateBinding.inflate(inflater, container, false)
 //        //TODO: implement for higher versions
 //        // SOFT_INPUT_ADJUST_RESIZE is deprecated in version 30

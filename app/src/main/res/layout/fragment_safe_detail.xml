@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,9 +9,8 @@
     tools:context=".ui.safe.SafeDetailFragment">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp">
 
@@ -39,16 +38,6 @@
                         android:layout_alignParentStart="true"
                         android:gravity="start"
                         android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                    <ImageView
-                        android:id="@+id/safe_detail_add_invite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="8dp"
-                        android:visibility="gone"
-                        android:contentDescription="@string/desc_invite_participants"
-                        android:src="@drawable/ic_baseline_person_add_48" />
 
                     <TextView
                         android:id="@+id/safe_detail_status"
@@ -107,65 +96,59 @@
                         android:enabled="false"
                         android:layout_centerVertical="true"/>
                 </RelativeLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/safe_detail_cancel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/action_cancel"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_weight="0.5"
-                        />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/safe_detail_leave"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:enabled="false"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/action_leave"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_weight="0.5"
-                        />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/safe_detail_start"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/action_start"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_weight="0.5"
-                        />
-
-                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/safe_detail_user_list"
+            android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.safe.SafeDetailFragment" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/safe_detail_user_list"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/safe_detail_leave"
+            android:src="@drawable/ic_baseline_close_24"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/safe_detail_cancel"
+            android:src="@drawable/ic_baseline_close_24"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/safe_detail_start"
+            android:src="@drawable/ic_baseline_check_24"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/safe_detail_add_invite"
+            android:src="@drawable/ic_baseline_person_add_24"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

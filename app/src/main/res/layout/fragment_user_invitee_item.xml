@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_search_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1.0">
+
+        <ImageView
+            android:id="@+id/invitee_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_baseline_person_24"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/invitee_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?attr/textAppearanceSubtitle2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/invitee_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_close_24"
+            android:layout_weight="0.2"
+            app:iconGravity="end"
+            android:layout_gravity="center_vertical"
+            style="?attr/borderlessButtonStyle"
+            />
+    </LinearLayout>
+</LinearLayout>
