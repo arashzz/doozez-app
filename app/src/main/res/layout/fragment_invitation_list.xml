@@ -8,15 +8,35 @@
     android:layout_height="match_parent"
     tools:context=".ui.invitation.InvitationListFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/invite_list"
         android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginHorizontal="17dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.invitation.InvitationListFragment"
         tools:listitem="@layout/fragment_invitation_item" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/invite_list_no_data_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_baseline_format_list_bulleted_24"/>
+
+        <TextView
+            android:id="@+id/invite_list_no_data_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/invite_list_no_data_image"
+            android:layout_centerInParent="true"
+            android:text="@string/empty_data_invite_list" />
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

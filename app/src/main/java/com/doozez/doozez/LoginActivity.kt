@@ -99,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
                     SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
                     getUserForToken(it.body().apiKey)
                 } else {
+                    triggerOverlay()
                     Snackbar.make(
                         binding.loginContainer,
                         "Login failed. Invalid Credentials",

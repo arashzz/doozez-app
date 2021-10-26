@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import com.doozez.doozez.api.ApiClient
@@ -96,9 +97,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun register(body: RegisterCreateReq) {
         val call = ApiClient.authService.register(body)
+        triggerOverlay()
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful) {
+                    triggerOverlay()
                     AlertDialog.Builder(this@RegisterActivity)
                         .setTitle("Thank you ${body.firstName}")
                         .setMessage("Awesome! You will receive an activation email shortly!")
@@ -109,6 +112,7 @@ class RegisterActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }.show()
                 } else {
+                    triggerOverlay()
                     Snackbar.make(
                         binding.registerContainer,
                         "failed to register, please try again",
@@ -118,6 +122,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             onFailure = {
+                triggerOverlay()
                 Log.e("RegisterActivity", it?.stackTrace.toString())
                 Snackbar.make(
                     binding.registerContainer,
@@ -136,6 +141,14 @@ class RegisterActivity : AppCompatActivity() {
             binding.registerPassword.editText?.text.toString(),
             binding.registerPasswordConfirm.editText?.text.toString()
         )
+    }
+
+    private fun triggerOverlay() {
+        var visibility = View.GONE
+        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        binding.overlayLoader.progressView.visibility = visibility
     }
 
     private fun navigateToLogin(email: String) {

@@ -8,16 +8,39 @@
     android:layout_height="match_parent"
     tools:context=".ui.safe.SafeCreateFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/safesRecyclerView"
-        android:name="com.doozez.doozez.ui.safe.SafeListFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.safe.SafeListFragment"
-        tools:listitem="@layout/fragment_safe_item" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/safe_list_list"
+            android:name="com.doozez.doozez.ui.safe.SafeListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.safe.SafeListFragment"
+            tools:listitem="@layout/fragment_safe_item" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/safe_list_no_data_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_baseline_format_list_bulleted_24"/>
+
+        <TextView
+            android:id="@+id/safe_list_no_data_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/safe_list_no_data_image"
+            android:layout_centerInParent="true"
+            android:text="@string/empty_data_safe_list" />
+    </RelativeLayout>
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_safe"

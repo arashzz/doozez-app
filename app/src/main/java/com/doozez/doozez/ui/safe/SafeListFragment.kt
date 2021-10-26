@@ -34,16 +34,12 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
     private val adapter = SafeListAdapter(mutableListOf(), this)
     private var userId = 0L
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSafesListBinding.inflate(inflater, container, false)
-        with(binding.safesRecyclerView) {
+        with(binding.safeListList) {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SafeListFragment.adapter
         }
@@ -82,6 +78,11 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
+                    if(it.body().isNotEmpty()) {
+                        binding.safeListNoDataText.visibility = View.GONE
+                        binding.safeListNoDataImage.visibility = View.GONE
+                        binding.safeListList.visibility = View.VISIBLE
+                    }
                     adapter.addItems(it.body())
                 }
             }

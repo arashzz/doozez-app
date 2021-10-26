@@ -5,9 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -65,6 +63,7 @@ class SafeDetailFragment : Fragment() {
             safeId = it.getInt(BundleKey.SAFE_ID)
         }
         userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
+        setHasOptionsMenu(true)
         //viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
     }
 
@@ -74,6 +73,21 @@ class SafeDetailFragment : Fragment() {
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
         getSafeDetails()
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.safe_detail_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_safe_history -> {
+                findNavController().navigate(R.id.action_nav_safe_detail_to_nav_safe_history, bundleOf(
+                    BundleKey.SAFE_ID to safeId
+                ))
+                true
+            } else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun getSafeDetails() {
@@ -368,15 +382,15 @@ class SafeDetailFragment : Fragment() {
     }
 
     private fun leaveSafe() {
-//        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
-//        call.enqueue {
-//            onResponse = {
-//                if (it.isSuccessful) {
-//                    findNavController().navigate(SafeDetailFragmentDirections.actionNavSafeDetailToNavHome())
-//                } else {
-//                    Snackbar.make(binding.safeDetailContainer, "Failed to leave Safe", Snackbar.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
+        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful) {
+                    findNavController().navigate(SafeDetailFragmentDirections.actionNavSafeDetailToNavHome())
+                } else {
+                    Snackbar.make(binding.safeDetailContainer, "Failed to leave Safe", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

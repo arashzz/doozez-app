@@ -14,7 +14,7 @@
     <string name="menu_safe_create">Create Safe</string>
     <string name="menu_safe_detail">Safe Information</string>
     <string name="menu_user_search">Search Users</string>
-
+    <string name="menu_safe_history">Safe History</string>
 
     <string name="action_leave">Leave</string>
     <string name="action_start">Start</string>
@@ -26,6 +26,7 @@
     <string name="action_login">Login</string>
     <string name="action_register">Register</string>
     <string name="action_invite">Invite</string>
+    <string name="action_safe_detail_history">History</string>
     <string name="action_change_password">Change Password</string>
     <string name="action_already_have_account">I already have an account</string>
     <string name="action_create">Create</string>
@@ -53,6 +54,9 @@
     <string name="hint_password_confirm">Password Confirmation</string>
     <string name="hint_first_name">First Name</string>
     <string name="hint_last_name">Last Name</string>
+
+    <string name="empty_data_safe_list">You have no Safe</string>'
+    <string name="empty_data_invite_list">You have no Invitation</string>
 
     <string name="et_search_user_hint">Enter email…</string>
 
