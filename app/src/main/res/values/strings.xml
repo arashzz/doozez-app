@@ -57,6 +57,7 @@
 
     <string name="empty_data_safe_list">You have no Safe</string>
     <string name="empty_data_payment_method_list">You have no Payment Method</string>
+    <string name="empty_data_active_payment_method_list">You have no Active Payment Method</string>
     <string name="empty_data_invite_list">You have no Invitation</string>
 
     <string name="et_search_user_hint">Enter email…</string>

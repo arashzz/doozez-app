@@ -24,7 +24,7 @@
             tools:context=".ui.safe.SafeListFragment"
             tools:listitem="@layout/fragment_safe_item" />
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/safe_list_no_data_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

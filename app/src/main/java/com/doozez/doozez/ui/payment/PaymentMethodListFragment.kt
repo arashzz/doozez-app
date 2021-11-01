@@ -52,7 +52,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
         }
         }
         _binding = FragmentPaymentMethodListBinding.inflate(inflater, container, false)
-        with(binding.paymentMethodListList) {
+        with(binding.paymentListList) {
             layoutManager = LinearLayoutManager(context)
             adapter = this@PaymentMethodListFragment.adapter
         }
@@ -69,7 +69,24 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
                     val eligibleMethods = it.body().filter { pd ->
                         pd.status == PaymentMethodStatus.EXTERNAL_APPROVAL_SUCCESSFUL.name
                     }
-                    adapter?.addItems(eligibleMethods)
+                    if(eligibleMethods.isNotEmpty()) {
+                        binding.paymentListNoDataText.visibility = View.GONE
+                        binding.paymentListNoDataImage.visibility = View.GONE
+                        binding.paymentListList.visibility = View.VISIBLE
+                        binding.paymentListProceed.isEnabled = true
+                        binding.paymentListProceed.setOnClickListener {
+                            if (selectedPaymentMethod != null && selectedPaymentMethod!!.id > 0) {
+                                returnSelectedPayment()
+                                dismiss()
+                            } else {
+                                Snackbar.make(binding.paymentListContainer,
+                                    "A payment method should be selected before accepting an invite",
+                                    Snackbar.LENGTH_SHORT).show()
+
+                            }
+                        }
+                        adapter?.addItems(eligibleMethods)
+                    }
                 }
             }
             onFailure = {
@@ -80,17 +97,6 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
     }
 
     private fun addListeners() {
-        binding.paymentListProceed.setOnClickListener {
-            if (selectedPaymentMethod != null && selectedPaymentMethod!!.id > 0) {
-                returnSelectedPayment()
-                dismiss()
-            } else {
-                Snackbar.make(binding.paymentListContainer,
-                    "A payment method should be selected before accepting an invite",
-                    Snackbar.LENGTH_SHORT).show()
-
-            }
-        }
         binding.paymentListCancel.setOnClickListener {
             dismiss()
         }

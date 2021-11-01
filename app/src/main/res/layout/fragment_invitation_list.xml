@@ -22,7 +22,7 @@
         tools:context=".ui.invitation.InvitationListFragment"
         tools:listitem="@layout/fragment_invitation_item" />
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/invite_list_no_data_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
