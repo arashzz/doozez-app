@@ -7,7 +7,7 @@ enum class PaymentMethodStatus(val code: String, val description: String) {
     EXTERNAL_APPROVAL_SUCCESSFUL("EAS", "External Approval Successful"),
     EXTERNALLY_CREATED("EXC", "Externally Created"),
     EXTERNALLY_SUBMITTED("EXS", "Externally Submitted"),
-    EXTERNALLY_ACTIVATED("EXS", "Externally Activated");
+    EXTERNALLY_ACTIVATED("EXA", "Externally Activated");
 
     companion object {
         private val map = PaymentMethodStatus.values().associateBy(PaymentMethodStatus::code)
