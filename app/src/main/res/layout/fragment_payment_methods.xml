@@ -8,16 +8,37 @@
     android:layout_height="match_parent"
     tools:context=".ui.payment.PaymentMethodsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/payment_method_list"
-        android:name="com.doozez.doozez.ui.payment.PaymentMethodsFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.payment.PaymentMethodsFragment"
-        tools:listitem="@layout/fragment_payment_methods" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/payment_method_list"
+            android:name="com.doozez.doozez.ui.payment.PaymentMethodsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.payment.PaymentMethodsFragment"
+            tools:listitem="@layout/fragment_payment_methods" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/payment_method_list_no_data_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_baseline_format_list_bulleted_24"/>
+
+        <TextView
+            android:id="@+id/payment_method_list_no_data_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/payment_method_list_no_data_image"
+            android:layout_centerInParent="true"
+            android:text="@string/empty_data_payment_method_list" />
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_payment_method"

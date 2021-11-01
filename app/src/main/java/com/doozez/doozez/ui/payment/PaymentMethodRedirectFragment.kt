@@ -1,5 +1,6 @@
 package com.doozez.doozez.ui.payment
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class PaymentMethodRedirectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         FragmentPaymentCreateRedirectBinding.inflate(inflater, container, false).also { _binding = it }
+        triggerOverlay()
         loadRedirectView()
         return binding.root
     }
@@ -49,7 +51,21 @@ class PaymentMethodRedirectFragment : Fragment() {
                 view.loadUrl(url)
                 return false
             }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                //triggerOverlay()
+            }
         }
         webView.loadUrl(redirectURL!!)
+    }
+
+
+
+    private fun triggerOverlay() {
+        var visibility = View.GONE
+        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        binding.overlayLoader.progressView.visibility = visibility
     }
 }

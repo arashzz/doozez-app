@@ -67,7 +67,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
                     val eligibleMethods = it.body().filter { pd ->
-                        pd.status == PaymentMethodStatus.EAS.name
+                        pd.status == PaymentMethodStatus.EXTERNAL_APPROVAL_SUCCESSFUL.name
                     }
                     adapter?.addItems(eligibleMethods)
                 }

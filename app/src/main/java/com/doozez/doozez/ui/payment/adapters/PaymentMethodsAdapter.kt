@@ -53,7 +53,7 @@ class PaymentMethodsAdapter
         holder.name.text = item.name
 //        holder.type.text = PaymentType.getPaymentName(item.type)
         holder.type.text = PaymentMethodType.getPaymentName("DIRECT_DEBIT")
-        holder.status.text = PaymentMethodStatus.getPaymentStatus(item.status)
+        holder.status.text = PaymentMethodStatus.fromCode(item.status).description
         holder.container.setOnClickListener {
             listener.paymentMethodClicked(item)
         }

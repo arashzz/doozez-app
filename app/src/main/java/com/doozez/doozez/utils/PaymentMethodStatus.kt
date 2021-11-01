@@ -1,15 +1,22 @@
 package com.doozez.doozez.utils
 
-enum class PaymentMethodStatus {
-    PEA,
-    EAS;
+enum class PaymentMethodStatus(val code: String, val description: String) {
+    UNKNOWN("", "Unknown"),
+    PENDING_EXTERNAL_APPROVAL("PEA", "Pending External Approval"),
+    EXTERNAL_APPROVAL_FAILED("EAF", "External Approval Failed"),
+    EXTERNAL_APPROVAL_SUCCESSFUL("EAS", "External Approval Successful"),
+    EXTERNALLY_CREATED("EXC", "Externally Created"),
+    EXTERNALLY_SUBMITTED("EXS", "Externally Submitted"),
+    EXTERNALLY_ACTIVATED("EXS", "Externally Activated");
 
     companion object {
-        fun getPaymentStatus(status: String): String {
-            return when (valueOf(status)) {
-                PEA -> "Pending External Approval"
-                EAS -> "External Approval Successful"
+        private val map = PaymentMethodStatus.values().associateBy(PaymentMethodStatus::code)
+        fun fromCode(type: String): PaymentMethodStatus {
+            val status = map[type]
+            if(status != null) {
+                return status
             }
+            return UNKNOWN
         }
     }
 }
