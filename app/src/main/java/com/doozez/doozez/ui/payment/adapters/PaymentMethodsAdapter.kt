@@ -2,12 +2,15 @@ package com.doozez.doozez.ui.payment.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.doozez.doozez.R
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodsItemBinding
 import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
+import com.doozez.doozez.utils.InvitationStatus
 import com.doozez.doozez.utils.PaymentMethodStatus
 import com.doozez.doozez.utils.PaymentMethodType
 
@@ -51,9 +54,9 @@ class PaymentMethodsAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
-//        holder.type.text = PaymentType.getPaymentName(item.type)
-        holder.type.text = PaymentMethodType.getPaymentName("DIRECT_DEBIT")
-        holder.status.text = PaymentMethodStatus.fromCode(item.status).description
+        val type = PaymentMethodType.fromCode("DIRECT_DEBIT")
+        holder.type.text = type.displayName
+        holder.status.setImageResource(type.resId)
         holder.container.setOnClickListener {
             listener.paymentMethodClicked(item)
         }
@@ -70,6 +73,6 @@ class PaymentMethodsAdapter
         val container: CardView = binding.paymentMethodsItemContainer
         val name: TextView = binding.paymentMethodsItemName
         val type: TextView = binding.paymentMethodsItemType
-        val status: TextView = binding.paymentMethodsItemStatus
+        val status: ImageView = binding.paymentMethodsItemStatus
     }
 }
