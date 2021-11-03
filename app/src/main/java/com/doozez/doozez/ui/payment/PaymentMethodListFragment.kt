@@ -67,7 +67,7 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
                     val eligibleMethods = it.body().filter { pd ->
-                        pd.status == PaymentMethodStatus.EXTERNAL_APPROVAL_SUCCESSFUL.name
+                        pd.status == PaymentMethodStatus.EXTERNALLY_ACTIVATED.code
                     }
                     if(eligibleMethods.isNotEmpty()) {
                         binding.paymentListNoDataText.visibility = View.GONE
