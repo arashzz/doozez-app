@@ -18,5 +18,5 @@ interface SafeV1Service {
     fun getSafeByIdForUser(@Path("safeId") safeId: Int): Call<SafeDetailResp>
 
     @PATCH("v1/safes/{id}/")
-    fun updateSafeForAction(@Path("id") id: Int, @Body body: SafeActionReq): Call<JobDetailResp>
+    fun updateSafeForAction(@Path("id") id: Int, @Body body: SafeActionReq): Call<SafeDetailResp>
 }

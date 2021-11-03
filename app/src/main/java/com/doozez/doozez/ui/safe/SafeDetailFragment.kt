@@ -64,7 +64,6 @@ class SafeDetailFragment : Fragment() {
         }
         userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
         setHasOptionsMenu(true)
-        //viewPagerAdapter = SafeDetailPagerAdapter(this, safeId, userId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -96,7 +95,7 @@ class SafeDetailFragment : Fragment() {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
                     safe = it.body()
-                    populateSafeDetails(it.body())
+                    updateSafeDetails(it.body())
                     populateList(it.body())
                     getPaymentMethod()
                 } else {
@@ -113,7 +112,7 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
-    private fun populateSafeDetails(safe: SafeDetailResp) {
+    private fun updateSafeDetails(safe: SafeDetailResp) {
         isInitiator = safe.initiator == userId
         binding.safeDetailName.text = safe.name
         binding.safeDetailMonthlyPayment.text = safe.monthlyPayment.toString()
@@ -270,36 +269,16 @@ class SafeDetailFragment : Fragment() {
                 ).show()
             }
             binding.safeDetailStart.setOnClickListener {
-                Snackbar.make(binding.safeDetailContainer, "dummy start", Snackbar.LENGTH_SHORT)
-                    .show()
-                val body = SafeActionReq(SafeAction.START.name, true)
-                val call = ApiClient.safeService.updateSafeForAction(safeId, body)
-                call.enqueue {
-                    onResponse = {
-                        if (it.isSuccessful && it.body() != null) {
-
-                            Snackbar.make(
-                                binding.safeDetailContainer,
-                                "Safe started successfully",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Snackbar.make(
-                                binding.safeDetailContainer,
-                                "Failed to start safe",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
+                AlertDialog.Builder(ctx)
+                    .setTitle("some title")
+                    .setMessage("Do you want to start this safe?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        startSafe()
+                        dialog.dismiss()
                     }
-                    onFailure = {
-                        Log.e(TAG, it?.stackTrace.toString())
-                        Snackbar.make(
-                            binding.safeDetailContainer,
-                            "Failed start safe",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
             }
 
             binding.safeDetailAddInvite.setOnClickListener {
@@ -392,5 +371,45 @@ class SafeDetailFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun startSafe() {
+        val body = SafeActionReq(SafeAction.START.name, true)
+        val call = ApiClient.safeService.updateSafeForAction(safeId, body)
+        call.enqueue {
+            onResponse = {
+                if (it.isSuccessful && it.body() != null) {
+                    updateSafeDetails(it.body())
+                    populateList(it.body())
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Safe started successfully",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Failed to start safe",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            onFailure = {
+                Log.e(TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    "Failed start safe",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun triggerOverlay() {
+        var visibility = View.GONE
+        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        binding.overlayLoader.progressView.visibility = visibility
     }
 }

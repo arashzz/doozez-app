@@ -18,8 +18,7 @@ class PaymentMethodsAdapter
 (
     private val values: MutableList<PaymentMethodDetailResp>,
     private val listener: PaymentMethodItemListener
-)
-    : RecyclerView.Adapter<PaymentMethodsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PaymentMethodsAdapter.ViewHolder>() {
 
     private var selectedItem: PaymentMethodDetailResp? = null
 
