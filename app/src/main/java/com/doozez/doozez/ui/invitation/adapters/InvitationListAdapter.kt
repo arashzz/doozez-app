@@ -49,10 +49,10 @@ class InvitationListAdapter(
     }
 
     override fun onBindViewHolder(holder: InvitationViewHolder, position: Int) {
-        var senderMsg = "Invited by"
+//        var senderMsg = "Invited by"
         val item = values[position]
-        holder.name.text = item.safe?.name
-        holder.monthlyPayment.text = item.safe?.monthlyPayment.toString()
+        holder.name.text = item.safe.name
+        holder.monthlyPayment.text = item.safe.monthlyPayment.toString()
         addListeners(holder, item)
         if (userId != item.recipient.id) {
             (holder.acceptBtn.parent as? ViewGroup)?.removeView(holder.acceptBtn)
@@ -63,14 +63,14 @@ class InvitationListAdapter(
                     holder.cancelBtn.isEnabled = false
                 }
             }
-            senderMsg = "Invite sent to"
+//            senderMsg = "Invite sent to"
         } else {
             if (item.status != InvitationStatus.PENDING) {
                 holder.declineBtn.isEnabled = false
                 holder.acceptBtn.isEnabled = false
             }
         }
-        holder.sender.text = senderMsg + " ${item.initiator?.firstName} ${item.initiator?.lastName}"
+//        holder.sender.text = senderMsg + " ${item.initiator.firstName} ${item.initiator.lastName}"
         var statusTxt = "Pending"
         var statusColor = ContextCompat.getColor(ctx, R.color.yellow)
         when(item.status) {
@@ -114,7 +114,7 @@ class InvitationListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         val name: TextView = binding.inviteDetailName
-        val sender: TextView = binding.inviteDetailSender
+//        val sender: TextView = binding.inviteDetailSender
         val monthlyPayment: TextView = binding.inviteDetailMonthlyPayment
         val acceptBtn : MaterialButton = binding.inviteDetailAccept
         val declineBtn : MaterialButton = binding.inviteDetailDecline

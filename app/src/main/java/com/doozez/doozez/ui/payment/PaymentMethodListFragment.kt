@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
@@ -97,6 +99,12 @@ class PaymentMethodListFragment : BottomSheetDialogFragment(), PaymentMethodItem
     }
 
     private fun addListeners() {
+        binding.paymentListAdd.setOnClickListener {
+            dismiss()
+            findNavController().navigate(R.id.action_nav_payment_method_list_to_nav_payment_methods, bundleOf(
+                "ACTION" to "CREATE"
+            ))
+        }
         binding.paymentListCancel.setOnClickListener {
             dismiss()
         }

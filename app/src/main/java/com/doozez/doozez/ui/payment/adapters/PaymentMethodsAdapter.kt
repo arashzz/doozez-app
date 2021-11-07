@@ -54,11 +54,13 @@ class PaymentMethodsAdapter
         val item = values[position]
         holder.name.text = item.name
         val type = PaymentMethodType.fromCode("DIRECT_DEBIT")
-        holder.type.text = type.displayName
-        holder.status.setImageResource(type.resId)
-        holder.container.setOnClickListener {
-            listener.paymentMethodClicked(item)
-        }
+        val status = PaymentMethodStatus.fromCode(item.status)
+        holder.statusDesc.text = status.description
+        holder.icon.setImageResource(type.resId)
+        holder.status.setImageResource(getPaymentStatusIcon(item.status))
+//        holder.container.setOnClickListener {
+//            listener.paymentMethodClicked(item)
+//        }
     }
 
     override fun getItemCount(): Int = values.size
@@ -67,11 +69,25 @@ class PaymentMethodsAdapter
         selectedItem = item
     }
 
+    private fun getPaymentStatusIcon(statusCode: String): Int {
+        val status = PaymentMethodStatus.fromCode(statusCode)
+        if(status == PaymentMethodStatus.EXTERNALLY_ACTIVATED) {
+            return R.drawable.ic_round_check_24
+        } else if(status == PaymentMethodStatus.EXTERNAL_APPROVAL_FAILED) {
+            return R.drawable.ic_baseline_close_24
+        } else if(status == PaymentMethodStatus.UNKNOWN) {
+            return R.drawable.ic_baseline_info_24
+        } else {
+            return R.drawable.ic_baseline_access_time_24
+        }
+    }
+
     inner class ViewHolder(_binding: FragmentPaymentMethodsItemBinding) : RecyclerView.ViewHolder(_binding.root) {
         private val binding: FragmentPaymentMethodsItemBinding = _binding
         val container: CardView = binding.paymentMethodsItemContainer
         val name: TextView = binding.paymentMethodsItemName
-        val type: TextView = binding.paymentMethodsItemType
         val status: ImageView = binding.paymentMethodsItemStatus
+        val statusDesc: TextView = binding.paymentMethodsItemStatusDesc
+        val icon: ImageView = binding.paymentMethodsItemIcon
     }
 }

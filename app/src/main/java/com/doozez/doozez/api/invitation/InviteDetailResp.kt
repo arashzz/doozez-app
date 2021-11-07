@@ -12,8 +12,8 @@ class InviteDetailResp (
     @SerializedName("recipient")
     var recipient: UserDetailResp,
 
-    @SerializedName("initiator")
-    var initiator: UserDetailResp,
+//    @SerializedName("initiator")
+//    var initiator: UserDetailResp,
 
     @SerializedName("status")
     var status: String,

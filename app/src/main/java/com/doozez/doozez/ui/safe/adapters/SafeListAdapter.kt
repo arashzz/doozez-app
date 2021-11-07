@@ -44,7 +44,7 @@ class SafeListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
-        holder.status.text = SafeStatus.getStatusForCode(item.status!!).description
+        holder.status.text = SafeStatus.getStatusForCode(item.status).description
         holder.cardview.setOnClickListener {
             onClickListener.safeItemClicked(item)
         }

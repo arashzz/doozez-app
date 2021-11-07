@@ -31,20 +31,11 @@
             android:textAppearance="?attr/textAppearanceHeadline6"
             />
         <TextView
-            android:id="@+id/invite_detail_sender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/invite_detail_name"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            />
-        <TextView
             android:id="@+id/invite_detail_monthly_payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_below="@+id/invite_detail_sender"
+            android:layout_below="@+id/invite_detail_status"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
             />

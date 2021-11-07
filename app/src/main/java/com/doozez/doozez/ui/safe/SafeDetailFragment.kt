@@ -116,7 +116,7 @@ class SafeDetailFragment : Fragment() {
         isInitiator = safe.initiator == userId
         binding.safeDetailName.text = safe.name
         binding.safeDetailMonthlyPayment.text = safe.monthlyPayment.toString()
-        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(safe.status!!).description
+        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(safe.status).description
         binding.safeDetailStatus.setOnClickListener {
             findNavController().navigate(R.id.action_nav_safe_to_nav_task_list, bundleOf(
                 BundleKey.SAFE_ID to safeId
@@ -128,9 +128,9 @@ class SafeDetailFragment : Fragment() {
 
     private fun populateList(safe: SafeDetailResp) {
         if(safe.status == SafeStatus.PENDING_PARTICIPANTS.code) {
-            populateInviteList(safe.id!!)
+            populateInviteList(safe.id)
         } else {
-            populateParticipantList(safe.id!!)
+            populateParticipantList(safe.id)
         }
     }
 
@@ -405,11 +405,11 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
-    private fun triggerOverlay() {
-        var visibility = View.GONE
-        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
-            visibility = View.VISIBLE
-        }
-        binding.overlayLoader.progressView.visibility = visibility
-    }
+//    private fun triggerOverlay() {
+//        var visibility = View.GONE
+//        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
+//            visibility = View.VISIBLE
+//        }
+//        binding.overlayLoader.progressView.visibility = visibility
+//    }
 }

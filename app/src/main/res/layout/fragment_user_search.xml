@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/safe_list_use_search_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,21 +15,33 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/user_search_email"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/user_search_input_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="14dp"
-            android:hint="@string/et_search_user_hint"
-            android:inputType="textEmailAddress"
-            android:layout_alignParentTop="true"/>
+            app:cardElevation="7dp"
+            app:cardCornerRadius="7dp"
+            card_view:cardUseCompatPadding="true">
+
+            <EditText
+                android:id="@+id/user_search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_baseline_search_24"
+                android:hint="@string/hint_user_search"
+                android:padding="14dp"
+                android:maxLines="1"
+                android:background="@android:color/transparent"/>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/user_search_list"
             android:name="com.doozez.doozez.ui.UserSearchFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_search_email"
+            android:layout_below="@+id/user_search_input_container"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:layoutManager="LinearLayoutManager"
@@ -90,13 +103,13 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fab"
+        android:id="@+id/invitees_efab"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_baseline_people_24"
+        app:icon="@drawable/ic_baseline_people_24"
         app:layout_anchor="@id/user_search_container"
-        app:layout_anchorGravity="center_horizontal|bottom" />
+        app:layout_anchorGravity="end|bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

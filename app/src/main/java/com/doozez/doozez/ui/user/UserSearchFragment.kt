@@ -1,6 +1,5 @@
 package com.doozez.doozez.ui.user
 
-import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
@@ -26,28 +25,26 @@ import com.doozez.doozez.ui.user.adapters.UserSearchAdapter
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.doozez.doozez.utils.BundleKey
 import com.google.android.material.snackbar.Snackbar
-import android.text.style.UnderlineSpan
 
-import android.text.SpannableString
 import android.util.TypedValue
 import android.view.Gravity
-import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionManager
 import com.doozez.doozez.utils.ContextExtensions.hideKeyboard
 import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.transition.MaterialContainerTransform
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.EditText
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.transition.PathMotion
+import com.doozez.doozez.R
 import com.doozez.doozez.api.SharedPrefManager
-import com.doozez.doozez.ui.user.adapters.InviteeAdapter
+import com.doozez.doozez.ui.user.adapters.UserInviteeAdapter
 import com.doozez.doozez.utils.SharedPrerfKey
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.transition.MaterialArcMotion
 
 
@@ -57,14 +54,10 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
     private var _binding: FragmentUserSearchBinding? = null
     private val binding get() = _binding!!
     private var ctx: Context? = null
+    private val inviteeVM: InviteeListViewModel by navGraphViewModels(R.id.nav_user_search_invitee)
 
     private val userSearchAdapter = UserSearchAdapter(mutableListOf(), this)
-    private val inviteeAdapter = InviteeAdapter(mutableListOf(), this)
-
-    private val selectedUsers: MutableList<UserDetailResp> = mutableListOf()
-    private val selectedUsersLiveData: MutableLiveData<List<UserDetailResp>> by lazy {
-        MutableLiveData<List<UserDetailResp>>()
-    }
+    //private val inviteeAdapter = UserInviteeAdapter(mutableListOf(), this)
 
     var badgeDrawable: BadgeDrawable? = null
 
@@ -85,7 +78,6 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
             safeId = it.getInt(BundleKey.SAFE_ID)
         }
         userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
-        selectedUsersLiveData.value = selectedUsers
     }
 
     @SuppressLint("UnsafeExperimentalUsageError")
@@ -99,42 +91,21 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
             layoutManager = LinearLayoutManager(context)
             adapter = this@UserSearchFragment.userSearchAdapter
         }
-        with(binding.userSearchInviteeList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@UserSearchFragment.inviteeAdapter
-            addItemDecoration(DividerItemDecoration(this@UserSearchFragment.ctx!!, LinearLayoutManager.VERTICAL))
-        }
+        setFabDisplayText(0)
         addListeners()
-        configBadgeOnFab()
         return  binding.root
     }
 
     private fun addListeners() {
-        binding.fab.setOnClickListener {
+        binding.inviteesEfab.setOnClickListener {
             hideKeyboard()
-            if(selectedUsers.size > 0) {
-                showEndView(true)
-                addInviteeListActionListeners()
-            } else {
-                Snackbar.make(
-                    binding.safeListUseSearchContainer,
-                    "There is no one added to invite list",
-                    Snackbar.LENGTH_SHORT)
-                    .setAction("Dismiss") {}
-                    .show()
-            }
-
+            findNavController().navigate(R.id.action_nav_user_search_to_nav_user_invitee_list)
         }
-        selectedUsersLiveData.observe(viewLifecycleOwner, Observer {
-            badgeDrawable!!.number = selectedUsers.size
-            inviteeAdapter.addItems(it)
-            inviteeAdapter.notifyDataSetChanged()
-            if(selectedUsers.size > 0) {
-                adjustInviteeListHeight(selectedUsers.size)
-            }
+        inviteeVM.listLiveData.observe(viewLifecycleOwner, Observer {
+            setFabDisplayText(it.size)
         })
 
-        binding.userSearchEmail.addTextChangedListener(object : TextWatcher {
+        binding.userSearchInput.addTextChangedListener(object : TextWatcher {
             var lastChange: Long = 0
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int,
@@ -151,25 +122,21 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
                 }
             }
         })
-    }
 
-    private fun addInviteeListActionListeners() {
-        binding.userSearchInviteeCancel.setOnClickListener {
-            hideKeyboard()
-            showEndView(false)
-        }
         binding.userSearchInviteeInvite.setOnClickListener {
-            if(selectedUsers.size > 0) {
-                selectedUsers.forEach {
-                    sendInvite(it)
+            with(inviteeVM.listLiveData.value!!) {
+                if(isNotEmpty()) {
+                    forEach {
+                        sendInvite(it)
+                    }
+                } else {
+                    Snackbar.make(
+                        binding.safeListUseSearchContainer,
+                        "There is no one to invite",
+                        Snackbar.LENGTH_SHORT)
+                        .setAction("Dismiss") {}
+                        .show()
                 }
-            } else {
-                Snackbar.make(
-                    binding.safeListUseSearchContainer,
-                    "There is no one to invite",
-                    Snackbar.LENGTH_SHORT)
-                    .setAction("Dismiss") {}
-                    .show()
             }
         }
     }
@@ -227,18 +194,17 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
         hideKeyboard()
     }
 
-    override fun selectedUserRemoved(user: UserDetailResp) {
-        removeSelectedUser(user)
-        if(selectedUsers.size == 0) {
-            showEndView(false)
-        }
-    }
-
     private fun addSelectedUser(user: UserDetailResp) {
-        val found = selectedUsers.find { it.id == user.id } != null
-        if(!found) {
-            selectedUsers.add(user)
-            selectedUsersLiveData.value = selectedUsers
+        val found = inviteeVM.get(user.id)
+        if(found == null) {
+            inviteeVM.add(user)
+            val msg = "${user.firstName} is added to the list of invitee(s)"
+            Snackbar.make(
+                binding.safeListUseSearchContainer,
+                msg,
+                Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .show()
         } else {
             Snackbar.make(
                 binding.safeListUseSearchContainer,
@@ -250,58 +216,13 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
     }
 
     private fun removeSelectedUser(user: UserDetailResp) {
-        selectedUsers.remove(user)
-        selectedUsersLiveData.value = selectedUsers
+        inviteeVM.remove(user.id)
     }
 
-    private fun configBadgeOnFab() {
-        badgeDrawable!!.horizontalOffset = 30
-        badgeDrawable!!.verticalOffset = 20
-        binding.fab.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-            @SuppressLint("UnsafeExperimentalUsageError")
-            override fun onGlobalLayout() {
-                BadgeUtils.attachBadgeDrawable(badgeDrawable!!, binding.fab, null)
-                binding.fab.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
-    }
-
-    private fun adjustInviteeListHeight(rowCount: Int) {
-        val rowHeight = 50f
-        var height = rowCount * rowHeight
-        if(rowCount > 5) height = 5 * rowHeight
-        height += rowHeight
-        val heightPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, resources.displayMetrics).toInt()
-        val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics).toInt()
-        val params = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, heightPx)
-        params.setMargins(marginPx,0, marginPx, marginPx+marginPx)
-        params.anchorId = binding.fab.id
-        params.anchorGravity = Gravity.START
-        binding.endCard.layoutParams = params
-    }
-
-    private fun showEndView(open: Boolean) {
-        val transform = MaterialContainerTransform().apply {
-            if(open) {
-                startView = binding.fab
-                endView = binding.endCard
-                addTarget(endView as MaterialCardView)
-            } else {
-                startView = binding.endCard
-                endView = binding.fab
-                addTarget(endView as FloatingActionButton)
-            }
-            setPathMotion(MaterialArcMotion())
-            scrimColor = Color.TRANSPARENT
-        }
-        TransitionManager.beginDelayedTransition(binding.root, transform)
-        if(open) {
-            binding.fab.visibility = View.GONE
-            binding.endCard.visibility = View.VISIBLE
-        } else {
-            binding.endCard.visibility = View.GONE
-            binding.fab.visibility = View.VISIBLE
-        }
+    private fun setFabDisplayText(size: Int) {
+        val fabText = "$size Invitee(s)"
+        binding.inviteesEfab.text = fabText
+        binding.inviteesEfab.extend()
     }
 
     companion object {

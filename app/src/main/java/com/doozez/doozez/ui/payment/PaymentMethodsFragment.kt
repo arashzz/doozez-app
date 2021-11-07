@@ -24,10 +24,14 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
     private var _binding: FragmentPaymentMethodsBinding? = null
     private val binding get() = _binding!!
     private var adapter: PaymentMethodsAdapter? = null
+    private var action: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = PaymentMethodsAdapter(mutableListOf(), this)
+        arguments?.let {
+            action = it.getString("ACTION")
+        }
     }
 
     override fun onCreateView(
@@ -41,14 +45,15 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
         }
         loadPayments()
         addListeners()
+        if(!action.isNullOrBlank() && action == "CREATE") {
+            navigateToCreate()
+        }
         return binding.root
     }
 
     private fun addListeners() {
         binding.addPaymentMethod.setOnClickListener {
-            findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
-                BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.CREATE
-            ))
+            navigateToCreate()
         }
     }
 
@@ -76,6 +81,12 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
         findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
             BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.EDIT,
             BundleKey.PAYMENT_METHOD_ID to paymentMethod.id
+        ))
+    }
+
+    private fun navigateToCreate() {
+        findNavController().navigate(R.id.nav_payment_methods_to_nav_payment_create, bundleOf(
+            BundleKey.PAYMENT_METHOD_CREATE_MODE to PaymentMethodCreateMode.CREATE
         ))
     }
 }

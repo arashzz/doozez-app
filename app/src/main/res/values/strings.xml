@@ -54,11 +54,13 @@
     <string name="hint_password_confirm">Password Confirmation</string>
     <string name="hint_first_name">First Name</string>
     <string name="hint_last_name">Last Name</string>
+    <string name="hint_user_search">Type in someone\'s name</string>
 
     <string name="empty_data_safe_list">You have no Safe</string>
     <string name="empty_data_payment_method_list">You have no Payment Method</string>
     <string name="empty_data_active_payment_method_list">You have no Active Payment Method</string>
     <string name="empty_data_invite_list">You have no Invitation</string>
+    <string name="empty_data_invitee_list">You have no Invitee added</string>
 
     <string name="et_search_user_hint">Enter email…</string>
 

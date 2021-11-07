@@ -59,9 +59,7 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
         setFragmentResultListener(ResultKey.SAFE_ADDED) { _, bundle ->
             val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
             if (resultOk) {
-                loadNewSafe(
-                    bundle.getParcelable(BundleKey.SAFE_OBJECT)
-                )
+                //loadSafes()
             }
         }
         binding.addSafe.setOnClickListener {

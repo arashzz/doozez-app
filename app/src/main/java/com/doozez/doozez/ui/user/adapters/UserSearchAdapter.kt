@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.databinding.FragmentUserSearchItemBinding
@@ -11,10 +12,8 @@ import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.google.android.material.button.MaterialButton
 
 class UserSearchAdapter(
-    private val values: MutableList<UserDetailResp>, onClickListener: OnUserSearchItemClickListener
+    private val values: MutableList<UserDetailResp>, private val listener: OnUserSearchItemClickListener
 ): RecyclerView.Adapter<UserSearchAdapter.UserViewHolder>() {
-
-    private val onClickListener: OnUserSearchItemClickListener = onClickListener
 
     fun addItems(items: List<UserDetailResp>) {
         values.clear()
@@ -36,16 +35,16 @@ class UserSearchAdapter(
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = values[position]
-        holder.name.text = item.firstName + " " + item.lastName
+        val fullName = "${item.firstName} ${item.lastName}"
+        holder.name.text =  fullName
         holder.email.text = item.email
         holder.addInvite.setOnClickListener {
-            onClickListener.userItemClicked(item)
+            listener.userItemClicked(item)
         }
 
     }
 
     inner class UserViewHolder(binding: FragmentUserSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val container: LinearLayout = binding.userSearchItemContainer
         val name: TextView = binding.userSearchItemName
         val email: TextView = binding.userSearchItemEmail
         val addInvite: MaterialButton = binding.userSearchItemAdd

@@ -21,6 +21,7 @@ class SafeCreateFragment : Fragment() {
     private var _binding: FragmentSafeCreateBinding? = null
     private val binding get() = _binding!!
     private var paymentID = 0
+    private val TAG = "SafeCreateFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,24 +79,25 @@ class SafeCreateFragment : Fragment() {
         val call = ApiClient.safeService.createSafeForUser(SafeCreateReq(safeName, monthlyPayment, paymentID!!))
         call.enqueue {
             onResponse = {
-                returnNewSafe(it.isSuccessful, it.body())
+                if(it.isSuccessful) {
+                    findNavController().popBackStack()
+                } else {
+                    Log.e(TAG, it.errorBody().string())
+                    Snackbar.make(
+                        binding.safeCreateContainer,
+                        "Failed to create Safe",
+                        Snackbar.LENGTH_SHORT).show()
+                }
+
             }
             onFailure = {
-                Log.e("SafeListFragment", it?.stackTrace.toString())
-                returnNewSafe(false, null)
+                Log.e(TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeCreateContainer,
+                    "Failed to create Safe",
+                    Snackbar.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun returnNewSafe(created: Boolean, safe: SafeDetailResp?) {
-        setFragmentResult(
-            ResultKey.SAFE_ADDED,
-            bundleOf(
-                BundleKey.RESULT_OK to created,
-                BundleKey.SAFE_OBJECT to safe
-            )
-        )
-        findNavController().popBackStack()
     }
 
     //TODO: improvement needed

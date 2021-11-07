@@ -7,13 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.databinding.FragmentUserInviteeItemBinding
-import com.doozez.doozez.databinding.FragmentUserSearchItemBinding
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
+import com.doozez.doozez.ui.user.listeners.UserInviteeListener
 import com.google.android.material.button.MaterialButton
 
-class InviteeAdapter(
-    private val values: MutableList<UserDetailResp>, private val onClickListener: OnUserSearchItemClickListener
-): RecyclerView.Adapter<InviteeAdapter.UserViewHolder>() {
+class UserInviteeAdapter(
+    private val values: MutableList<UserDetailResp>, private val listener: UserInviteeListener
+): RecyclerView.Adapter<UserInviteeAdapter.UserViewHolder>() {
 
     fun addItems(items: List<UserDetailResp>) {
         values.clear()
@@ -38,7 +38,7 @@ class InviteeAdapter(
         val name = "${item.firstName} ${item.lastName}"
         holder.name.text = name
         holder.remove.setOnClickListener {
-            onClickListener.selectedUserRemoved(item)
+            listener.inviteeRemoved(item)
         }
 
     }

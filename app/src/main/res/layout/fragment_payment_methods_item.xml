@@ -6,8 +6,8 @@
     android:id="@+id/payment_methods_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
-    android:layout_marginVertical="4dp"
+    android:layout_margin="7dp"
+    android:padding="5dp"
     card_view:cardElevation="4dp"
     card_view:cardCornerRadius="4dp">
     <RelativeLayout
@@ -17,31 +17,30 @@
 
         <ImageView
             android:id="@+id/payment_methods_item_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_credit_card_36"
-            android:layout_alignParentStart="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="8dp"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"/>
 
         <TextView
             android:id="@+id/payment_methods_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/payment_methods_item_icon"
             android:layout_toEndOf="@+id/payment_methods_item_icon"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:layout_centerVertical="true"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:includeFontPadding="false"
             tools:text="@tools:sample/cities" />
 
         <TextView
-            android:id="@+id/payment_methods_item_type"
+            android:id="@+id/payment_methods_item_status_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_alignStart="@+id/payment_methods_item_name"
-            android:layout_below="@+id/payment_methods_item_icon"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
+            android:layout_below="@+id/payment_methods_item_name"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:includeFontPadding="false"
             tools:text="@tools:sample/cities" />
 
         <ImageView
