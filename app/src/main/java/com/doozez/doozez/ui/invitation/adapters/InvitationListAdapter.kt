@@ -27,10 +27,10 @@ class InvitationListAdapter(
         }.also { notifyDataSetChanged() }
     }
 
-    fun itemStatusChanged(itemId: Int, status: String) {
+    fun itemStatusChanged(itemId: Int, status: InvitationStatus) {
         values.forEachIndexed { index, it ->
             if(it.id == itemId) {
-                it.status = status
+                it.status = status.code
                 values[index] = it
                 notifyItemChanged(index)
             }
@@ -49,52 +49,39 @@ class InvitationListAdapter(
     }
 
     override fun onBindViewHolder(holder: InvitationViewHolder, position: Int) {
-//        var senderMsg = "Invited by"
+        var actionMsg = "Invited by "
         val item = values[position]
+        val status = InvitationStatus.fromCode(item.status)
         holder.name.text = item.safe.name
         holder.monthlyPayment.text = item.safe.monthlyPayment.toString()
         addListeners(holder, item)
         if (userId != item.recipient.id) {
             (holder.acceptBtn.parent as? ViewGroup)?.removeView(holder.acceptBtn)
             (holder.declineBtn.parent as? ViewGroup)?.removeView(holder.declineBtn)
-            if (item.status == InvitationStatus.PENDING || item.status == InvitationStatus.CANCELLED) {
+            if (status == InvitationStatus.PENDING || status == InvitationStatus.CANCELLED) {
                 holder.cancelBtn.visibility = View.VISIBLE
-                if (item.status == InvitationStatus.CANCELLED) {
+                if (status == InvitationStatus.CANCELLED) {
                     holder.cancelBtn.isEnabled = false
                 }
             }
-//            senderMsg = "Invite sent to"
+            actionMsg = "Invitation sent to ${item.recipient.firstName} ${item.recipient.lastName}"
         } else {
-            if (item.status != InvitationStatus.PENDING) {
+            actionMsg += "${item.sender.firstName} ${item.sender.lastName}"
+            if (status != InvitationStatus.PENDING) {
                 holder.declineBtn.isEnabled = false
                 holder.acceptBtn.isEnabled = false
             }
         }
-//        holder.sender.text = senderMsg + " ${item.initiator.firstName} ${item.initiator.lastName}"
-        var statusTxt = "Pending"
-        var statusColor = ContextCompat.getColor(ctx, R.color.yellow)
-        when(item.status) {
-            InvitationStatus.ACCEPTED -> {
-                statusTxt = "Accepted"
-                statusColor = ContextCompat.getColor(ctx, R.color.green)
-            }
-            InvitationStatus.DECLINED -> {
-                statusTxt = "Declined"
-                statusColor = ContextCompat.getColor(ctx, R.color.red)
-            }
-            InvitationStatus.CANCELLED -> {
-                statusTxt = "Cancelled"
-                statusColor = ContextCompat.getColor(ctx, R.color.red)
-            }
-        }
-        holder.status.text = statusTxt
-        holder.status.setTextColor(statusColor)
+        holder.actionMessage.text = actionMsg
+        holder.status.text = status.description
+        holder.status.setTextColor(ContextCompat.getColor(ctx, status.colorId))
     }
 
     override fun getItemCount(): Int = values.size
 
     private fun addListeners(holder: InvitationViewHolder, item: InviteDetailResp) {
-        if (item.status == InvitationStatus.PENDING) {
+        val status = InvitationStatus.fromCode(item.status)
+        if (status == InvitationStatus.PENDING) {
             holder.acceptBtn.setOnClickListener {
                 listener.inviteAccepted(item)
             }
@@ -114,7 +101,7 @@ class InvitationListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         val name: TextView = binding.inviteDetailName
-//        val sender: TextView = binding.inviteDetailSender
+        val actionMessage: TextView = binding.inviteDetailAction
         val monthlyPayment: TextView = binding.inviteDetailMonthlyPayment
         val acceptBtn : MaterialButton = binding.inviteDetailAccept
         val declineBtn : MaterialButton = binding.inviteDetailDecline

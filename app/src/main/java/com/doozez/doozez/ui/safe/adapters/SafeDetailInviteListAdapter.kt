@@ -41,9 +41,9 @@ class SafeDetailInviteListAdapter(
 
     private fun getStatusIcon(code: String): Int {
         var id = R.drawable.ic_baseline_access_time_24
-        if (code == InvitationStatus.ACCEPTED) {
+        if (code == InvitationStatus.ACCEPTED.code) {
             id = R.drawable.ic_round_check_24
-        } else if (code == InvitationStatus.DECLINED || code == InvitationStatus.CANCELLED) {
+        } else if (code == InvitationStatus.DECLINED.code || code == InvitationStatus.CANCELLED.code) {
             id = R.drawable.ic_baseline_clear_24
         }
         return id

@@ -209,7 +209,7 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
                 if (it.isSuccessful && it.body() != null) {
                     adapter?.itemStatusChanged(
                         inviteId,
-                        InvitationStatus.getStatusFromResponse(it.body().status))
+                        InvitationStatus.fromCode(it.body().status))
                     Snackbar.make(binding.inviteListContainer, "Invite updated", Snackbar.LENGTH_SHORT).show()
                 }
             }
@@ -223,7 +223,8 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
 
     override fun inviteSafeClicked(invite: InviteDetailResp) {
         val bundle = bundleOf(
-            BundleKey.SAFE_ID to invite.safe.id
+            BundleKey.SAFE_ID to invite.safe.id,
+            BundleKey.IS_INVITE_ACCEPTED to (invite.status == InvitationStatus.ACCEPTED.code)
         )
         findNavController().navigate(R.id.action_nav_invitation_to_nav_safe_detail, bundle)
     }

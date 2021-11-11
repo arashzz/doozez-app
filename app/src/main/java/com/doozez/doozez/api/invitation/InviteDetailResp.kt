@@ -12,8 +12,8 @@ class InviteDetailResp (
     @SerializedName("recipient")
     var recipient: UserDetailResp,
 
-//    @SerializedName("initiator")
-//    var initiator: UserDetailResp,
+    @SerializedName("sender")
+    var sender: UserDetailResp,
 
     @SerializedName("status")
     var status: String,
@@ -28,7 +28,7 @@ class InviteDetailResp (
     override fun compareTo(other: InviteDetailResp): Int {
         if (status == other.status) {
             return 0
-        } else if (status != InvitationStatus.PENDING && other.status == InvitationStatus.PENDING) {
+        } else if (status != InvitationStatus.PENDING.code && other.status == InvitationStatus.PENDING.code) {
             return 1
         }
         return -1

@@ -1,22 +1,25 @@
 package com.doozez.doozez.ui.user
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
+import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.invitation.InviteCreateReq
 import com.doozez.doozez.api.user.UserDetailResp
@@ -24,37 +27,21 @@ import com.doozez.doozez.databinding.FragmentUserSearchBinding
 import com.doozez.doozez.ui.user.adapters.UserSearchAdapter
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.ContextExtensions.hideKeyboard
+import com.doozez.doozez.utils.SharedPrerfKey
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.snackbar.Snackbar
 
-import android.util.TypedValue
-import android.view.Gravity
-import androidx.transition.TransitionManager
-import com.doozez.doozez.utils.ContextExtensions.hideKeyboard
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.transition.MaterialContainerTransform
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import com.doozez.doozez.R
-import com.doozez.doozez.api.SharedPrefManager
-import com.doozez.doozez.ui.user.adapters.UserInviteeAdapter
-import com.doozez.doozez.utils.SharedPrerfKey
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.transition.MaterialArcMotion
 
-
-class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
+class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView.OnQueryTextListener {
     private var safeId: Int = 0
     private var userId: Int = 0
     private var _binding: FragmentUserSearchBinding? = null
     private val binding get() = _binding!!
     private var ctx: Context? = null
     private val inviteeVM: InviteeListViewModel by navGraphViewModels(R.id.nav_user_search_invitee)
+
+    private var searchView: SearchView? = null
 
     private val userSearchAdapter = UserSearchAdapter(mutableListOf(), this)
     //private val inviteeAdapter = UserInviteeAdapter(mutableListOf(), this)
@@ -78,6 +65,31 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
             safeId = it.getInt(BundleKey.SAFE_ID)
         }
         userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.user_search_menu, menu)
+        val searchItem = menu.findItem(R.id.action_user_search)
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        if(searchItem != null) {
+            searchView = searchItem.actionView as SearchView
+        }
+        searchView?.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        searchView?.setOnQueryTextListener(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_user_search -> {
+                false
+            } else -> {
+                searchView?.setOnQueryTextListener(this)
+                return super.onOptionsItemSelected(item)
+            }
+        }
+
+
     }
 
     @SuppressLint("UnsafeExperimentalUsageError")
@@ -99,46 +111,13 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
     private fun addListeners() {
         binding.inviteesEfab.setOnClickListener {
             hideKeyboard()
-            findNavController().navigate(R.id.action_nav_user_search_to_nav_user_invitee_list)
+            findNavController().navigate(R.id.action_nav_user_search_to_nav_user_invitee_list, bundleOf(
+                BundleKey.SAFE_ID to safeId
+            ))
         }
         inviteeVM.listLiveData.observe(viewLifecycleOwner, Observer {
             setFabDisplayText(it.size)
         })
-
-        binding.userSearchInput.addTextChangedListener(object : TextWatcher {
-            var lastChange: Long = 0
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
-                if (s.length > 3) {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (System.currentTimeMillis() - lastChange >= 300) {
-                            searchAndLoadUsers(s.toString())
-                        }
-                    }, 300)
-                    lastChange = System.currentTimeMillis()
-                }
-            }
-        })
-
-        binding.userSearchInviteeInvite.setOnClickListener {
-            with(inviteeVM.listLiveData.value!!) {
-                if(isNotEmpty()) {
-                    forEach {
-                        sendInvite(it)
-                    }
-                } else {
-                    Snackbar.make(
-                        binding.safeListUseSearchContainer,
-                        "There is no one to invite",
-                        Snackbar.LENGTH_SHORT)
-                        .setAction("Dismiss") {}
-                        .show()
-                }
-            }
-        }
     }
 
     private fun searchAndLoadUsers(query: String) {
@@ -227,5 +206,22 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener {
 
     companion object {
         private const val TAG = "UserSearchFragment"
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        var lastChange: Long = 0
+        if (!newText.isNullOrBlank() && newText.length > 3) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (System.currentTimeMillis() - lastChange >= 300) {
+                    searchAndLoadUsers(newText.toString())
+                }
+            }, 300)
+            lastChange = System.currentTimeMillis()
+        }
+        return true
     }
 }

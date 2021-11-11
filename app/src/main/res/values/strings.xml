@@ -12,8 +12,8 @@
     <string name="menu_payment_methods">Payment Methods</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_safe_create">Create Safe</string>
-    <string name="menu_safe_detail">Safe Information</string>
-    <string name="menu_user_search">Search Users</string>
+    <string name="menu_safe_detail"></string>
+    <string name="menu_user_search"></string>
     <string name="menu_safe_history">Safe History</string>
 
     <string name="action_leave">Leave</string>

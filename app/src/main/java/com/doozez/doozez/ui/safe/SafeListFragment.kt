@@ -56,12 +56,12 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
     }
 
     private fun addListeners() {
-        setFragmentResultListener(ResultKey.SAFE_ADDED) { _, bundle ->
-            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
-            if (resultOk) {
-                //loadSafes()
-            }
-        }
+//        setFragmentResultListener(ResultKey.SAFE_ADDED) { _, bundle ->
+//            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+//            if (resultOk) {
+//                //loadSafes()
+//            }
+//        }
         binding.addSafe.setOnClickListener {
             findNavController().navigate(R.id.action_nav_safe_to_nav_safe_create)
         }

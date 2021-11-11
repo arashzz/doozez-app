@@ -45,7 +45,7 @@ class SafeDetailFragment : Fragment() {
     private val inviteAdapter = SafeDetailInviteListAdapter(mutableListOf())
     private val participantsAdapter = SafeDetailParticipantListAdapter(mutableListOf())
     private var ctx: Context? = null
-    private val TAG = "SafeDetailFragment"
+    private var menu: Menu? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,6 +75,7 @@ class SafeDetailFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        this.menu = menu
         inflater.inflate(R.menu.safe_detail_menu, menu)
     }
 
@@ -84,6 +85,32 @@ class SafeDetailFragment : Fragment() {
                 findNavController().navigate(R.id.action_nav_safe_detail_to_nav_safe_history, bundleOf(
                     BundleKey.SAFE_ID to safeId
                 ))
+                true
+            }
+            R.id.action_safe_cancel -> {
+                AlertDialog.Builder(ctx)
+                    .setTitle("some title")
+                    .setMessage("Are you sure you want to cancel this safe?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        cancelSafe()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
+                true
+            }
+            R.id.action_safe_leave -> {
+                AlertDialog.Builder(ctx)
+                    .setTitle("some title")
+                    .setMessage("Are you sure you want to leave this safe?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        leaveSafe()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
                 true
             } else -> super.onOptionsItemSelected(item)
         }
@@ -97,7 +124,6 @@ class SafeDetailFragment : Fragment() {
                     safe = it.body()
                     updateSafeDetails(it.body())
                     populateList(it.body())
-                    getPaymentMethod()
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -153,10 +179,16 @@ class SafeDetailFragment : Fragment() {
     private fun loadInvites(safeId: Int) {
         val call = ApiClient.invitationService.getInvitationsForSafe(safeId)
         call.enqueue {
-            onResponse = {
-                if (it.isSuccessful && it.body() != null) {
-                    inviteAdapter.addItems(it.body())
+            onResponse = { resp ->
+                if (resp.isSuccessful && resp.body() != null) {
+                    inviteAdapter.addItems(resp.body())
                     inviteAdapter.notifyDataSetChanged()
+                    val isInviteAccepted = resp.body().filter {
+                        it.recipient.id == userId && it.status == InvitationStatus.ACCEPTED.code
+                    }.size == 1
+                    if(isInviteAccepted) {
+                        getPaymentMethod()
+                    }
                 }
             }
             onFailure = {
@@ -237,37 +269,22 @@ class SafeDetailFragment : Fragment() {
                     Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.safeDetailPaymentMethodContainer.setOnClickListener {
+        binding.safeDetailPaymentMethod.setOnClickListener {
             findNavController().navigate(R.id.action_nav_safe_detail_to_nav_payment_method_list)
         }
     }
 
     private fun applyUserRoleRules() {
-        if(!isInitiator && safe!!.status!! == SafeStatus.PENDING_PARTICIPANTS.code) {
-            binding.safeDetailLeave.visibility = View.VISIBLE
-            binding.safeDetailLeave.setOnClickListener {
-                AlertDialog.Builder(ctx)
-                    .setTitle("some title")
-                    .setMessage("Are you sure you want to leave this safe?")
-                    .setPositiveButton("Yes") { dialog, _ ->
-                        leaveSafe()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        dialog.dismiss()
-                    }.show()
-            }
-        } else if(safe!!.status!! == SafeStatus.PENDING_PARTICIPANTS.code) {
+        val menuItemLeave = this.menu!!.findItem(R.id.action_safe_leave)
+        val menuItemCancel = this.menu!!.findItem(R.id.action_safe_cancel)
+
+        binding.safeDetailPaymentMethod.visibility = View.VISIBLE
+        if (!isInitiator && safe!!.status == SafeStatus.PENDING_PARTICIPANTS.code) {
+            menuItemLeave.isVisible = true
+        } else if (safe!!.status == SafeStatus.PENDING_PARTICIPANTS.code) {
             binding.safeDetailStart.visibility = View.VISIBLE
             binding.safeDetailAddInvite.visibility = View.VISIBLE
-            binding.safeDetailCancel.visibility = View.VISIBLE
-            binding.safeDetailCancel.setOnClickListener {
-                Snackbar.make(
-                    binding.safeDetailContainer,
-                    "dummy cancel",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
+            menuItemCancel.isVisible = true
             binding.safeDetailStart.setOnClickListener {
                 AlertDialog.Builder(ctx)
                     .setTitle("some title")
@@ -289,6 +306,7 @@ class SafeDetailFragment : Fragment() {
                 )
             }
         }
+
     }
 
     private fun getPaymentMethod() {
@@ -299,7 +317,7 @@ class SafeDetailFragment : Fragment() {
                     val participation = it.body().find { it.user.id == userId }
                     if (participation != null) {
                         participationId = participation.id
-                        binding.safeDetailLeave.isEnabled = true
+                        //binding.safeDetailLeave.isEnabled = true
                         loadPaymentMethodForParticipant(participation.id)
                     } else {
                         Snackbar.make(
@@ -340,7 +358,7 @@ class SafeDetailFragment : Fragment() {
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
-                        "Failed get to payment method for user",
+                        "Failed to get payment method for user",
                         Snackbar.LENGTH_SHORT).show()
                 }
             }
@@ -348,7 +366,7 @@ class SafeDetailFragment : Fragment() {
                 Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(
                     binding.safeDetailContainer,
-                    "Failed get to participation for user",
+                    "Failed to get payment method for user",
                     Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -405,6 +423,14 @@ class SafeDetailFragment : Fragment() {
         }
     }
 
+    private fun cancelSafe() {
+        Snackbar.make(
+            binding.safeDetailContainer,
+            "dummy cancel",
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
 //    private fun triggerOverlay() {
 //        var visibility = View.GONE
 //        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
@@ -412,4 +438,8 @@ class SafeDetailFragment : Fragment() {
 //        }
 //        binding.overlayLoader.progressView.visibility = visibility
 //    }
+
+    companion object {
+        private const val TAG = "SafeDetailFragment"
+    }
 }

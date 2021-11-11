@@ -18,15 +18,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp">
+        android:weightSum="1.0">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/safe_detail_card"
+        <RelativeLayout
+            android:id="@+id/safe_detail_detail_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="7dp"
-            app:cardCornerRadius="7dp">
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:background="@color/primary_color">
+
+            <TextView
+                android:id="@+id/safe_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Sandogh-Test-1"
+                android:textColor="@color/primary_text_color"
+                android:textAppearance="?attr/textAppearanceHeadline6"/>
+
+            <TextView
+                android:id="@+id/safe_detail_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/safe_detail_name"
+                android:layout_alignStart="@+id/safe_detail_name"
+                android:textColor="@color/primary_text_color"
+                android:text="Sandogh-Test-1"
+                android:textAppearance="?attr/textAppearanceSubtitle2" />
+
+
+            <TextView
+                android:id="@+id/safe_detail_monthly_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text_color"
+                android:text="100"
+                android:textAppearance="?attr/textAppearanceHeadline4" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,51 +61,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/safe_detail_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:gravity="start"
-                        android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                    <TextView
-                        android:id="@+id/safe_detail_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/safe_detail_name"
-                        android:textAppearance="?attr/textAppearanceSubtitle1" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/safe_detail_monthly_payment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="start"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
-
-                    <TextView
-                        android:id="@+id/safe_detail_total_invites"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="end"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
-                </LinearLayout>
                 <RelativeLayout
                     android:id="@+id/safe_detail_payment_method_container"
                     android:layout_width="match_parent"
@@ -92,6 +74,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_margin="8dp"
                         android:layout_centerVertical="true"
+                        android:visibility="invisible"
                         android:contentDescription="Payment Method" />
 
                     <TextView
@@ -101,15 +84,18 @@
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/safe_detail_payment_method_icon"
                         android:enabled="false"
+                        android:visibility="invisible"
                         android:layout_centerVertical="true"/>
                 </RelativeLayout>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/safe_detail_user_list"
             android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             app:layoutManager="LinearLayoutManager"
@@ -124,18 +110,10 @@
         android:orientation="vertical">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/safe_detail_payment_method"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/safe_detail_leave"
-            android:src="@drawable/ic_baseline_close_24"
-            android:visibility="gone"
-            android:layout_marginBottom="12dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/safe_detail_cancel"
-            android:src="@drawable/ic_baseline_close_24"
+            android:src="@drawable/ic_baseline_credit_card_24_white"
             android:visibility="gone"
             android:layout_marginBottom="12dp"/>
 
@@ -143,19 +121,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/safe_detail_start"
-            android:src="@drawable/ic_baseline_check_24"
+            android:src="@drawable/ic_baseline_check_24_white"
             android:visibility="gone"
             android:layout_marginBottom="12dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/safe_detail_add_invite"
-            android:src="@drawable/ic_baseline_person_add_24"
-            android:visibility="gone"
-            android:layout_marginBottom="12dp"/>
-
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/safe_detail_add_invite"
+        android:src="@drawable/ic_baseline_person_add_24"
+        app:layout_anchor="@id/safe_detail_detail_container"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_marginEnd="30dp"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

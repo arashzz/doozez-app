@@ -89,10 +89,14 @@ class UserInviteeListFragment : BottomSheetDialogFragment(), UserInviteeListener
         }
 
         binding.inviteeListInvite.setOnClickListener {
-            with(inviteeVM.listLiveData.value!!) {
-                forEach {
-                    sendInvite(it)
-                }
+            inviteNextInvitee()
+        }
+    }
+
+    private fun inviteNextInvitee() {
+        with(inviteeVM.listLiveData.value!!) {
+            if(size > 0) {
+                sendInvite(get(0))
             }
         }
     }
@@ -106,6 +110,7 @@ class UserInviteeListFragment : BottomSheetDialogFragment(), UserInviteeListener
             onResponse = {
                 if (it.isSuccessful) {
                     removeInvitee(user.id)
+                    inviteNextInvitee()
                 } else {
                     if (it.errorBody() != null) {
                         Log.e(TAG, it.errorBody().string())
