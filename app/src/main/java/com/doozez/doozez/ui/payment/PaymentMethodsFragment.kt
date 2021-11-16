@@ -62,12 +62,12 @@ class PaymentMethodsFragment : Fragment(), PaymentMethodItemListener {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    if(it.body().isNotEmpty()) {
+                    if(it.body().results.isNotEmpty()) {
                         binding.paymentMethodListNoDataText.visibility = View.GONE
                         binding.paymentMethodListNoDataImage.visibility = View.GONE
                         binding.paymentMethodList.visibility = View.VISIBLE
                     }
-                    adapter?.addItems(it.body())
+                    adapter?.addItems(it.body().results)
                 }
             }
             onFailure = {

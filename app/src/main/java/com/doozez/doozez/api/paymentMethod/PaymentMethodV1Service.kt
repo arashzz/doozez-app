@@ -1,5 +1,6 @@
 package com.doozez.doozez.api.paymentMethod
 
+import com.doozez.doozez.api.PaginatedListResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -11,7 +12,7 @@ interface PaymentMethodV1Service {
     fun getPaymentById(@Path("id") id: Int): Call<PaymentMethodDetailResp>
 
     @GET("v1/payment-methods/")
-    fun getPayments(): Call<List<PaymentMethodDetailResp>>
+    fun getPayments(): Call<PaginatedListResponse<PaymentMethodDetailResp>>
 
     @POST("v1/payment-methods/")
     fun createPayment(@Body body: PaymentMethodCreateReq): Call<PaymentMethodDetailResp>

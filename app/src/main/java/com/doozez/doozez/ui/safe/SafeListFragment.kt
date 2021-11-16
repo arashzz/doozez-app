@@ -76,12 +76,12 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    if(it.body().isNotEmpty()) {
+                    if(it.body().results.isNotEmpty()) {
                         binding.safeListNoDataText.visibility = View.GONE
                         binding.safeListNoDataImage.visibility = View.GONE
                         binding.safeListList.visibility = View.VISIBLE
                     }
-                    adapter.addItems(it.body())
+                    adapter.addItems(it.body().results)
                 }
             }
             onFailure = {

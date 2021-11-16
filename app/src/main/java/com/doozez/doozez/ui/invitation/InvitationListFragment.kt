@@ -133,12 +133,12 @@ class InvitationListFragment : Fragment(), OnInviteActionClickListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    if(it.body().isNotEmpty()) {
+                    if(it.body().results.isNotEmpty()) {
                         binding.inviteListNoDataText.visibility = View.GONE
                         binding.inviteListNoDataImage.visibility = View.GONE
                         binding.inviteList.visibility = View.VISIBLE
                     }
-                    adapter?.addItems(it.body().sortedByDescending { sit -> sit.status })
+                    adapter?.addItems(it.body().results.sortedByDescending { sit -> sit.status })
                 }
             }
             onFailure = {

@@ -1,5 +1,6 @@
 package com.doozez.doozez.api.safe
 
+import com.doozez.doozez.api.PaginatedListResponse
 import com.doozez.doozez.api.invitation.InviteActionReq
 import com.doozez.doozez.api.invitation.InviteActionResp
 import com.doozez.doozez.api.job.JobDetailResp
@@ -9,7 +10,7 @@ import retrofit2.http.*
 interface SafeV1Service {
 
     @GET("v1/safes/")
-    fun getSafesForUser(): Call<List<SafeDetailResp>>
+    fun getSafesForUser(): Call<PaginatedListResponse<SafeDetailResp>>
 
     @POST("v1/safes/")
     fun createSafeForUser(@Body body: SafeCreateReq): Call<SafeDetailResp>
