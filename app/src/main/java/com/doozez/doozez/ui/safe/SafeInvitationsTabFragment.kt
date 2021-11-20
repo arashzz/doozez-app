@@ -10,16 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
+import com.doozez.doozez.api.invitation.InviteActionReq
+import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.databinding.FragmentSafeInvitationsBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
+import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
 import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.utils.InvitationAction
 import com.google.android.material.snackbar.Snackbar
 
-class SafeInvitationsTabFragment() : Fragment() {
+class SafeInvitationsTabFragment() : Fragment(), SafeInviteeListener {
     private var safeId: Int = 0
     private var _binding: FragmentSafeInvitationsBinding? = null
     private val binding get() = _binding!!
-    private val adapter = SafeDetailInviteListAdapter(mutableListOf())
+    private val adapter = SafeDetailInviteListAdapter(mutableListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +50,19 @@ class SafeInvitationsTabFragment() : Fragment() {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    adapter.addItems(it.body())
+                    adapter.addItems(it.body().results)
                     adapter.notifyDataSetChanged()
+                } else {
+                    Log.e(TAG, it.message())
+                    Snackbar.make(
+                        binding.safeDetailInviteList,
+                        "Failed to load Invitation list",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
             onFailure = {
-                Log.e("SafeDetailFragment-invitation-list", it?.stackTrace.toString())
+                Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(
                     binding.safeDetailInviteList,
                     "Failed to load Invitation list",
@@ -62,8 +73,39 @@ class SafeInvitationsTabFragment() : Fragment() {
     }
 
     companion object {
+        const val TAG = "SafeDetailFragment-invitation-list"
         fun newInstance(safeId: Int) = SafeInvitationsTabFragment().apply {
             arguments = bundleOf(BundleKey.SAFE_ID to safeId)
+        }
+    }
+
+    override fun inviteeRemoved(invitation: InviteDetailResp) {
+        val body = InviteActionReq(InvitationAction.REMOVE, 0)
+        val call = ApiClient.invitationService.updateInvitationForAction(invitation.id, body)
+        call.enqueue {
+            onResponse = {
+                if(it.isSuccessful) {
+                    with(adapter) {
+                        removeItem(invitation)
+                        notifyDataSetChanged()
+                    }
+                } else {
+                    Log.e(TAG, it.message())
+                    Snackbar.make(
+                        binding.safeDetailInviteList,
+                        "Failed to remove invitee from safe",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            onFailure = {
+                Log.e(TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailInviteList,
+                    "Failed to load Invitation list",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

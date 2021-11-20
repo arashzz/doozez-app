@@ -2,39 +2,32 @@ package com.doozez.doozez.ui.safe
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.TransitionManager
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
+import com.doozez.doozez.api.invitation.InviteActionReq
+import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.api.participation.ParticipationActionReq
 import com.doozez.doozez.api.safe.SafeActionReq
-import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
-import com.doozez.doozez.ui.safe.adapters.SafeDetailPagerAdapter
 import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
+import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
 import com.doozez.doozez.utils.*
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.transition.MaterialArcMotion
-import com.google.android.material.transition.MaterialContainerTransform
 
-class SafeDetailFragment : Fragment() {
+class SafeDetailFragment : Fragment(), SafeInviteeListener {
     private var safeId: Int = 0
     private var safe: SafeDetailResp? = null
     private var userId: Int = 0
@@ -42,7 +35,7 @@ class SafeDetailFragment : Fragment() {
     private var _binding: FragmentSafeDetailBinding? = null
     private val binding get() = _binding!!
     private var isInitiator = false
-    private val inviteAdapter = SafeDetailInviteListAdapter(mutableListOf())
+    private val inviteAdapter = SafeDetailInviteListAdapter(mutableListOf(), this)
     private val participantsAdapter = SafeDetailParticipantListAdapter(mutableListOf())
     private var ctx: Context? = null
     private var menu: Menu? = null
@@ -164,7 +157,13 @@ class SafeDetailFragment : Fragment() {
         with(binding.safeDetailUserList) {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SafeDetailFragment.inviteAdapter
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         }
+//        val covertConfig = Covert.Config(
+//            iconRes = R.drawable.ic_star_border_black_24dp, // The icon to show
+//            iconDefaultColorRes = R.color.black,            // The color of the icon
+//            actionColorRes = R.color.colorPrimary           // The color of the background
+//        )
         loadInvites(safeId)
     }
 
@@ -172,6 +171,7 @@ class SafeDetailFragment : Fragment() {
         with(binding.safeDetailUserList) {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SafeDetailFragment.participantsAdapter
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         }
         loadParticipants(safeId)
     }
@@ -181,9 +181,10 @@ class SafeDetailFragment : Fragment() {
         call.enqueue {
             onResponse = { resp ->
                 if (resp.isSuccessful && resp.body() != null) {
-                    inviteAdapter.addItems(resp.body())
+                    val results = resp.body().results
+                    inviteAdapter.addItems(results)
                     inviteAdapter.notifyDataSetChanged()
-                    val isInviteAccepted = resp.body().filter {
+                    val isInviteAccepted = results.filter {
                         it.recipient.id == userId && it.status == InvitationStatus.ACCEPTED.code
                     }.size == 1
                     if(isInviteAccepted) {
@@ -246,10 +247,10 @@ class SafeDetailFragment : Fragment() {
             val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
             if (resultOk) {
                 val paymentMethodID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
-                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME)
-                if (!paymentMethodName.isNullOrBlank()) {
-                    binding.safeDetailPaymentMethodName.text = paymentMethodName
-                }
+//                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME)
+//                if (!paymentMethodName.isNullOrBlank()) {
+//                    binding.safeDetailPaymentMethodName.text = paymentMethodName
+//                }
                 if(paymentMethodID > 0) {
                     updatePaymentMethod(paymentMethodID)
                 } else {
@@ -318,7 +319,7 @@ class SafeDetailFragment : Fragment() {
                     if (participation != null) {
                         participationId = participation.id
                         //binding.safeDetailLeave.isEnabled = true
-                        loadPaymentMethodForParticipant(participation.id)
+                        //loadPaymentMethodForParticipant(participation.id)
                     } else {
                         Snackbar.make(
                             binding.safeDetailContainer,
@@ -349,34 +350,34 @@ class SafeDetailFragment : Fragment() {
             Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun loadPaymentMethodForParticipant(participationId: Int) {
-        val pCall = ApiClient.participationService.getParticipationByID(participationId)
-        pCall.enqueue {
-            onResponse = {
-                if (it.isSuccessful && it.body() != null) {
-                    populatePaymentMethod(it.body().paymentMethod)
-                } else {
-                    Snackbar.make(
-                        binding.safeDetailContainer,
-                        "Failed to get payment method for user",
-                        Snackbar.LENGTH_SHORT).show()
-                }
-            }
-            onFailure = {
-                Log.e(TAG, it?.stackTrace.toString())
-                Snackbar.make(
-                    binding.safeDetailContainer,
-                    "Failed to get payment method for user",
-                    Snackbar.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun loadPaymentMethodForParticipant(participationId: Int) {
+//        val pCall = ApiClient.participationService.getParticipationByID(participationId)
+//        pCall.enqueue {
+//            onResponse = {
+//                if (it.isSuccessful && it.body() != null) {
+//                    populatePaymentMethod(it.body().paymentMethod)
+//                } else {
+//                    Snackbar.make(
+//                        binding.safeDetailContainer,
+//                        "Failed to get payment method for user",
+//                        Snackbar.LENGTH_SHORT).show()
+//                }
+//            }
+//            onFailure = {
+//                Log.e(TAG, it?.stackTrace.toString())
+//                Snackbar.make(
+//                    binding.safeDetailContainer,
+//                    "Failed to get payment method for user",
+//                    Snackbar.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 
-    private fun populatePaymentMethod(item: PaymentMethodDetailResp) {
-        binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
-        binding.safeDetailPaymentMethodName.isEnabled = true
-        binding.safeDetailPaymentMethodName.text = item.name
-    }
+//    private fun populatePaymentMethod(item: PaymentMethodDetailResp) {
+//        binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
+//        binding.safeDetailPaymentMethodName.isEnabled = true
+//        binding.safeDetailPaymentMethodName.text = item.name
+//    }
 
     private fun leaveSafe() {
         val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
@@ -429,6 +430,49 @@ class SafeDetailFragment : Fragment() {
             "dummy cancel",
             Snackbar.LENGTH_SHORT
         ).show()
+    }
+
+    override fun inviteeRemoved(invitation: InviteDetailResp) {
+        AlertDialog.Builder(ctx)
+            .setTitle("some title")
+            .setMessage("Are you sure you want to remove this invitee?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                removeInvitee(invitation)
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
+    private fun removeInvitee(invitation: InviteDetailResp) {
+        val body = InviteActionReq(InvitationAction.REMOVE, 0)
+        val call = ApiClient.invitationService.updateInvitationForAction(invitation.id, body)
+        call.enqueue {
+            onResponse = {
+                if(it.isSuccessful) {
+                    with(inviteAdapter) {
+                        removeItem(invitation)
+                        notifyDataSetChanged()
+                    }
+                } else {
+                    Log.e(SafeInvitationsTabFragment.TAG, it.message())
+                    Snackbar.make(
+                        binding.safeDetailContainer,
+                        "Failed to remove invitee from safe",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            onFailure = {
+                Log.e(SafeInvitationsTabFragment.TAG, it?.stackTrace.toString())
+                Snackbar.make(
+                    binding.safeDetailContainer,
+                    "Failed to load Invitation list",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
 //    private fun triggerOverlay() {

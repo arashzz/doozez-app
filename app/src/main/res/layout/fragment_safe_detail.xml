@@ -27,67 +27,48 @@
             android:layout_weight="0.3"
             android:background="@color/primary_color">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/safe_detail_monthly_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textAppearance="?attr/textAppearanceHeadline4"
+                    android:textColor="@color/primary_text_color" />
+
+                <ImageView
+                    android:id="@+id/safe_detail_payment_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_attach_money_24" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/safe_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Sandogh-Test-1"
-                android:textColor="@color/primary_text_color"
-                android:textAppearance="?attr/textAppearanceHeadline6"/>
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textColor="@color/primary_text_color" />
 
             <TextView
                 android:id="@+id/safe_detail_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/safe_detail_name"
-                android:layout_alignStart="@+id/safe_detail_name"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:textColor="@color/primary_text_color"
                 android:text="Sandogh-Test-1"
                 android:textAppearance="?attr/textAppearanceSubtitle2" />
-
-
-            <TextView
-                android:id="@+id/safe_detail_monthly_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primary_text_color"
-                android:text="100"
-                android:textAppearance="?attr/textAppearanceHeadline4" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <RelativeLayout
-                    android:id="@+id/safe_detail_payment_method_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/safe_detail_payment_method_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_baseline_credit_card_36"
-                        android:layout_alignParentStart="true"
-                        android:layout_margin="8dp"
-                        android:layout_centerVertical="true"
-                        android:visibility="invisible"
-                        android:contentDescription="Payment Method" />
-
-                    <TextView
-                        android:id="@+id/safe_detail_payment_method_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/safe_detail_payment_method_icon"
-                        android:enabled="false"
-                        android:visibility="invisible"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-            </LinearLayout>
 
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView

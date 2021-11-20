@@ -8,8 +8,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        loadUserIntoDrawer()
+
         NotificationService.registerChannels(this)
         NotificationService.registerDevice()
     }
@@ -87,5 +91,29 @@ class MainActivity : AppCompatActivity() {
             visibility = View.VISIBLE
         }
         binding.appBarMain.contentMain.overlayLoader.progressView.visibility = visibility
+    }
+
+    private fun loadUserIntoDrawer() {
+        val fistName = SharedPrefManager.getString(SharedPrerfKey.FIRST_NAME)
+        val lastName =  SharedPrefManager.getString(SharedPrerfKey.LAST_NAME)
+        val fullName = "$fistName $lastName"
+        val email = SharedPrefManager.getString(SharedPrerfKey.EMAIL)
+        val headerView = binding.navView.getHeaderView(0)
+
+        if(headerView != null) {
+//            ViewCompat.setOnApplyWindowInsetsListener(headerView) { view, insets ->
+//                view.setPadding(0, insets.systemWindowInsetTop, 0, 0)
+//                insets
+//            }
+
+            val tvName = headerView.findViewById<TextView>(R.id.nav_drawer_full_name)
+            val tvEmail = headerView.findViewById<TextView>(R.id.nav_drawer_email)
+            if(tvName != null) {
+                tvName.text = fullName
+            }
+            if(tvEmail != null) {
+                tvEmail.text = email
+            }
+        }
     }
 }

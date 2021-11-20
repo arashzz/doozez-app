@@ -9,7 +9,7 @@ interface InvitationV1Service {
     fun getInvitations(): Call<PaginatedListResponse<InviteDetailResp>>
 
     @GET("v1/invitations/")
-    fun getInvitationsForSafe(@Query("safe") safeId: Int): Call<List<InviteDetailResp>>
+    fun getInvitationsForSafe(@Query("safe") safeId: Int): Call<PaginatedListResponse<InviteDetailResp>>
 
     @POST("v1/invitations/")
     fun createInvitation(@Body body: InviteCreateReq): Call<Void>

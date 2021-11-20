@@ -37,11 +37,23 @@
         android:textAppearance="?attr/textAppearanceBody2"
         android:textColor="@color/mtrl_list_item_tint"/>
 
+
+    <ImageView
+        android:id="@+id/safe_detail_invite_item_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/safe_detail_invite_item_status"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:padding="16dp"/>
+
     <ImageView
         android:id="@+id/safe_detail_invite_item_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:padding="16dp"/>
 
 </RelativeLayout>
