@@ -6,7 +6,7 @@ import com.doozez.doozez.business.domain.models.InvitationFactory
 import com.doozez.doozez.business.domain.models.InvitationReply
 import com.doozez.doozez.business.domain.state.DataState
 import com.doozez.doozez.enums.InvitationAction
-import com.doozez.doozez.framework.presentation.invitationlist.state.invitationListViewState.InvitationListViewState
+import com.doozez.doozez.framework.presentation.invitationlist.state.InvitationListViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

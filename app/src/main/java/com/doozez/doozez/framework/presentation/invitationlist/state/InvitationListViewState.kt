@@ -1,4 +1,4 @@
-package com.doozez.doozez.framework.presentation.invitationlist.state.invitationListViewState
+package com.doozez.doozez.framework.presentation.invitationlist.state
 
 import android.os.Parcelable
 import com.doozez.doozez.business.domain.models.Invitation

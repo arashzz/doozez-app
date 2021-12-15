@@ -5,7 +5,7 @@ import com.doozez.doozez.business.data.network.abstraction.InvitationNetworkData
 import com.doozez.doozez.business.data.util.safeApiCall
 import com.doozez.doozez.business.domain.models.Invitation
 import com.doozez.doozez.business.domain.state.*
-import com.doozez.doozez.framework.presentation.invitationlist.state.invitationListViewState.InvitationListViewState
+import com.doozez.doozez.framework.presentation.invitationlist.state.InvitationListViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

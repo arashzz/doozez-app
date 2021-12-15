@@ -1,6 +1,7 @@
 package com.doozez.doozez.business.domain.state
 
 import android.view.View
+import com.doozez.doozez.utils.TodoCallback
 
 data class StateMessage(val response: Response)
 

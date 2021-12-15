@@ -1,5 +1,8 @@
 package com.doozez.doozez.di
 
+import android.content.SharedPreferences
+import androidx.lifecycle.ViewModelProvider
+import com.doozez.doozez.business.domain.models.InvitationFactory
 import com.google.android.datatransport.runtime.dagger.Module
 import com.google.android.datatransport.runtime.dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,8 +19,8 @@ object InvitationViewModelModule {
     @Provides
     fun provideInvitationViewModelFactory(
         invitationListInteractors: InvitationListInteractors,
-        noteNetworkSyncManager: NoteNetworkSyncManager,
-        noteFactory: NoteFactory,
+        //noteNetworkSyncManager: NoteNetworkSyncManager,
+        invitationFactory: InvitationFactory,
         editor: SharedPreferences.Editor,
         sharedPreferences: SharedPreferences
     ): ViewModelProvider.Factory{
