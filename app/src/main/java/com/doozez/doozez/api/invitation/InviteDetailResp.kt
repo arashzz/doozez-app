@@ -2,7 +2,7 @@ package com.doozez.doozez.api.invitation
 
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.api.user.UserDetailResp
-import com.doozez.doozez.utils.InvitationStatus
+import com.doozez.doozez.enums.InvitationStatus
 import com.google.gson.annotations.SerializedName
 
 class InviteDetailResp (

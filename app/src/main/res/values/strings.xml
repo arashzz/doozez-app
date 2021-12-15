@@ -10,6 +10,7 @@
     <string name="menu_invitation_list">Invitations</string>
     <string name="menu_safe_list">Safes</string>
     <string name="menu_payment_methods">Payment Methods</string>
+    <string name="menu_payments">Payments</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_safe_create">Create Safe</string>
     <string name="menu_safe_detail"></string>
@@ -60,6 +61,7 @@
     <string name="empty_data_payment_method_list">You have no Payment Method</string>
     <string name="empty_data_active_payment_method_list">You have no Active Payment Method</string>
     <string name="empty_data_invite_list">You have no Invitation</string>
+    <string name="empty_data_payment_list">There is no Payment</string>
     <string name="empty_data_invitee_list">You have no Invitee added</string>
 
     <string name="et_search_user_hint">Enter email…</string>

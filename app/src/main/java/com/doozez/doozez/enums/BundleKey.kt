@@ -1,0 +1,18 @@
+package com.doozez.doozez.enums
+
+enum class BundleKey {
+    RESULT_OK,
+    INVITE_ID,
+    PAYMENT_METHOD_ID,
+    PAYMENT_METHOD_NAME,
+    PAYMENT_METHOD_CREATE_MODE,
+    PAYMENT_METHOD_REDIRECT_URL,
+    SAFE_ID,
+    USER_ID,
+    SAFE_OBJECT,
+    EMAIL,
+    PAYMENT_METHOD_TYPE,
+    FAIL_REASON,
+    JOB_ID,
+    IS_INVITE_ACCEPTED
+}

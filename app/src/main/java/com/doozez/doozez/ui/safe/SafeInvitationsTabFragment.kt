@@ -15,8 +15,8 @@ import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.databinding.FragmentSafeInvitationsBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
 import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.InvitationAction
+import com.doozez.doozez.enums.BundleKey
+import com.doozez.doozez.enums.InvitationAction
 import com.google.android.material.snackbar.Snackbar
 
 class SafeInvitationsTabFragment() : Fragment(), SafeInviteeListener {
@@ -28,7 +28,7 @@ class SafeInvitationsTabFragment() : Fragment(), SafeInviteeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
         }
     }
 
@@ -75,12 +75,12 @@ class SafeInvitationsTabFragment() : Fragment(), SafeInviteeListener {
     companion object {
         const val TAG = "SafeDetailFragment-invitation-list"
         fun newInstance(safeId: Int) = SafeInvitationsTabFragment().apply {
-            arguments = bundleOf(BundleKey.SAFE_ID to safeId)
+            arguments = bundleOf(BundleKey.SAFE_ID.name to safeId)
         }
     }
 
     override fun inviteeRemoved(invitation: InviteDetailResp) {
-        val body = InviteActionReq(InvitationAction.REMOVE, 0)
+        val body = InviteActionReq(InvitationAction.REMOVE.name, 0)
         val call = ApiClient.invitationService.updateInvitationForAction(invitation.id, body)
         call.enqueue {
             onResponse = {

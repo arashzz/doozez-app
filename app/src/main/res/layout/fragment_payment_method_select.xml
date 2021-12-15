@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/payment_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.paymentmethod.PaymentMethodSelectFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_centerVertical="true"
+                android:text="@string/header_payment_list"/>
+
+            <ImageView
+                android:id="@+id/payment_list_add"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_baseline_add_24"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/payment_list_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:visibility="gone"
+                android:paddingTop="@dimen/list_item_spacing_half"
+                android:paddingBottom="@dimen/list_item_spacing_half"
+                tools:listitem="@layout/fragment_payment_method_select_item" />
+
+            <ImageView
+                android:id="@+id/payment_list_no_data_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_baseline_format_list_bulleted_24"/>
+
+            <TextView
+                android:id="@+id/payment_list_no_data_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/payment_list_no_data_image"
+                android:layout_centerInParent="true"
+                android:text="@string/empty_data_active_payment_method_list" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/payment_list_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_cancel"
+                android:layout_weight="0.5"
+                style="?attr/borderlessButtonStyle"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/payment_list_proceed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/action_proceed"
+                android:enabled="false"
+                android:layout_weight="0.5"
+                style="?attr/borderlessButtonStyle"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

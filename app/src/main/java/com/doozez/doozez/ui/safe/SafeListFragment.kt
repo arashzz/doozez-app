@@ -1,20 +1,12 @@
 package com.doozez.doozez.ui.safe
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doozez.doozez.R
@@ -24,8 +16,7 @@ import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafesListBinding
 import com.doozez.doozez.ui.safe.adapters.SafeListAdapter
 import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.ResultKey
+import com.doozez.doozez.enums.BundleKey
 import com.google.android.material.snackbar.Snackbar
 
 class SafeListFragment : Fragment(), OnSafeItemClickListener {
@@ -50,8 +41,8 @@ class SafeListFragment : Fragment(), OnSafeItemClickListener {
 
     override fun safeItemClicked(item: SafeDetailResp) {
         findNavController().navigate(R.id.action_nav_safe_to_nav_safe_detail, bundleOf(
-            BundleKey.SAFE_ID to item.id,
-            BundleKey.USER_ID to userId
+            BundleKey.SAFE_ID.name to item.id,
+            BundleKey.USER_ID.name to userId
         ))
     }
 

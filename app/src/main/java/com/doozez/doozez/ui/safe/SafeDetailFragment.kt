@@ -18,9 +18,11 @@ import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.invitation.InviteActionReq
 import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.api.participation.ParticipationActionReq
+import com.doozez.doozez.api.participation.ParticipationResp
 import com.doozez.doozez.api.safe.SafeActionReq
 import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailBinding
+import com.doozez.doozez.enums.*
 import com.doozez.doozez.ui.safe.adapters.SafeDetailInviteListAdapter
 import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
 import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
@@ -28,8 +30,6 @@ import com.doozez.doozez.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class SafeDetailFragment : Fragment(), SafeInviteeListener {
-    private var safeId: Int = 0
-    private var safe: SafeDetailResp? = null
     private var userId: Int = 0
     private var participationId: Int = 0
     private var _binding: FragmentSafeDetailBinding? = null
@@ -50,20 +50,16 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         ctx = null
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
-        }
-        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
+        var safeId = 0
+        arguments?.let {
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
+        }
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID.name)
+        setHasOptionsMenu(true)
         _binding = FragmentSafeDetailBinding.inflate(inflater, container, false)
-        getSafeDetails()
+        getSafeDetails(safeId)
         return binding.root
     }
 
@@ -73,10 +69,14 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var safeId = 0
+        arguments?.let {
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
+        }
         return when (item.itemId) {
             R.id.action_safe_history -> {
                 findNavController().navigate(R.id.action_nav_safe_detail_to_nav_safe_history, bundleOf(
-                    BundleKey.SAFE_ID to safeId
+                    BundleKey.SAFE_ID.name to safeId
                 ))
                 true
             }
@@ -109,14 +109,15 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         }
     }
 
-    private fun getSafeDetails() {
+    private fun getSafeDetails(safeId: Int) {
         val call = ApiClient.safeService.getSafeByIdForUser(safeId)
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    safe = it.body()
-                    updateSafeDetails(it.body())
-                    populateList(it.body())
+                    val safe = it.body()
+                    updateSafeDetails(safe)
+                    initAdapters(safe)
+                    populateList(safe)
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -135,60 +136,39 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         isInitiator = safe.initiator == userId
         binding.safeDetailName.text = safe.name
         binding.safeDetailMonthlyPayment.text = safe.monthlyPayment.toString()
-        binding.safeDetailStatus.text = SafeStatus.getStatusForCode(safe.status).description
+        val status = SafeStatus.fromCode(safe.status)
+        binding.safeDetailStatus.text = status.description
         binding.safeDetailStatus.setOnClickListener {
             findNavController().navigate(R.id.action_nav_safe_to_nav_task_list, bundleOf(
-                BundleKey.SAFE_ID to safeId
+                BundleKey.SAFE_ID.name to safe.id
             ))
         }
         addGeneralListeners()
-        applyUserRoleRules()
+        applyUserRoleRules(safe)
     }
 
     private fun populateList(safe: SafeDetailResp) {
-        if(safe.status == SafeStatus.PENDING_PARTICIPANTS.code) {
-            populateInviteList(safe.id)
-        } else {
-            populateParticipantList(safe.id)
+        val status = SafeStatus.fromCode(safe.status)
+        if(status == SafeStatus.PENDING_PARTICIPANTS) {
+            loadInvites(safe)
         }
+        getParticipationDetails(safe)
     }
 
-    private fun populateInviteList(safeId: Int) {
-        with(binding.safeDetailUserList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@SafeDetailFragment.inviteAdapter
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        }
-//        val covertConfig = Covert.Config(
-//            iconRes = R.drawable.ic_star_border_black_24dp, // The icon to show
-//            iconDefaultColorRes = R.color.black,            // The color of the icon
-//            actionColorRes = R.color.colorPrimary           // The color of the background
-//        )
-        loadInvites(safeId)
-    }
-
-    private fun populateParticipantList(safeId: Int) {
-        with(binding.safeDetailUserList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@SafeDetailFragment.participantsAdapter
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        }
-        loadParticipants(safeId)
-    }
-
-    private fun loadInvites(safeId: Int) {
-        val call = ApiClient.invitationService.getInvitationsForSafe(safeId)
+    private fun loadInvites(safe: SafeDetailResp) {
+        val call = ApiClient.invitationService.getInvitationsForSafe(safe.id)
         call.enqueue {
             onResponse = { resp ->
                 if (resp.isSuccessful && resp.body() != null) {
                     val results = resp.body().results
+                    inviteAdapter.isInitiator = isInitiator
                     inviteAdapter.addItems(results)
                     inviteAdapter.notifyDataSetChanged()
                     val isInviteAccepted = results.filter {
                         it.recipient.id == userId && it.status == InvitationStatus.ACCEPTED.code
                     }.size == 1
                     if(isInviteAccepted) {
-                        getPaymentMethod()
+                        //TODO:do we need this?
                     }
                 }
             }
@@ -203,13 +183,24 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         }
     }
 
-    private fun loadParticipants(safeId: Int) {
-        val call = ApiClient.participationService.getParticipationsForSafe(safeId)
+    private fun getParticipationDetails(safe: SafeDetailResp) {
+        val status = SafeStatus.fromCode(safe.status)
+        val call = ApiClient.participationService.getParticipationsForSafe(safe.id)
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    participantsAdapter.addItems(it.body())
-                    participantsAdapter.notifyDataSetChanged()
+                    val participationList = it.body().sortedBy { p -> p.winSequence }
+                    if(status != SafeStatus.PENDING_PARTICIPANTS) {
+                        participantsAdapter.addItems(participationList)
+                        participantsAdapter.notifyDataSetChanged()
+                    }
+                    val participation = participationList.find { x -> x.user.id == userId }
+                    if (participation != null) {
+                        participationId = participation.id
+                        loadPaymentMethodForParticipant()
+                    } else {
+                        applyNonParticipantRules()
+                    }
                 }
             }
             onFailure = {
@@ -223,36 +214,30 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         }
     }
 
-
-//    private fun populateTabs() {
-//        with(binding.pager) {
-//            adapter = viewPagerAdapter
-//            isUserInputEnabled = false
-//        }
-//
-//        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-//            var tabName = ""
-//            when(position) {
-//                //SafeDetailPagerAdapter.TAB_DETAILS -> tabName = SafeDetailPagerAdapter.TAB_DETAILS_NAME
-//                SafeDetailPagerAdapter.TAB_INVITATIONS -> tabName = SafeDetailPagerAdapter.TAB_INVITATIONS_NAME
-//                SafeDetailPagerAdapter.TAB_PARTICIPANTS -> tabName = SafeDetailPagerAdapter.TAB_PARTICIPANTS_NAME
-//            }
-//            tab.text = tabName
-//        }.attach()
-//    }
-
+    private fun initAdapters(safe: SafeDetailResp) {
+        val status = SafeStatus.fromCode(safe.status)
+        if(status == SafeStatus.PENDING_PARTICIPANTS) {
+            with(binding.safeDetailUserList) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = this@SafeDetailFragment.inviteAdapter
+                addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+            }
+        } else {
+            with(binding.safeDetailUserList) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = this@SafeDetailFragment.participantsAdapter
+                addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+            }
+        }
+    }
 
     private fun addGeneralListeners() {
-        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
-            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED.name) { _, bundle ->
+            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK.name)
             if (resultOk) {
-                val paymentMethodID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
-//                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME)
-//                if (!paymentMethodName.isNullOrBlank()) {
-//                    binding.safeDetailPaymentMethodName.text = paymentMethodName
-//                }
+                val paymentMethodID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID.name)
                 if(paymentMethodID > 0) {
-                    updatePaymentMethod(paymentMethodID)
+                    addPaymentMethodListener(paymentMethodID)
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -260,7 +245,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
                         Snackbar.LENGTH_SHORT).show()
                 }
             } else {
-                var reason = bundle.getString(BundleKey.FAIL_REASON)
+                var reason = bundle.getString(BundleKey.FAIL_REASON.name)
                 if (reason == null) {
                     reason = "unknown error"
                 }
@@ -270,19 +255,32 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
                     Snackbar.LENGTH_SHORT).show()
             }
         }
+
+    }
+
+    private fun addPaymentMethodListener(paymentMethodID: Int) {
         binding.safeDetailPaymentMethod.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_safe_detail_to_nav_payment_method_list)
+            findNavController().navigate(R.id.action_nav_safe_detail_to_nav_payment_method_select, bundleOf(
+                BundleKey.PAYMENT_METHOD_ID.name to paymentMethodID
+            ))
         }
     }
 
-    private fun applyUserRoleRules() {
+    private fun applyNonParticipantRules() {
+        val menuItemLeave = this.menu!!.findItem(R.id.action_safe_leave)
+        menuItemLeave.isVisible = false
+        binding.safeDetailPaymentMethod.visibility = View.GONE
+    }
+
+    private fun applyUserRoleRules(safe: SafeDetailResp) {
+        val status = SafeStatus.fromCode(safe.status)
         val menuItemLeave = this.menu!!.findItem(R.id.action_safe_leave)
         val menuItemCancel = this.menu!!.findItem(R.id.action_safe_cancel)
 
         binding.safeDetailPaymentMethod.visibility = View.VISIBLE
-        if (!isInitiator && safe!!.status == SafeStatus.PENDING_PARTICIPANTS.code) {
+        if (!isInitiator && status == SafeStatus.PENDING_PARTICIPANTS) {
             menuItemLeave.isVisible = true
-        } else if (safe!!.status == SafeStatus.PENDING_PARTICIPANTS.code) {
+        } else if (status == SafeStatus.PENDING_PARTICIPANTS) {
             binding.safeDetailStart.visibility = View.VISIBLE
             binding.safeDetailAddInvite.visibility = View.VISIBLE
             menuItemCancel.isVisible = true
@@ -291,7 +289,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
                     .setTitle("some title")
                     .setMessage("Do you want to start this safe?")
                     .setPositiveButton("Yes") { dialog, _ ->
-                        startSafe()
+                        startSafe(safe)
                         dialog.dismiss()
                     }
                     .setNegativeButton("No") { dialog, _ ->
@@ -302,34 +300,23 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
             binding.safeDetailAddInvite.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_nav_safe_detail_to_nav_user_search, bundleOf(
-                        BundleKey.SAFE_ID to safeId
+                        BundleKey.SAFE_ID.name to safe.id
                     )
                 )
             }
         }
-
     }
 
-    private fun getPaymentMethod() {
-        val call = ApiClient.participationService.getParticipationsForSafe(safeId)
-        call.enqueue {
-            onResponse = { it ->
+    private fun loadPaymentMethodForParticipant() {
+        val pCall = ApiClient.participationService.getParticipationByID(participationId)
+        pCall.enqueue {
+            onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    val participation = it.body().find { it.user.id == userId }
-                    if (participation != null) {
-                        participationId = participation.id
-                        //binding.safeDetailLeave.isEnabled = true
-                        //loadPaymentMethodForParticipant(participation.id)
-                    } else {
-                        Snackbar.make(
-                            binding.safeDetailContainer,
-                            "Failed get to participants for safe",
-                            Snackbar.LENGTH_SHORT).show()
-                    }
+                    addPaymentMethodListener(it.body().paymentMethod.id)
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
-                        "Failed get to participants for safe",
+                        "Failed to get payment method for user",
                         Snackbar.LENGTH_SHORT).show()
                 }
             }
@@ -337,50 +324,15 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
                 Log.e(TAG, it?.stackTrace.toString())
                 Snackbar.make(
                     binding.safeDetailContainer,
-                    "Failed get to participants for safe",
+                    "Failed to get payment method for user",
                     Snackbar.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun updatePaymentMethod(paymentMethodId: Int) {
-        Snackbar.make(
-            binding.safeDetailContainer,
-            "Dummy participant update",
-            Snackbar.LENGTH_SHORT).show()
-    }
-
-//    private fun loadPaymentMethodForParticipant(participationId: Int) {
-//        val pCall = ApiClient.participationService.getParticipationByID(participationId)
-//        pCall.enqueue {
-//            onResponse = {
-//                if (it.isSuccessful && it.body() != null) {
-//                    populatePaymentMethod(it.body().paymentMethod)
-//                } else {
-//                    Snackbar.make(
-//                        binding.safeDetailContainer,
-//                        "Failed to get payment method for user",
-//                        Snackbar.LENGTH_SHORT).show()
-//                }
-//            }
-//            onFailure = {
-//                Log.e(TAG, it?.stackTrace.toString())
-//                Snackbar.make(
-//                    binding.safeDetailContainer,
-//                    "Failed to get payment method for user",
-//                    Snackbar.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-//    private fun populatePaymentMethod(item: PaymentMethodDetailResp) {
-//        binding.safeDetailPaymentMethodContainer.visibility = View.VISIBLE
-//        binding.safeDetailPaymentMethodName.isEnabled = true
-//        binding.safeDetailPaymentMethodName.text = item.name
-//    }
-
     private fun leaveSafe() {
-        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(ParticipationAction.LEAVE))
+        val call = ApiClient.participationService.updateParticipationForAction(participationId, ParticipationActionReq(
+            ParticipationAction.LEAVE.name))
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful) {
@@ -392,9 +344,9 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         }
     }
 
-    private fun startSafe() {
+    private fun startSafe(safe: SafeDetailResp) {
         val body = SafeActionReq(SafeAction.START.name, true)
-        val call = ApiClient.safeService.updateSafeForAction(safeId, body)
+        val call = ApiClient.safeService.updateSafeForAction(safe.id, body)
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
@@ -446,7 +398,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
     }
 
     private fun removeInvitee(invitation: InviteDetailResp) {
-        val body = InviteActionReq(InvitationAction.REMOVE, 0)
+        val body = InviteActionReq(InvitationAction.REMOVE.name, 0)
         val call = ApiClient.invitationService.updateInvitationForAction(invitation.id, body)
         call.enqueue {
             onResponse = {
@@ -474,14 +426,6 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
             }
         }
     }
-
-//    private fun triggerOverlay() {
-//        var visibility = View.GONE
-//        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
-//            visibility = View.VISIBLE
-//        }
-//        binding.overlayLoader.progressView.visibility = visibility
-//    }
 
     companion object {
         private const val TAG = "SafeDetailFragment"

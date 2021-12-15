@@ -5,23 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import androidx.work.OneTimeWorkRequest
 import com.doozez.doozez.R
 import com.doozez.doozez.SplashActivity
-import com.doozez.doozez.api.ApiClient
-import com.doozez.doozez.api.SharedPrefManager
-import com.doozez.doozez.api.device.DeviceCreateReq
-import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.utils.NotificationChannel
-import com.doozez.doozez.utils.SharedPrerfKey
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 
 
 class FirebaseMessagingService : FirebaseMessagingService() {

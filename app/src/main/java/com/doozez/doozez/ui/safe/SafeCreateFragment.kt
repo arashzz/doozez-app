@@ -3,17 +3,16 @@ package com.doozez.doozez.ui.safe
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.safe.SafeCreateReq
-import com.doozez.doozez.api.safe.SafeDetailResp
 import com.doozez.doozez.databinding.FragmentSafeCreateBinding
+import com.doozez.doozez.enums.BundleKey
+import com.doozez.doozez.enums.ResultKey
 import com.doozez.doozez.utils.*
 import com.google.android.material.snackbar.Snackbar
 
@@ -21,7 +20,6 @@ class SafeCreateFragment : Fragment() {
     private var _binding: FragmentSafeCreateBinding? = null
     private val binding get() = _binding!!
     private var paymentID = 0
-    private val TAG = "SafeCreateFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,16 +42,16 @@ class SafeCreateFragment : Fragment() {
     }
 
     private fun addListeners() {
-        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED) { _, bundle ->
-            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK)
+        setFragmentResultListener(ResultKey.PAYMENT_METHOD_SELECTED.name) { _, bundle ->
+            val resultOk = bundle.getBoolean(BundleKey.RESULT_OK.name)
             if (resultOk) {
-                paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID)
-                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME)
+                paymentID = bundle.getInt(BundleKey.PAYMENT_METHOD_ID.name)
+                val paymentMethodName = bundle.getString(BundleKey.PAYMENT_METHOD_NAME.name)
                 if (!paymentMethodName.isNullOrBlank()) {
                     binding.safeCreatePaymentSelect.text = paymentMethodName
                 }
             } else {
-                var reason = bundle.getString(BundleKey.FAIL_REASON)
+                var reason = bundle.getString(BundleKey.FAIL_REASON.name)
                 if (reason == null) {
                     reason = "unknown error"
                 }
@@ -64,7 +62,7 @@ class SafeCreateFragment : Fragment() {
             }
         }
         binding.safeCreatePaymentSelect.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_safe_to_nav_payment_method_list)
+            findNavController().navigate(R.id.action_nav_safe_to_nav_payment_method_select)
         }
         binding.safeCreateCreate.setOnClickListener {
             if (validateInput()) {
@@ -88,7 +86,6 @@ class SafeCreateFragment : Fragment() {
                         "Failed to create Safe",
                         Snackbar.LENGTH_SHORT).show()
                 }
-
             }
             onFailure = {
                 Log.e(TAG, it?.stackTrace.toString())
@@ -120,10 +117,14 @@ class SafeCreateFragment : Fragment() {
             binding.safeCreateMonthlyPayment.error = "This field is required"
             valid = false
         }
-        else if (!Utils.isInteger(payment)) {
+        else if (!Common.isInteger(payment)) {
             binding.safeCreateMonthlyPayment.error = "Only numbers are accepted"
             valid = false
         }
         return valid
+    }
+
+    companion object {
+        private const val TAG = "SafeCreateFragment"
     }
 }

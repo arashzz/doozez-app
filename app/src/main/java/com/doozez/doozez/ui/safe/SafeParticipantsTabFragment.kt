@@ -15,8 +15,8 @@ import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.FragmentTabSafeParticipantsBinding
 import com.doozez.doozez.ui.safe.adapters.SafeDetailParticipantListAdapter
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.SharedPrerfKey
+import com.doozez.doozez.enums.BundleKey
+import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -30,9 +30,9 @@ class SafeParticipantsTabFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
         }
-        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID.name)
     }
 
     override fun onCreateView(
@@ -91,7 +91,7 @@ class SafeParticipantsTabFragment() : Fragment() {
 
     companion object {
         fun newInstance(safeId: Int) = SafeParticipantsTabFragment().apply {
-            arguments = bundleOf(BundleKey.SAFE_ID to safeId)
+            arguments = bundleOf(BundleKey.SAFE_ID.name to safeId)
         }
     }
 }

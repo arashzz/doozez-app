@@ -1,12 +1,11 @@
 package com.doozez.doozez.api
 
 import android.content.Context
-import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.doozez.doozez.MyApplication
 import com.doozez.doozez.api.user.UserDetailResp
-import com.doozez.doozez.utils.SharedPrerfKey
+import com.doozez.doozez.enums.SharedPrerfKey
 
 object SharedPrefManager {
 
@@ -57,10 +56,10 @@ object SharedPrefManager {
 
     fun putUser(user: UserDetailResp) {
         with(sharedPrefs.edit()) {
-            putInt(SharedPrerfKey.USER_ID, user.id)
-            putString(SharedPrerfKey.EMAIL, user.email)
-            putString(SharedPrerfKey.FIRST_NAME, user.firstName)
-            putString(SharedPrerfKey.LAST_NAME, user.lastName)
+            putInt(SharedPrerfKey.USER_ID.name, user.id)
+            putString(SharedPrerfKey.EMAIL.name, user.email)
+            putString(SharedPrerfKey.FIRST_NAME.name, user.firstName)
+            putString(SharedPrerfKey.LAST_NAME.name, user.lastName)
             commit()
         }
     }

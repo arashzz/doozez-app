@@ -1,12 +1,15 @@
 package com.doozez.doozez.ui.safe.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.participation.ParticipationResp
 import com.doozez.doozez.databinding.FragmentSafeDetailParticipantItemBinding
+import com.doozez.doozez.enums.ParticipationStatus
 
 class SafeDetailParticipantListAdapter(
     private val values: MutableList<ParticipationResp>):
@@ -32,18 +35,23 @@ class SafeDetailParticipantListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
 
-        val name = "${item.user?.firstName} ${item.user?.lastName}"
+        val name = "${item.user.firstName} ${item.user.lastName}"
         holder.name.text = name
-        holder.email.text = item.user?.email
+        val sequence = "${item.winSequence}."
+        holder.sequence.text = sequence
+        var status = ParticipationStatus.ACTIVE
+        if(item.id == 2) {
+            status = ParticipationStatus.COMPLETE
+        }
+        if(status == ParticipationStatus.COMPLETE) {
+            holder.winner.visibility = View.VISIBLE
+        }
     }
 
     inner class ViewHolder(binding: FragmentSafeDetailParticipantItemBinding): RecyclerView.ViewHolder(binding.root) {
         val container: RelativeLayout = binding.safeDetailParticipantItemContainer
         val name: TextView = binding.safeDetailParticipantItemName
-        val email: TextView = binding.safeDetailParticipantItemEmail
-
-        override fun toString(): String {
-            return super.toString() + " '"
-        }
+        val sequence: TextView = binding.safeDetailParticipantItemSequence
+        val winner: ImageView = binding.safeDetailParticipantItemWinner
     }
 }

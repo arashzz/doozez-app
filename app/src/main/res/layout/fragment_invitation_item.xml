@@ -54,8 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
+            android:enabled="false"
             android:layout_below="@+id/invite_detail_monthly_payment"
-            android:layout_alignLeft="@+id/invite_detail_monthly_payment"
+            android:layout_alignStart="@+id/invite_detail_monthly_payment"
             android:text="@string/action_invite_accept"
             style="?attr/borderlessButtonStyle"
             />
@@ -64,20 +65,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
+            android:enabled="false"
             android:layout_alignBaseline="@id/invite_detail_accept"
-            android:layout_toRightOf="@+id/invite_detail_accept"
+            android:layout_toEndOf="@+id/invite_detail_accept"
             android:text="@string/action_invite_reject"
-            style="?attr/borderlessButtonStyle"
-            />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/invite_detail_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:visibility="gone"
-            android:layout_alignBaseline="@id/invite_detail_safe"
-            android:layout_toLeftOf="@+id/invite_detail_safe"
-            android:text="@string/action_invite_cancel"
             style="?attr/borderlessButtonStyle"
             />
         <com.google.android.material.button.MaterialButton

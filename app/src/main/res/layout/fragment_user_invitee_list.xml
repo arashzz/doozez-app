@@ -6,7 +6,7 @@
     android:id="@+id/invitee_list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.payment.PaymentMethodListFragment">
+    tools:context=".ui.paymentmethod.PaymentMethodSelectFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

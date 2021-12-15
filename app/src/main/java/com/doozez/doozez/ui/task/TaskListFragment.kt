@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.FragmentTaskListBinding
 import com.doozez.doozez.ui.task.adapters.TaskListAdapter
-import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.enums.BundleKey
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -26,7 +25,7 @@ class TaskListFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         adapter = TaskListAdapter(mutableListOf())
         arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
         }
     }
 

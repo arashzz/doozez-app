@@ -15,7 +15,7 @@
     <!-- PAYMENT METHODS -->
     <fragment
         android:id="@+id/nav_payment_methods"
-        android:name="com.doozez.doozez.ui.payment.PaymentMethodsFragment"
+        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodsFragment"
         android:label="@string/menu_payment_methods"
         tools:layout="@layout/fragment_payment_methods" >
 
@@ -29,10 +29,17 @@
 
     </fragment>
 
+    <!-- PAYMENT METHODS -->
+    <fragment
+        android:id="@+id/nav_payments"
+        android:name="com.doozez.doozez.ui.payment.PaymentListFragment"
+        android:label="@string/menu_payments"
+        tools:layout="@layout/fragment_payment_list"/>
+
     <!-- CREATE PAYMENT METHODS -->
     <dialog
         android:id="@+id/nav_payment_method_create"
-        android:name="com.doozez.doozez.ui.payment.PaymentMethodCreateFragment"
+        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodCreateFragment"
         android:label="@string/menu_payment_methods"
         tools:layout="@layout/fragment_payment_method_create" >
 
@@ -62,8 +69,8 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/action_nav_invitation_to_nav_payment_method_list"
-            app:destination="@id/nav_payment_method_list"/>
+            android:id="@+id/action_nav_invitation_to_nav_payment_method_select"
+            app:destination="@id/nav_payment_method_select"/>
 
     </fragment>
 
@@ -125,8 +132,8 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/action_nav_safe_detail_to_nav_payment_method_list"
-            app:destination="@id/nav_payment_method_list"/>
+            android:id="@+id/action_nav_safe_detail_to_nav_payment_method_select"
+            app:destination="@id/nav_payment_method_select"/>
 
         <action
             android:id="@+id/action_nav_safe_to_nav_task_list"
@@ -149,8 +156,8 @@
         tools:layout="@layout/fragment_safe_create" >
 
         <action
-            android:id="@+id/action_nav_safe_to_nav_payment_method_list"
-            app:destination="@id/nav_payment_method_list"/>
+            android:id="@+id/action_nav_safe_to_nav_payment_method_select"
+            app:destination="@id/nav_payment_method_select"/>
 
     </fragment>
 
@@ -162,12 +169,12 @@
 
     <!-- PAYMENT METHODS LIST -->
     <dialog
-        android:id="@+id/nav_payment_method_list"
-        android:name="com.doozez.doozez.ui.payment.PaymentMethodListFragment"
-        tools:layout="@layout/fragment_payment_method_list">
+        android:id="@+id/nav_payment_method_select"
+        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodSelectFragment"
+        tools:layout="@layout/fragment_payment_method_select">
 
         <action
-            android:id="@+id/action_nav_payment_method_list_to_nav_payment_methods"
+            android:id="@+id/action_nav_payment_method_select_to_nav_payment_methods"
             app:destination="@id/nav_payment_methods"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -179,7 +186,7 @@
     <!-- CREATE PAYMENT METHOD REDIRECT -->
     <fragment
         android:id="@+id/nav_payment_create_redirect"
-        android:name="com.doozez.doozez.ui.payment.PaymentMethodRedirectFragment"
+        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodRedirectFragment"
         tools:layout="@layout/fragment_payment_create_redirect" />
 
 
@@ -192,7 +199,7 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.doozez.doozez.ui.user.ProfileFragment"
-        android:label="@string/action_profile" />
+        android:label="" />
 
 
     <!-- USER SEARCH NAVIGATION -->

@@ -6,8 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.SearchView
@@ -26,9 +24,9 @@ import com.doozez.doozez.api.user.UserDetailResp
 import com.doozez.doozez.databinding.FragmentUserSearchBinding
 import com.doozez.doozez.ui.user.adapters.UserSearchAdapter
 import com.doozez.doozez.ui.user.listeners.OnUserSearchItemClickListener
-import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.enums.BundleKey
 import com.doozez.doozez.utils.ContextExtensions.hideKeyboard
-import com.doozez.doozez.utils.SharedPrerfKey
+import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.snackbar.Snackbar
 
@@ -62,9 +60,9 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
         }
-        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID)
+        userId = SharedPrefManager.getInt(SharedPrerfKey.USER_ID.name)
         setHasOptionsMenu(true)
     }
 
@@ -112,7 +110,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
         binding.inviteesEfab.setOnClickListener {
             hideKeyboard()
             findNavController().navigate(R.id.action_nav_user_search_to_nav_user_invitee_list, bundleOf(
-                BundleKey.SAFE_ID to safeId
+                BundleKey.SAFE_ID.name to safeId
             ))
         }
         inviteeVM.listLiveData.observe(viewLifecycleOwner, Observer {
@@ -204,10 +202,6 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
         binding.inviteesEfab.extend()
     }
 
-    companion object {
-        private const val TAG = "UserSearchFragment"
-    }
-
     override fun onQueryTextSubmit(query: String?): Boolean {
         TODO("Not yet implemented")
     }
@@ -223,5 +217,9 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
             lastChange = System.currentTimeMillis()
         }
         return true
+    }
+
+    companion object {
+        private const val TAG = "UserSearchFragment"
     }
 }

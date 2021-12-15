@@ -7,16 +7,17 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.R
 import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.databinding.FragmentSafeDetailInviteItemBinding
 import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
-import com.doozez.doozez.utils.InvitationStatus
+import com.doozez.doozez.enums.InvitationStatus
 
 class SafeDetailInviteListAdapter(
     private val values: MutableList<InviteDetailResp>,
     private val listener: SafeInviteeListener):
         RecyclerView.Adapter<SafeDetailInviteListAdapter.ViewHolder>() {
+
+    var isInitiator: Boolean = false
 
     fun addItems(items: List<InviteDetailResp>) {
         values.clear()
@@ -47,7 +48,7 @@ class SafeDetailInviteListAdapter(
         holder.email.text = item.recipient?.email
         val status = InvitationStatus.fromCode(item.status)
         holder.status.setImageResource(status.resId)
-        if(status != InvitationStatus.DECLINED && status != InvitationStatus.CANCELLED) {
+        if(isInitiator && status != InvitationStatus.DECLINED && status != InvitationStatus.CANCELLED) {
             holder.remove.visibility = View.VISIBLE
             holder.remove.setOnClickListener {
                 listener.inviteeRemoved(item)

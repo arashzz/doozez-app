@@ -26,7 +26,6 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Dooz.NoActionBar"
             android:windowSoftInputMode="adjustResize"/>
-
         <service
             android:name=".services.FirebaseMessagingService"
             android:exported="false">

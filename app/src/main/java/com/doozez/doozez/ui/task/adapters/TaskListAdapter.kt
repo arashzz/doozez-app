@@ -3,14 +3,12 @@ package com.doozez.doozez.ui.task.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.R
 import com.doozez.doozez.api.job.TaskDetail
 import com.doozez.doozez.databinding.FragmentTaskListItemBinding
-import com.doozez.doozez.utils.TaskStatus
+import com.doozez.doozez.enums.TaskStatus
 
 class TaskListAdapter
     (private val values: MutableList<TaskDetail>)

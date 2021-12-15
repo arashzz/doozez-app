@@ -1,14 +1,10 @@
 package com.doozez.doozez
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
@@ -16,11 +12,9 @@ import com.doozez.doozez.api.auth.LoginCreateReq
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.ActivityLoginBinding
 import com.doozez.doozez.services.NotificationService
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.SharedPrerfKey
-import com.google.android.gms.tasks.OnCompleteListener
+import com.doozez.doozez.enums.BundleKey
+import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val email = intent.getStringExtra(BundleKey.EMAIL)
+        val email = intent.getStringExtra(BundleKey.EMAIL.name)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -96,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.putString(SharedPrerfKey.API_KEY, it.body().apiKey, true)
+                    SharedPrefManager.putString(SharedPrerfKey.API_KEY.name, it.body().apiKey, true)
                     getUserForToken(it.body().apiKey)
                 } else {
                     triggerOverlay()

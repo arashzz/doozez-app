@@ -11,6 +11,9 @@ class ParticipationResp(
     @SerializedName("user_role")
     var userRole: String,
 
+    @SerializedName("status")
+    var status: String,
+
     @SerializedName("user")
     var user: UserDetailResp,
 

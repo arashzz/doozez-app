@@ -7,33 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.R
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.invitation.InviteCreateReq
-import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.api.user.UserDetailResp
-import com.doozez.doozez.databinding.FragmentPaymentMethodListBinding
 import com.doozez.doozez.databinding.FragmentUserInviteeListBinding
-import com.doozez.doozez.ui.payment.adapters.PaymentMethodListAdapter
-import com.doozez.doozez.ui.payment.listeners.PaymentMethodItemListener
 import com.doozez.doozez.ui.user.adapters.UserInviteeAdapter
 import com.doozez.doozez.ui.user.listeners.UserInviteeListener
-import com.doozez.doozez.utils.BundleKey
-import com.doozez.doozez.utils.PaymentMethodStatus
-import com.doozez.doozez.utils.ResultKey
+import com.doozez.doozez.enums.BundleKey
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 
 class UserInviteeListFragment : BottomSheetDialogFragment(), UserInviteeListener {
     private var _binding: FragmentUserInviteeListBinding? = null
@@ -46,7 +33,7 @@ class UserInviteeListFragment : BottomSheetDialogFragment(), UserInviteeListener
         super.onCreate(savedInstanceState)
         adapter = UserInviteeAdapter(mutableListOf(), this)
         arguments?.let {
-            safeId = it.getInt(BundleKey.SAFE_ID)
+            safeId = it.getInt(BundleKey.SAFE_ID.name)
         }
     }
 

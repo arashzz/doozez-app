@@ -1,17 +1,10 @@
 package com.doozez.doozez
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,10 +14,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.databinding.ActivityMainBinding
 import com.doozez.doozez.services.NotificationService
-import com.doozez.doozez.utils.SharedPrerfKey
-import com.google.android.gms.tasks.OnCompleteListener
+import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile
+                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile, R.id.nav_payments
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -94,10 +85,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadUserIntoDrawer() {
-        val fistName = SharedPrefManager.getString(SharedPrerfKey.FIRST_NAME)
-        val lastName =  SharedPrefManager.getString(SharedPrerfKey.LAST_NAME)
+        val fistName = SharedPrefManager.getString(SharedPrerfKey.FIRST_NAME.name)
+        val lastName =  SharedPrefManager.getString(SharedPrerfKey.LAST_NAME.name)
         val fullName = "$fistName $lastName"
-        val email = SharedPrefManager.getString(SharedPrerfKey.EMAIL)
+        val email = SharedPrefManager.getString(SharedPrerfKey.EMAIL.name)
         val headerView = binding.navView.getHeaderView(0)
 
         if(headerView != null) {

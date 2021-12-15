@@ -1,6 +1,6 @@
 package com.doozez.doozez.api.job
 
-import com.doozez.doozez.utils.TaskStatus
+import com.doozez.doozez.enums.TaskStatus
 import com.google.gson.annotations.SerializedName
 
 class TaskDetail (

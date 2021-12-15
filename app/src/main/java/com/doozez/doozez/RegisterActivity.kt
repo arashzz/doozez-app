@@ -12,7 +12,7 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.auth.RegisterCreateReq
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.ActivityRegisterBinding
-import com.doozez.doozez.utils.BundleKey
+import com.doozez.doozez.enums.BundleKey
 import com.google.android.material.snackbar.Snackbar
 
 class RegisterActivity : AppCompatActivity() {
@@ -153,7 +153,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun navigateToLogin(email: String) {
         Intent(this, LoginActivity::class.java).apply {
-            bundleOf(BundleKey.EMAIL to email)
+            bundleOf(BundleKey.EMAIL.name to email)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also { startActivity(it) }

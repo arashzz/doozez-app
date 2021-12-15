@@ -1,6 +1,5 @@
 package com.doozez.doozez
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,7 @@ import android.view.WindowManager
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.enqueue
-import com.doozez.doozez.utils.SharedPrerfKey
+import com.doozez.doozez.enums.SharedPrerfKey
 
 class SplashActivity : AppCompatActivity() {
 
@@ -27,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkStuff() {
-        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY, null, true)
+        val apiKey = SharedPrefManager.getString(SharedPrerfKey.API_KEY.name, null, true)
         val intentLogin = Intent(this, LoginActivity::class.java)
         val intentMain = Intent(this, MainActivity::class.java)
         if(!apiKey.isNullOrBlank()) {
