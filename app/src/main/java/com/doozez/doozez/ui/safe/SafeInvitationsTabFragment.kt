@@ -50,7 +50,7 @@ class SafeInvitationsTabFragment() : Fragment(), SafeInviteeListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    adapter.addItems(it.body().results)
+                    adapter.addItems(it.body()!!.results)
                     adapter.notifyDataSetChanged()
                 } else {
                     Log.e(TAG, it.message())

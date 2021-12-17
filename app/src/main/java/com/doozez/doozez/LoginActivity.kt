@@ -90,8 +90,8 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.putString(SharedPrerfKey.API_KEY.name, it.body().apiKey, true)
-                    getUserForToken(it.body().apiKey)
+                    SharedPrefManager.putString(SharedPrerfKey.API_KEY.name, it.body()!!.apiKey, true)
+                    getUserForToken(it.body()!!.apiKey)
                 } else {
                     triggerOverlay()
                     Snackbar.make(
@@ -118,7 +118,8 @@ class LoginActivity : AppCompatActivity() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.putUser(it.body())
+                    val user = it.body()
+                    SharedPrefManager.putUser(it.body()!!)
                     triggerOverlay()
                     navigateToActivity(MainActivity::class.java)
                 }

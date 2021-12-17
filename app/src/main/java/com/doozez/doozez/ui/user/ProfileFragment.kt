@@ -106,7 +106,7 @@ class ProfileFragment : Fragment() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    loadProfile(it.body())
+                    loadProfile(it.body()!!)
                 }
             }
             onFailure = {

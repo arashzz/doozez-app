@@ -47,8 +47,8 @@ class TaskListFragment : BottomSheetDialogFragment() {
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    if(it.body().isNotEmpty()) {
-                        adapter?.addItems(it.body()[0].tasks)
+                    if(it.body()!!.isNotEmpty()) {
+                        adapter?.addItems(it.body()!![0].tasks)
                     }
 
                 }

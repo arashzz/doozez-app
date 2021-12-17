@@ -34,7 +34,7 @@ class SplashActivity : AppCompatActivity() {
             call.enqueue {
                 onResponse = {
                     if(it.isSuccessful && it.body() != null) {
-                        SharedPrefManager.putUser(it.body())
+                        SharedPrefManager.putUser(it.body()!!)
                         loadActivity(intentMain, false)
                     } else {
                         loadActivity(intentLogin, true)

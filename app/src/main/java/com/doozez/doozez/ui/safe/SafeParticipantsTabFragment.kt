@@ -74,7 +74,7 @@ class SafeParticipantsTabFragment() : Fragment() {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    adapter.addItems(it.body())
+                    adapter.addItems(it.body()!!)
                     adapter.notifyDataSetChanged()
                 }
             }

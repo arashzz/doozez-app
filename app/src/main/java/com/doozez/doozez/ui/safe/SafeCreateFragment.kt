@@ -80,7 +80,7 @@ class SafeCreateFragment : Fragment() {
                 if(it.isSuccessful) {
                     findNavController().popBackStack()
                 } else {
-                    Log.e(TAG, it.errorBody().string())
+                    Log.e(TAG, it.errorBody()!!.string())
                     Snackbar.make(
                         binding.safeCreateContainer,
                         "Failed to create Safe",

@@ -1,27 +1,15 @@
 package com.doozez.doozez.ui.payment.adapters
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.api.payment.PaymentDetailResp
-import com.doozez.doozez.databinding.FragmentInvitationItemBinding
 import com.doozez.doozez.databinding.FragmentPaymentListItemBinding
-import com.doozez.doozez.ui.invitation.listeners.OnInviteActionClickListener
-import com.doozez.doozez.enums.InvitationStatus
 import com.doozez.doozez.enums.PaymentStatus
-import com.doozez.doozez.ui.payment.PaymentListFragment
 import com.doozez.doozez.ui.payment.interfaces.PaymentListener
 import com.doozez.doozez.utils.Common
-import com.google.android.material.button.MaterialButton
-import java.lang.Exception
-import java.time.DateTimeException
-import java.time.format.DateTimeParseException
 import kotlin.math.abs
 
 class PaymentListAdapter(

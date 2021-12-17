@@ -114,7 +114,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    val safe = it.body()
+                    val safe = it.body()!!
                     updateSafeDetails(safe)
                     initAdapters(safe)
                     populateList(safe)
@@ -160,7 +160,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         call.enqueue {
             onResponse = { resp ->
                 if (resp.isSuccessful && resp.body() != null) {
-                    val results = resp.body().results
+                    val results = resp.body()!!.results
                     inviteAdapter.isInitiator = isInitiator
                     inviteAdapter.addItems(results)
                     inviteAdapter.notifyDataSetChanged()
@@ -189,7 +189,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    val participationList = it.body().sortedBy { p -> p.winSequence }
+                    val participationList = it.body()!!.sortedBy { p -> p.winSequence }
                     if(status != SafeStatus.PENDING_PARTICIPANTS) {
                         participantsAdapter.addItems(participationList)
                         participantsAdapter.notifyDataSetChanged()
@@ -312,7 +312,7 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         pCall.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    addPaymentMethodListener(it.body().paymentMethod.id)
+                    addPaymentMethodListener(it.body()!!.paymentMethod.id)
                 } else {
                     Snackbar.make(
                         binding.safeDetailContainer,
@@ -350,8 +350,8 @@ class SafeDetailFragment : Fragment(), SafeInviteeListener {
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    updateSafeDetails(it.body())
-                    populateList(it.body())
+                    updateSafeDetails(it.body()!!)
+                    populateList(it.body()!!)
                     Snackbar.make(
                         binding.safeDetailContainer,
                         "Safe started successfully",

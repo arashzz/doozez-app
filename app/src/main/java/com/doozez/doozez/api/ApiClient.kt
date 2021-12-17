@@ -40,7 +40,7 @@ object ApiClient {
             .build()
     }
 
-    val invitationService :  InvitationV1Service by lazy{
+    val invitationService : InvitationV1Service by lazy{
         retrofit.create(InvitationV1Service::class.java)
     }
 

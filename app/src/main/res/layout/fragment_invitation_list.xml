@@ -6,7 +6,7 @@
     android:id="@+id/invite_list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.invitation.InvitationListFragment">
+    tools:context=".framework.presentation.invitation.InvitationListFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="17dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.invitation.InvitationListFragment"
+        tools:context=".framework.presentation.invitation.InvitationListFragment"
         tools:listitem="@layout/fragment_invitation_item" />
 
         <ImageView

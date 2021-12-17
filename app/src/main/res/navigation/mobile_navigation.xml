@@ -56,7 +56,7 @@
     <!-- INVITATION -->
     <fragment
         android:id="@+id/nav_invitation"
-        android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
+        android:name="com.doozez.doozez.framework.presentation.invitation.InvitationListFragment"
         android:label="@string/menu_invitation_list"
         tools:layout="@layout/fragment_invitation_list" >
 

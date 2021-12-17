@@ -83,13 +83,13 @@ class PaymentMethodCreateFragment : BottomSheetDialogFragment() {
                         findNavController().navigate(
                             R.id.nav_payment_method_create_to_nav_payment_create_redirect,
                             bundleOf(
-                                BundleKey.PAYMENT_METHOD_REDIRECT_URL.name to it.body().redirectURL,
+                                BundleKey.PAYMENT_METHOD_REDIRECT_URL.name to it.body()!!.redirectURL,
                                 BundleKey.PAYMENT_METHOD_TYPE.name to PaymentMethodType.DIRECT_DEBIT,
-                                BundleKey.PAYMENT_METHOD_ID.name to it.body().id
+                                BundleKey.PAYMENT_METHOD_ID.name to it.body()!!.id
                             )
                         )
                     } else {
-                        Log.e("PaymentMethodCreateFragment", it.errorBody().string())
+                        Log.e("PaymentMethodCreateFragment", it.errorBody()!!.string())
                         Snackbar.make(
                             binding.paymentMethodCreateContainer,
                             "Failed to create Payment method",

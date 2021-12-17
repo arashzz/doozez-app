@@ -100,7 +100,7 @@ class UserInviteeListFragment : BottomSheetDialogFragment(), UserInviteeListener
                     inviteNextInvitee()
                 } else {
                     if (it.errorBody() != null) {
-                        Log.e(TAG, it.errorBody().string())
+                        Log.e(TAG, it.errorBody()!!.string())
                     }
                 }
             }

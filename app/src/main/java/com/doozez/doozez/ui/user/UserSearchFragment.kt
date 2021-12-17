@@ -123,7 +123,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
         call.enqueue {
             onResponse = {
                 if (it.isSuccessful && it.body() != null) {
-                    val users = it.body().toMutableList()
+                    val users = it.body()!!.toMutableList()
                     users.find { u -> u.id == userId }.apply {
                         if(this != null) {
                             users.remove(this)
@@ -156,7 +156,7 @@ class UserSearchFragment : Fragment(), OnUserSearchItemClickListener, SearchView
                     removeSelectedUser(user)
                 } else {
                     if (it.errorBody() != null) {
-                        Log.e(TAG, it.errorBody().string())
+                        Log.e(TAG, it.errorBody()!!.string())
                     }
                 }
             }

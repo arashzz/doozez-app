@@ -70,7 +70,7 @@ class PaymentMethodSelectFragment : BottomSheetDialogFragment(), PaymentMethodIt
         call.enqueue {
             onResponse = {
                 if(it.isSuccessful && it.body() != null) {
-                    val eligibleMethods = it.body().results.filter { pd ->
+                    val eligibleMethods = it.body()!!.results.filter { pd ->
                         pd.status == PaymentMethodStatus.EXTERNALLY_ACTIVATED.code
                     }
                     if(eligibleMethods.isNotEmpty()) {

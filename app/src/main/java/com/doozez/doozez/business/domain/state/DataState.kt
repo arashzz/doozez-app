@@ -1,40 +1,8 @@
 package com.doozez.doozez.business.domain.state
 
-data class DataState<T>(
-    var stateMessage: StateMessage? = null,
-    var data: T? = null,
-    var stateEvent: StateEvent? = null
-) {
+sealed class DataState<out R> {
 
-    companion object {
-
-        fun <T> error(
-            response: Response,
-            stateEvent: StateEvent?
-        ): DataState<T> {
-            return DataState(
-                stateMessage = StateMessage(
-                    response
-                ),
-                data = null,
-                stateEvent = stateEvent
-            )
-        }
-
-        fun <T> data(
-            response: Response?,
-            data: T? = null,
-            stateEvent: StateEvent?
-        ): DataState<T> {
-            return DataState(
-                stateMessage = response?.let {
-                    StateMessage(
-                        it
-                    )
-                },
-                data = data,
-                stateEvent = stateEvent
-            )
-        }
-    }
+    data class Success<out T>(val data: T) : DataState<T>()
+    data class Error(val exception: Exception) : DataState<Nothing>()
+    object Loading : DataState<Nothing>()
 }

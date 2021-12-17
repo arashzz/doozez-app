@@ -16,7 +16,11 @@ import com.doozez.doozez.databinding.ActivityMainBinding
 import com.doozez.doozez.services.NotificationService
 import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -43,7 +47,12 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile, R.id.nav_payments
+                R.id.nav_home,
+                R.id.nav_invitation,
+                R.id.nav_safe,
+                R.id.nav_payment_methods,
+                R.id.nav_profile,
+                R.id.nav_payments
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
