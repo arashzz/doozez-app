@@ -36,7 +36,7 @@ android {
         viewBinding true
     }
 }
-
+apply plugin: 'kotlin-android-extensions'
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -76,5 +76,9 @@ dependencies {
 
     implementation 'com.github.thesurix:gesture-recycler:1.15.0'
 
+    // Charts
+    implementation 'com.diogobernardino:williamchart:3.11.0'
 
+    implementation 'com.diogobernardino.williamchart:tooltip-slider:3.11.0'
+    implementation 'com.diogobernardino.williamchart:tooltip-points:3.11.0'
 }
