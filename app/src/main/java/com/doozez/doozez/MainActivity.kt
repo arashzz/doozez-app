@@ -15,6 +15,7 @@ import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.databinding.ActivityMainBinding
 import com.doozez.doozez.services.NotificationService
 import com.doozez.doozez.enums.SharedPrerfKey
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -29,30 +30,40 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
+        val navView: BottomNavigationView = binding.navView
         navView.bringToFront()
-
-        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
-            redirectToLogin()
-            false
-        }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
+        val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile, R.id.nav_payments
-            ), drawerLayout
+                R.id.nav_home, R.id.nav_invitation, R.id.nav_notifications, R.id.nav_profile
+            )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        loadUserIntoDrawer()
-
-        NotificationService.registerChannels(this)
-        NotificationService.registerDevice()
+//        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+//            redirectToLogin()
+//            false
+//        }
+//
+//        val navController = findNavController(R.id.nav_host_fragment_content_main)
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile, R.id.nav_payments
+//            ), drawerLayout
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
+//
+//        loadUserIntoDrawer()
+//
+//        NotificationService.registerChannels(this)
+//        NotificationService.registerDevice()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -76,35 +87,35 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    fun triggerOverlay() {
-        var visibility = View.GONE
-        if (binding.appBarMain.contentMain.overlayLoader.progressView.visibility != View.VISIBLE) {
-            visibility = View.VISIBLE
-        }
-        binding.appBarMain.contentMain.overlayLoader.progressView.visibility = visibility
-    }
+//    fun triggerOverlay() {
+//        var visibility = View.GONE
+//        if (binding.appBarMain.contentMain.overlayLoader.progressView.visibility != View.VISIBLE) {
+//            visibility = View.VISIBLE
+//        }
+//        binding.appBarMain.contentMain.overlayLoader.progressView.visibility = visibility
+//    }
 
-    private fun loadUserIntoDrawer() {
-        val fistName = SharedPrefManager.getString(SharedPrerfKey.FIRST_NAME.name)
-        val lastName =  SharedPrefManager.getString(SharedPrerfKey.LAST_NAME.name)
-        val fullName = "$fistName $lastName"
-        val email = SharedPrefManager.getString(SharedPrerfKey.EMAIL.name)
-        val headerView = binding.navView.getHeaderView(0)
-
-        if(headerView != null) {
-//            ViewCompat.setOnApplyWindowInsetsListener(headerView) { view, insets ->
-//                view.setPadding(0, insets.systemWindowInsetTop, 0, 0)
-//                insets
+//    private fun loadUserIntoDrawer() {
+//        val fistName = SharedPrefManager.getString(SharedPrerfKey.FIRST_NAME.name)
+//        val lastName =  SharedPrefManager.getString(SharedPrerfKey.LAST_NAME.name)
+//        val fullName = "$fistName $lastName"
+//        val email = SharedPrefManager.getString(SharedPrerfKey.EMAIL.name)
+//        val headerView = binding.navView.getHeaderView(0)
+//
+//        if(headerView != null) {
+////            ViewCompat.setOnApplyWindowInsetsListener(headerView) { view, insets ->
+////                view.setPadding(0, insets.systemWindowInsetTop, 0, 0)
+////                insets
+////            }
+//
+//            val tvName = headerView.findViewById<TextView>(R.id.nav_drawer_full_name)
+//            val tvEmail = headerView.findViewById<TextView>(R.id.nav_drawer_email)
+//            if(tvName != null) {
+//                tvName.text = fullName
 //            }
-
-            val tvName = headerView.findViewById<TextView>(R.id.nav_drawer_full_name)
-            val tvEmail = headerView.findViewById<TextView>(R.id.nav_drawer_email)
-            if(tvName != null) {
-                tvName.text = fullName
-            }
-            if(tvEmail != null) {
-                tvEmail.text = email
-            }
-        }
-    }
+//            if(tvEmail != null) {
+//                tvEmail.text = email
+//            }
+//        }
+//    }
 }

@@ -2,15 +2,29 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/mobile_navigation2"
     app:startDestination="@+id/nav_home">
 
     <!-- HOME -->
     <fragment
         android:id="@+id/nav_home"
         android:name="com.doozez.doozez.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
+
+    <!-- PROFILE -->
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.doozez.doozez.ui.user.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <!-- INVITATION LIST -->
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.doozez.doozez.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
 
     <!-- PAYMENT METHODS -->
     <fragment
@@ -206,12 +220,6 @@
         android:name="com.doozez.doozez.ui.setting.SettingsFragment"
         android:label="@string/action_settings" />
 
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.doozez.doozez.ui.user.ProfileFragment"
-        android:label="" />
-
-
     <!-- USER SEARCH NAVIGATION -->
     <navigation android:id="@+id/nav_user_search_invitee"
         app:startDestination="@id/nav_user_search">
@@ -231,6 +239,4 @@
             android:name="com.doozez.doozez.ui.user.UserInviteeListFragment"
             tools:layout="@layout/fragment_user_invitee_list" />
     </navigation>
-
-
 </navigation>

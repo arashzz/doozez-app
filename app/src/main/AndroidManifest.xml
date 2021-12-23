@@ -13,19 +13,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dooz"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".MainActivityTest"
+            android:exported="true"
+            android:label="@string/title_activity_main_test" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Dooz.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
+
         <service
             android:name=".services.FirebaseMessagingService"
             android:exported="false">
