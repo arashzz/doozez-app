@@ -25,9 +25,19 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
 
-<!--    <color name="white">#FFFFFFFF</color>-->
-<!--    <color name="black">#FF000000</color>-->
+    <!--    <color name="white">#FFFFFFFF</color>-->
+    <!--    <color name="black">#FF000000</color>-->
     <color name="yellow">#FFC107</color>
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
+
+    <!-- STATUS -->
+    <color name="status_yellow_background">#ffecb9</color>
+    <color name="status_yellow_text">#b5852c</color>
+    <color name="status_green_background">#a8f5c7</color>
+    <color name="status_green_text">#358b42</color>
+    <color name="status_red_background">#ffebeb</color>
+    <color name="status_red_text">#fc656a</color>
+
+    <color name="doozez_purple">#6e66b4</color>
 </resources>

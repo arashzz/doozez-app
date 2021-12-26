@@ -8,9 +8,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.invitation.InviteDetailResp
-import com.doozez.doozez.databinding.FragmentSafeDetailInviteItemBinding
+import com.doozez.doozez.databinding.FragmentSafeDetailInviteListItemBinding
 import com.doozez.doozez.ui.safe.listeners.SafeInviteeListener
 import com.doozez.doozez.enums.InvitationStatus
+import com.doozez.doozez.ui.view.InvitationStatusCustomView
 
 class SafeDetailInviteListAdapter(
     private val values: MutableList<InviteDetailResp>,
@@ -31,7 +32,7 @@ class SafeDetailInviteListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentSafeDetailInviteItemBinding.inflate(
+            FragmentSafeDetailInviteListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -45,9 +46,8 @@ class SafeDetailInviteListAdapter(
         val item = values[position]
         val name = "${item.recipient.firstName} ${item.recipient.lastName}"
         holder.name.text = name
-        holder.email.text = item.recipient?.email
         val status = InvitationStatus.fromCode(item.status)
-        holder.status.setImageResource(status.resId)
+        holder.status.changeStatus(status)
         if(isInitiator && status != InvitationStatus.DECLINED && status != InvitationStatus.CANCELLED) {
             holder.remove.visibility = View.VISIBLE
             holder.remove.setOnClickListener {
@@ -57,11 +57,10 @@ class SafeDetailInviteListAdapter(
 
     }
 
-    inner class ViewHolder(binding: FragmentSafeDetailInviteItemBinding) :  RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: FragmentSafeDetailInviteListItemBinding) :  RecyclerView.ViewHolder(binding.root) {
         val container: RelativeLayout = binding.safeDetailInviteItemContainer
         val name: TextView = binding.safeDetailInviteItemName
-        val email: TextView = binding.safeDetailInviteItemEmail
-        val status: ImageView = binding.safeDetailInviteItemStatus
+        val status: InvitationStatusCustomView = binding.safeDetailInviteItemStatus
         val remove: ImageView = binding.safeDetailInviteItemRemove
 
         override fun toString(): String {

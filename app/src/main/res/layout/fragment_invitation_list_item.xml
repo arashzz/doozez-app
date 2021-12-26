@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/invite_detail_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="17dp"
+    android:layout_marginVertical="4dp"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="6dp"
+    android:background="@drawable/shape_list_item">
+
+    <TextView
+        android:id="@+id/invite_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    <TextView
+        android:id="@+id/invite_detail_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/invite_detail_name"
+        android:layout_alignStart="@+id/invite_detail_name"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <com.doozez.doozez.ui.view.InvitationStatusCustomView
+        android:id="@+id/invite_detail_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/invite_detail_name"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="@font/opensans_regular"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/invite_detail_monthly_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/invite_detail_action"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invite_detail_accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/invite_detail_monthly_payment"
+        android:layout_alignStart="@+id/invite_detail_monthly_payment"
+        android:text="@string/action_invite_accept"
+        style="?attr/borderlessButtonStyle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invite_detail_decline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignBaseline="@id/invite_detail_accept"
+        android:layout_toEndOf="@+id/invite_detail_accept"
+        android:text="@string/action_invite_reject"
+        style="?attr/borderlessButtonStyle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invite_detail_safe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/invite_detail_accept"
+        android:layout_below="@+id/invite_detail_monthly_payment"
+        android:text="@string/action_invite_safe"
+        style="?attr/borderlessButtonStyle" />
+
+</RelativeLayout>

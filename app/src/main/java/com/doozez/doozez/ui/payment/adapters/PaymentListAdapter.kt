@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.invitation.InviteDetailResp
 import com.doozez.doozez.api.payment.PaymentDetailResp
-import com.doozez.doozez.databinding.FragmentInvitationItemBinding
 import com.doozez.doozez.databinding.FragmentPaymentListItemBinding
 import com.doozez.doozez.ui.invitation.listeners.OnInviteActionClickListener
 import com.doozez.doozez.enums.InvitationStatus

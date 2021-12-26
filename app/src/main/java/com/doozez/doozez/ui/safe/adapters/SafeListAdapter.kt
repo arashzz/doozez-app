@@ -2,13 +2,14 @@ package com.doozez.doozez.ui.safe.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.safe.SafeDetailResp
-import com.doozez.doozez.databinding.FragmentSafeItemBinding
-import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
+import com.doozez.doozez.databinding.FragmentSafeListItemBinding
 import com.doozez.doozez.enums.SafeStatus
+import com.doozez.doozez.ui.safe.listeners.OnSafeItemClickListener
+import com.doozez.doozez.ui.view.SafeStatusCustomView
 
 class SafeListAdapter(
     private val values: MutableList<SafeDetailResp>, onClickListener: OnSafeItemClickListener
@@ -32,7 +33,7 @@ class SafeListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentSafeItemBinding.inflate(
+            FragmentSafeListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -45,22 +46,21 @@ class SafeListAdapter(
         val item = values[position]
         holder.name.text = item.name
         val status = SafeStatus.fromCode(item.status)
-        holder.status.text = status.description
-        holder.cardview.setOnClickListener {
+        holder.status.changeStatus(status)
+        holder.amount.text = item.monthlyPayment.toString()
+        holder.container.setOnClickListener {
             onClickListener.safeItemClicked(item)
         }
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(_binding: FragmentSafeItemBinding) : RecyclerView.ViewHolder(_binding.root) {
-        private val binding: FragmentSafeItemBinding = _binding
-        val cardview: CardView = binding.safeCard
-        val name: TextView = binding.safeItemName
-        val status: TextView = binding.safeItemStatus
-
-        override fun toString(): String {
-            return super.toString() + " '"
-        }
+    inner class ViewHolder(_binding: FragmentSafeListItemBinding) :
+        RecyclerView.ViewHolder(_binding.root) {
+        private val binding: FragmentSafeListItemBinding = _binding
+        val name: TextView = binding.safeListItemName
+        val status: SafeStatusCustomView = binding.safeListItemStatus
+        val container: RelativeLayout = binding.safeListItemContainer
+        val amount: TextView = binding.safeListItemMonthlyPayment
     }
 }

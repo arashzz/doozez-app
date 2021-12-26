@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/secondary_dark_color</item>
         <item name="colorOnSecondary">@color/secondary_text_color</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -20,15 +20,25 @@
     </style>
 
     <style name="Theme.Dooz.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="elevation">0dp</item>
+        <item name="elevation" tools:targetApi="lollipop">0dp</item>
+        <item name="colorControlNormal">@color/doozez_purple</item>
+        <item name="android:textColor">@color/doozez_purple</item>
+        <item name="android:actionMenuTextColor">@color/doozez_purple</item>
+        <item name="actionBarStyle">@style/Theme.Doozez.ActionBar</item>
     </style>
 
     <style name="Theme.Dooz.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="elevation">0dp</item>
+        <item name="elevation" tools:targetApi="lollipop">0dp</item>
+        <item name="colorControlNormal">@color/doozez_purple</item>
+        <item name="android:textColor">@color/doozez_purple</item>
+        <item name="android:actionMenuTextColor">@color/doozez_purple</item>
+        <item name="actionBarStyle">@style/Theme.Doozez.ActionBar</item>
     </style>
 
-    <style name="ThemeOverlay.Dooz.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    <style name="Theme.Doozez.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="background">@android:color/transparent</item>
     </style>
+
 </resources>

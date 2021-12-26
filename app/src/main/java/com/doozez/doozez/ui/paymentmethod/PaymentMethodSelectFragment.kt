@@ -16,7 +16,7 @@ import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
 import com.doozez.doozez.databinding.FragmentPaymentMethodSelectBinding
-import com.doozez.doozez.ui.paymentmethod.adapters.PaymentMethodListAdapter
+import com.doozez.doozez.ui.paymentmethod.adapters.PaymentMethodSelectAdapter
 import com.doozez.doozez.ui.paymentmethod.listeners.PaymentMethodItemListener
 import com.doozez.doozez.enums.BundleKey
 import com.doozez.doozez.enums.PaymentMethodStatus
@@ -27,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 class PaymentMethodSelectFragment : BottomSheetDialogFragment(), PaymentMethodItemListener {
     private var _binding: FragmentPaymentMethodSelectBinding? = null
     private val binding get() = _binding!!
-    private var adapter: PaymentMethodListAdapter? = null
+    private var adapter: PaymentMethodSelectAdapter? = null
     private var inviteId = -1
     private var selectedPaymentMethodId = -1
     private var selectedPaymentMethod: PaymentMethodDetailResp? = null
@@ -38,7 +38,7 @@ class PaymentMethodSelectFragment : BottomSheetDialogFragment(), PaymentMethodIt
             inviteId = it.getInt(BundleKey.INVITE_ID.name, -1)
             selectedPaymentMethodId = it.getInt(BundleKey.PAYMENT_METHOD_ID.name, -1)
         }
-        adapter = PaymentMethodListAdapter(mutableListOf(), this, selectedPaymentMethodId)
+        adapter = PaymentMethodSelectAdapter(mutableListOf(), this, selectedPaymentMethodId)
     }
 
     override fun onCreateView(

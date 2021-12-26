@@ -5,4 +5,14 @@
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 
+    <style name="Widget.Doozez.Button.Login" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">@color/doozez_purple</item>
+    </style>
+
+    <style name="Widget.Doozez.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="colorOnSurface">@color/doozez_purple</item>
+        <item name="colorSecondary">#ee91ae</item>
+    </style>
+
 </resources>

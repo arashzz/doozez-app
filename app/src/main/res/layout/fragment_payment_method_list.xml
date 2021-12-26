@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/payment_methods_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.paymentmethod.PaymentMethodsFragment">
+    tools:context=".ui.paymentmethod.PaymentMethodListFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,15 +20,15 @@
             android:layout_alignParentStart="true"
             android:visibility="gone"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".ui.paymentmethod.PaymentMethodsFragment"
-            tools:listitem="@layout/fragment_payment_methods" />
+            tools:context=".ui.paymentmethod.PaymentMethodListFragment"
+            tools:listitem="@layout/fragment_payment_method_list_item" />
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/payment_method_list_no_data_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_baseline_format_list_bulleted_24"/>
+            android:src="@drawable/ic_baseline_format_list_bulleted_24" />
 
         <TextView
             android:id="@+id/payment_method_list_no_data_text"
@@ -47,6 +46,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/doozez_purple"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

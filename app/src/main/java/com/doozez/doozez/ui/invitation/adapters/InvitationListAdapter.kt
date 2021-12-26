@@ -2,14 +2,16 @@ package com.doozez.doozez.ui.invitation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.invitation.InviteDetailResp
-import com.doozez.doozez.databinding.FragmentInvitationItemBinding
+import com.doozez.doozez.databinding.FragmentInvitationListItemBinding
 import com.doozez.doozez.ui.invitation.listeners.OnInviteActionClickListener
 import com.doozez.doozez.enums.InvitationStatus
+import com.doozez.doozez.ui.view.InvitationStatusCustomView
 import com.google.android.material.button.MaterialButton
 
 class InvitationListAdapter(
@@ -38,7 +40,7 @@ class InvitationListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InvitationViewHolder {
 
         return InvitationViewHolder(
-            FragmentInvitationItemBinding.inflate(
+            FragmentInvitationListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -55,16 +57,15 @@ class InvitationListAdapter(
         addListeners(holder, item)
         if (userId == item.recipient.id) {
             if(status == InvitationStatus.PENDING) {
-                holder.acceptBtn.isEnabled = true
-                holder.declineBtn.isEnabled = true
+                holder.acceptBtn.visibility = View.VISIBLE
+                holder.declineBtn.visibility = View.VISIBLE
             }
             actionMsg = "Invited by ${item.sender.firstName} ${item.sender.lastName}"
         } else if (userId == item.sender.id){
             actionMsg = "Invitation sent to ${item.recipient.firstName} ${item.recipient.lastName}"
         }
         holder.actionMessage.text = actionMsg
-        holder.status.text = status.description
-        holder.status.setTextColor(ContextCompat.getColor(ctx, status.colorId))
+        holder.status.changeStatus(status)
     }
 
     override fun getItemCount(): Int = values.size
@@ -84,7 +85,7 @@ class InvitationListAdapter(
         }
     }
 
-    inner class InvitationViewHolder(binding: FragmentInvitationItemBinding) :
+    inner class InvitationViewHolder(binding: FragmentInvitationListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         val name: TextView = binding.inviteDetailName
@@ -94,6 +95,6 @@ class InvitationListAdapter(
         val declineBtn : MaterialButton = binding.inviteDetailDecline
 //        val cancelBtn : MaterialButton = binding.inviteDetailCancel
         val safeBtn : MaterialButton = binding.inviteDetailSafe
-        val status : TextView = binding.inviteDetailStatus
+        val status : InvitationStatusCustomView = binding.inviteDetailStatus
     }
 }

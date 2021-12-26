@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/safe_detail_invite_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,48 +12,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_round_account_circle_36"
-        android:padding="16dp"/>
+        android:padding="16dp" />
 
     <TextView
         android:id="@+id/safe_detail_invite_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_centerVertical="true"
         android:layout_toEndOf="@id/safe_detail_invite_item_avatar"
-        android:paddingTop="16dp"
-        android:paddingEnd="16dp"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceSubtitle1"
-        android:textColor="@color/mtrl_list_item_tint"/>
-
-    <TextView
-        android:id="@+id/safe_detail_invite_item_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/safe_detail_invite_item_name"
-        android:layout_gravity="center_vertical"
-        android:layout_toEndOf="@id/safe_detail_invite_item_avatar"
-        android:paddingEnd="16dp"
-        android:maxLines="2"
-        android:textAppearance="?attr/textAppearanceBody2"
-        android:textColor="@color/mtrl_list_item_tint"/>
-
+        android:textColor="@color/black"
+        android:fontFamily="@font/opensans_regular"
+        tools:text="@tools:sample/cities" />
 
     <ImageView
         android:id="@+id/safe_detail_invite_item_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/safe_detail_invite_item_status"
         android:layout_centerVertical="true"
         android:visibility="gone"
         android:src="@drawable/ic_baseline_delete_24"
-        android:padding="16dp"/>
+        android:padding="16dp" />
 
-    <ImageView
+    <com.doozez.doozez.ui.view.InvitationStatusCustomView
         android:id="@+id/safe_detail_invite_item_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:padding="16dp"/>
+        android:layout_marginEnd="15dp"
+        android:fontFamily="@font/opensans_regular"
+        tools:text="@tools:sample/lorem" />
 
 </RelativeLayout>

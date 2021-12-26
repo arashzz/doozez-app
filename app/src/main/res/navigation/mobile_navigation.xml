@@ -12,15 +12,15 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
-    <!-- PAYMENT METHODS -->
+    <!-- PAYMENT METHOD LIST -->
     <fragment
-        android:id="@+id/nav_payment_methods"
-        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodsFragment"
+        android:id="@+id/nav_payment_method_list"
+        android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodListFragment"
         android:label="@string/menu_payment_methods"
-        tools:layout="@layout/fragment_payment_methods" >
+        tools:layout="@layout/fragment_payment_method_list">
 
         <action
-            android:id="@+id/nav_payment_methods_to_nav_payment_create"
+            android:id="@+id/nav_payment_method_list_to_nav_payment_create"
             app:destination="@id/nav_payment_method_create"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -34,14 +34,14 @@
         android:id="@+id/nav_payments"
         android:name="com.doozez.doozez.ui.payment.PaymentListFragment"
         android:label="@string/menu_payments"
-        tools:layout="@layout/fragment_payment_list"/>
+        tools:layout="@layout/fragment_payment_list" />
 
     <!-- CREATE PAYMENT METHODS -->
     <dialog
         android:id="@+id/nav_payment_method_create"
         android:name="com.doozez.doozez.ui.paymentmethod.PaymentMethodCreateFragment"
         android:label="@string/menu_payment_methods"
-        tools:layout="@layout/fragment_payment_method_create" >
+        tools:layout="@layout/fragment_payment_method_create">
 
         <action
             android:id="@+id/nav_payment_method_create_to_nav_payment_create_redirect"
@@ -58,7 +58,7 @@
         android:id="@+id/nav_invitation"
         android:name="com.doozez.doozez.ui.invitation.InvitationListFragment"
         android:label="@string/menu_invitation_list"
-        tools:layout="@layout/fragment_invitation_list" >
+        tools:layout="@layout/fragment_invitation_list">
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_safe_detail"
@@ -66,11 +66,11 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_invitation_to_nav_payment_method_select"
-            app:destination="@id/nav_payment_method_select"/>
+            app:destination="@id/nav_payment_method_select" />
 
     </fragment>
 
@@ -79,7 +79,7 @@
         android:id="@+id/nav_safe"
         android:name="com.doozez.doozez.ui.safe.SafeListFragment"
         android:label="@string/menu_safe_list"
-        tools:layout="@layout/fragment_safes_list" >
+        tools:layout="@layout/fragment_safes_list">
 
         <action
             android:id="@+id/action_nav_safe_to_nav_safe_create"
@@ -87,7 +87,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_safe_to_nav_safe_detail"
@@ -95,7 +95,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <!-- SAFE DETAIL -->
@@ -103,7 +103,7 @@
         android:id="@+id/nav_safe_detail"
         android:name="com.doozez.doozez.ui.safe.SafeDetailFragment"
         android:label="@string/menu_safe_detail"
-        tools:layout="@layout/fragment_safe_detail" >
+        tools:layout="@layout/fragment_safe_detail">
 
         <action
             android:id="@+id/action_nav_safe_detail_to_nav_home"
@@ -113,7 +113,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_safe_detail_to_nav_user_search"
@@ -121,7 +121,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_safe_detail_to_nav_safe_history"
@@ -129,15 +129,15 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_nav_safe_detail_to_nav_payment_method_select"
-            app:destination="@id/nav_payment_method_select"/>
+            app:destination="@id/nav_payment_method_select" />
 
         <action
             android:id="@+id/action_nav_safe_to_nav_task_list"
-            app:destination="@id/nav_task_list"/>
+            app:destination="@id/nav_task_list" />
 
     </fragment>
 
@@ -153,11 +153,11 @@
         android:id="@+id/nav_safe_create"
         android:name="com.doozez.doozez.ui.safe.SafeCreateFragment"
         android:label="@string/menu_safe_create"
-        tools:layout="@layout/fragment_safe_create" >
+        tools:layout="@layout/fragment_safe_create">
 
         <action
             android:id="@+id/action_nav_safe_to_nav_payment_method_select"
-            app:destination="@id/nav_payment_method_select"/>
+            app:destination="@id/nav_payment_method_select" />
 
     </fragment>
 
@@ -175,11 +175,11 @@
 
         <action
             android:id="@+id/action_nav_payment_method_select_to_nav_payment_methods"
-            app:destination="@id/nav_payment_methods"
+            app:destination="@id/nav_payment_method_list"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
     </dialog>
 
@@ -203,7 +203,8 @@
 
 
     <!-- USER SEARCH NAVIGATION -->
-    <navigation android:id="@+id/nav_user_search_invitee"
+    <navigation
+        android:id="@+id/nav_user_search_invitee"
         app:startDestination="@id/nav_user_search">
         <fragment
             android:id="@+id/nav_user_search"

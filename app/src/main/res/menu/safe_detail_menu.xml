@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_safe_history"
         android:icon="@drawable/ic_baseline_history_24"
         android:title="@string/action_safe_detail_history"
-        app:showAsAction="collapseActionView"/>
+
+        app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_safe_cancel"
         android:icon="@drawable/ic_baseline_close_24"
         android:title="@string/action_cancel"
         android:visible="false"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_safe_leave"
         android:icon="@drawable/ic_baseline_exit_to_app_24_white"
         android:title="@string/action_leave"
         android:visible="false"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="collapseActionView" />
 </menu>

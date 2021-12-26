@@ -18,7 +18,7 @@
             android:icon="@drawable/ic_baseline_attach_money_24"
             android:title="@string/menu_safe_list" />
         <item
-            android:id="@+id/nav_payment_methods"
+            android:id="@+id/nav_payment_method_list"
             android:icon="@drawable/ic_menu_payment_24"
             android:title="@string/menu_payment_methods" />
         <item

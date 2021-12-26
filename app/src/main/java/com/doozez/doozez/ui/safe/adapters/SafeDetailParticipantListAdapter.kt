@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doozez.doozez.api.participation.ParticipationResp
-import com.doozez.doozez.databinding.FragmentSafeDetailParticipantItemBinding
+import com.doozez.doozez.databinding.FragmentSafeDetailParticipantListItemBinding
 import com.doozez.doozez.enums.ParticipationStatus
 
 class SafeDetailParticipantListAdapter(
@@ -22,7 +22,7 @@ class SafeDetailParticipantListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentSafeDetailParticipantItemBinding.inflate(
+            FragmentSafeDetailParticipantListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -48,7 +48,7 @@ class SafeDetailParticipantListAdapter(
         }
     }
 
-    inner class ViewHolder(binding: FragmentSafeDetailParticipantItemBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: FragmentSafeDetailParticipantListItemBinding): RecyclerView.ViewHolder(binding.root) {
         val container: RelativeLayout = binding.safeDetailParticipantItemContainer
         val name: TextView = binding.safeDetailParticipantItemName
         val sequence: TextView = binding.safeDetailParticipantItemSequence

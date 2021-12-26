@@ -2,35 +2,48 @@ package com.doozez.doozez.ui.paymentmethod.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.RadioButton
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.doozez.doozez.R
 import com.doozez.doozez.api.paymentMethod.PaymentMethodDetailResp
-import com.doozez.doozez.databinding.FragmentPaymentMethodSelectItemBinding
+import com.doozez.doozez.databinding.FragmentPaymentMethodListItemBinding
 import com.doozez.doozez.ui.paymentmethod.listeners.PaymentMethodItemListener
+import com.doozez.doozez.enums.PaymentMethodStatus
 import com.doozez.doozez.enums.PaymentMethodType
+import com.doozez.doozez.ui.view.PaymentMethodStatusCustomView
 
 class PaymentMethodListAdapter
-    (private val values: MutableList<PaymentMethodDetailResp>,
-     private val listener: PaymentMethodItemListener,
-     private val selectedId: Int)
-    : RecyclerView.Adapter<PaymentMethodListAdapter.ViewHolder>() {
+(
+    private val values: MutableList<PaymentMethodDetailResp>,
+    private val listener: PaymentMethodItemListener
+) : RecyclerView.Adapter<PaymentMethodListAdapter.ViewHolder>() {
 
-    private var selectedItemId = -1
+    private var selectedItem: PaymentMethodDetailResp? = null
+
+    fun getSelectedItem(): PaymentMethodDetailResp? {
+        return selectedItem
+    }
 
     fun addItems(items: List<PaymentMethodDetailResp>) {
         with(values) {
             clear()
             addAll(items)
+            notifyDataSetChanged()
         }
-        notifyDataSetChanged()
+    }
+
+    fun addItem(item: PaymentMethodDetailResp) {
+        values.add(item)
+        notifyItemChanged(values.size-1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentMethodListAdapter.ViewHolder {
-        selectedItemId = selectedId
+
         return ViewHolder(
-            FragmentPaymentMethodSelectItemBinding.inflate(
+            FragmentPaymentMethodListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -38,27 +51,21 @@ class PaymentMethodListAdapter
         )
     }
 
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.name.text = item.name
-        holder.type.text = PaymentMethodType.DIRECT_DEBIT.name
-        holder.selected.isChecked = (item.id == selectedItemId)
-        holder.selected.setOnClickListener {
-            selectedItemId = item.id
-            listener.paymentMethodClicked(item)
-            notifyDataSetChanged()
-        }
+        val type = PaymentMethodType.fromCode("DIRECT_DEBIT")
+        holder.type.text = type.displayName
+        val status = PaymentMethodStatus.fromCode(item.status)
+        holder.status.changeStatus(status)
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(_binding: FragmentPaymentMethodSelectItemBinding) : RecyclerView.ViewHolder(_binding.root) {
-        private val binding: FragmentPaymentMethodSelectItemBinding = _binding
-        val container: RelativeLayout = binding.paymentListItemContainer
-        val name: TextView = binding.paymentMethodListItemName
-        val type: TextView = binding.paymentMethodListItemType
-        val selected: RadioButton = binding.paymentListItemSelected
+    inner class ViewHolder(binding: FragmentPaymentMethodListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        val container: RelativeLayout = binding.paymentMethodsItemContainer
+        val name: TextView = binding.paymentMethodsItemName
+        val type: TextView = binding.paymentMethodsItemType
+        val status: PaymentMethodStatusCustomView = binding.paymentMethodsItemStatus
     }
 }

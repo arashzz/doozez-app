@@ -13,7 +13,7 @@
         android:src="@drawable/ic_baseline_credit_card_36"
         android:layout_alignParentStart="true"
         android:layout_margin="8dp"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/payment_method_list_item_name"

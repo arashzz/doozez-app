@@ -91,7 +91,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.registerLogin.setOnClickListener {
-            navigateToLogin("")
+            navigateToLogin()
         }
     }
 
@@ -106,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
                         .setTitle("Thank you ${body.firstName}")
                         .setMessage("Awesome! You will receive an activation email shortly!")
                         .setOnDismissListener {
-                            navigateToLogin(body.email)
+                            navigateToLogin()
                         }
                         .setPositiveButton("Login") { dialog, _ ->
                             dialog.dismiss()
@@ -151,9 +151,8 @@ class RegisterActivity : AppCompatActivity() {
         binding.overlayLoader.progressView.visibility = visibility
     }
 
-    private fun navigateToLogin(email: String) {
+    private fun navigateToLogin() {
         Intent(this, LoginActivity::class.java).apply {
-            bundleOf(BundleKey.EMAIL.name to email)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also { startActivity(it) }
@@ -171,6 +170,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.registerFirstname.error == null &&
                 binding.registerLastname.error == null &&
                 binding.registerPassword.error == null &&
-                binding.registerPasswordConfirm.error == null
+                binding.registerPasswordConfirm.error == null &&
+                binding.registerTerms.isChecked
     }
 }

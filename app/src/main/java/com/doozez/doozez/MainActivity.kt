@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -16,6 +17,12 @@ import com.doozez.doozez.databinding.ActivityMainBinding
 import com.doozez.doozez.services.NotificationService
 import com.doozez.doozez.enums.SharedPrerfKey
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.app_bar_main.*
+import android.view.WindowManager
+
+import android.os.Build
+import android.view.Window
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +31,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val w: Window = window
+        w.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -43,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_methods, R.id.nav_profile, R.id.nav_payments
+                R.id.nav_home, R.id.nav_invitation, R.id.nav_safe, R.id.nav_payment_method_list, R.id.nav_profile, R.id.nav_payments
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
