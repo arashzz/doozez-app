@@ -37,7 +37,7 @@ class UserSearchAdapter(
         val item = values[position]
         val fullName = "${item.firstName} ${item.lastName}"
         holder.name.text =  fullName
-        holder.email.text = item.email
+//        holder.email.text = item.email
         holder.addInvite.setOnClickListener {
             listener.userItemClicked(item)
         }
@@ -46,7 +46,7 @@ class UserSearchAdapter(
 
     inner class UserViewHolder(binding: FragmentUserSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val name: TextView = binding.userSearchItemName
-        val email: TextView = binding.userSearchItemEmail
+//        val email: TextView = binding.userSearchItemEmail
         val addInvite: MaterialButton = binding.userSearchItemAdd
 
         override fun toString(): String {

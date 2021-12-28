@@ -16,9 +16,8 @@
 
     <TextView
         android:id="@+id/safe_detail_invite_item_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/safe_detail_invite_item_avatar"
         android:maxLines="1"
