@@ -1,11 +1,18 @@
 package com.doozez.doozez
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.doozez.doozez.api.ApiClient
 import com.doozez.doozez.api.SharedPrefManager
 import com.doozez.doozez.api.auth.LoginCreateReq
@@ -13,67 +20,52 @@ import com.doozez.doozez.api.enqueue
 import com.doozez.doozez.databinding.ActivityLoginBinding
 import com.doozez.doozez.services.NotificationService
 import com.doozez.doozez.enums.BundleKey
+import com.doozez.doozez.enums.NavigationDirection
 import com.doozez.doozez.enums.SharedPrerfKey
+import com.doozez.doozez.utils.setupSnackbar
+import com.doozez.doozez.viewmodels.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
+    private val viewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val email = intent.getStringExtra(BundleKey.EMAIL.name)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        binding.viewmodel = viewModel
 
-        if (!email.isNullOrEmpty()) {
-            binding.loginEmail.editText?.setText(email)
-        }
         registerFCM()
-        addListeners()
+        setupSnackbar()
+        setupSubscriptions()
     }
 
-    private fun addListeners() {
-        binding.loginLogin.setOnClickListener {
-            if (validateForm()) {
-                login(LoginCreateReq(
-                    binding.loginEmail.editText?.text.toString(),
-                    binding.loginPassword.editText?.text.toString()
-                ))
-            } else {
-                Snackbar.make(
-                    binding.loginContainer,
-                    "Incorrect credentials",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+    private fun setupSubscriptions() {
+        viewModel.emailError.observe(this, EventObserver {
+            binding.loginEmail.error = getString(it)
+        })
+        viewModel.passwordError.observe(this, EventObserver {
+            binding.loginPassword.error = getString(it)
+        })
+        viewModel.navigateTo.observe(this, EventObserver {
+            when(it) {
+                NavigationDirection.ACTIVITY_MAIN -> navigateToActivity(MainActivity::class.java)
+                NavigationDirection.ACTIVITY_REGISTER -> navigateToActivity(RegisterActivity::class.java)
             }
-        }
-        binding.loginEmail.editText?.doOnTextChanged { inputText, _, _, _ ->
-            if (inputText.isNullOrEmpty()) {
-                binding.loginEmail.error = getString(R.string.error_validation_empty_email)
+        })
+        viewModel.isLoading.observe(this, Observer {
+            if(it) {
+                binding.overlayLoader.progressView.visibility = View.VISIBLE
             } else {
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(inputText).matches()) {
-                    binding.loginEmail.error = getString(R.string.error_validation_invalid_email)
-                } else {
-                    binding.loginEmail.error = null
-                }
+                binding.overlayLoader.progressView.visibility = View.GONE
             }
-        }
-        binding.loginPassword.editText?.doOnTextChanged { inputText, _, _, _ ->
-            if (inputText.isNullOrEmpty()) {
-                binding.loginPassword.error = getString(R.string.error_validation_empty_password)
-            } else {
-                binding.loginPassword.error = null
-            }
-        }
-        binding.loginRegister.setOnClickListener {
-            navigateToActivity(RegisterActivity::class.java)
-        }
+        })
     }
 
-    private fun validateForm(): Boolean {
-        return binding.loginEmail.error == null &&
-                binding.loginPassword.error == null
+    private fun setupSnackbar() {
+        binding.loginContainer.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
     }
 
     private fun <T> navigateToActivity(cls: Class<T>) {
@@ -82,64 +74,6 @@ class LoginActivity : AppCompatActivity() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also { startActivity(it) }
         finish()
-    }
-
-    private fun login(body: LoginCreateReq) {
-        val call = ApiClient.authService.login(body)
-        triggerOverlay()
-        call.enqueue {
-            onResponse = {
-                if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.putString(SharedPrerfKey.API_KEY.name, it.body().apiKey, true)
-                    getUserForToken(it.body().apiKey)
-                } else {
-                    triggerOverlay()
-                    Snackbar.make(
-                        binding.loginContainer,
-                        "Login failed. Invalid Credentials",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            onFailure = {
-                triggerOverlay()
-                Log.e("LoginActivity", it?.stackTrace.toString())
-                Snackbar.make(
-                    binding.loginContainer,
-                    "failed to login",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun getUserForToken(apiToken: String) {
-        val call = ApiClient.authService.validateToken()
-        call.enqueue {
-            onResponse = {
-                if(it.isSuccessful && it.body() != null) {
-                    SharedPrefManager.putUser(it.body())
-                    triggerOverlay()
-                    navigateToActivity(MainActivity::class.java)
-                }
-            }
-            onFailure = {
-                triggerOverlay()
-                Log.e("loginContainer", it?.stackTrace.toString())
-                Snackbar.make(
-                    binding.loginContainer,
-                    "Unknown Error",
-                    Snackbar.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun triggerOverlay() {
-        var visibility = View.GONE
-        if (binding.overlayLoader.progressView.visibility != View.VISIBLE) {
-            visibility = View.VISIBLE
-        }
-        binding.overlayLoader.progressView.visibility = visibility
     }
 
     private fun registerFCM() {

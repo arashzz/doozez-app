@@ -23,4 +23,6 @@ object Common {
         val dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
         return LocalDateTime.parse(dateStr, dtf)
     }
+
+    fun isEmail(str: String) = android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
 }

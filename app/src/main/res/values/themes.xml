@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Dooz" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimary">@color/doozez_purple</item>
         <item name="colorPrimaryVariant">@color/primary_dark_color</item>
         <item name="colorOnPrimary">@color/primary_text_color</item>
         <!-- Secondary brand color. -->
@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/Theme.Dooz.TextView.Style</item>
+        <item name="android:editTextStyle">@style/Theme.Dooz.EditText.Style</item>
     </style>
 
     <style name="Theme.Dooz.NoActionBar">
@@ -24,7 +26,7 @@
         <item name="colorControlNormal">@color/doozez_purple</item>
         <item name="android:textColor">@color/doozez_purple</item>
         <item name="android:actionMenuTextColor">@color/doozez_purple</item>
-        <item name="actionBarStyle">@style/Theme.Doozez.ActionBar</item>
+        <item name="actionBarStyle">@style/Theme.Dooz.ActionBar</item>
     </style>
 
     <style name="Theme.Dooz.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
@@ -32,13 +34,21 @@
         <item name="colorControlNormal">@color/doozez_purple</item>
         <item name="android:textColor">@color/doozez_purple</item>
         <item name="android:actionMenuTextColor">@color/doozez_purple</item>
-        <item name="actionBarStyle">@style/Theme.Doozez.ActionBar</item>
+        <item name="actionBarStyle">@style/Theme.Dooz.ActionBar</item>
     </style>
 
-    <style name="Theme.Doozez.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="Theme.Dooz.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Dooz.TextView.Style" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/opensans_regular</item>
+    </style>
+
+    <style name="Theme.Dooz.EditText.Style" parent="android:Widget.EditText">
+        <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
 </resources>

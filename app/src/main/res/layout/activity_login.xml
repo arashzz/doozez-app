@@ -1,122 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/login_container"
-    android:fitsSystemWindows="true"
-    tools:context=".LoginActivity">
-
-    <include
-        android:id="@+id/overlay_loader"
-        layout="@layout/overlay_loader"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewmodel"
+            type="com.doozez.doozez.viewmodels.LoginViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/login_container"
+        android:fitsSystemWindows="true"
+        tools:context=".LoginActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <include
+            android:id="@+id/overlay_loader"
+            layout="@layout/overlay_loader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingHorizontal="20dp">
+            android:layout_height="match_parent" />
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="80dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_wb_cloudy_24" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Welcome back"
-                android:textSize="24dp"
-                android:layout_marginBottom="30dp"
-                android:layout_gravity="center"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/login_email"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_email"
-                app:hintTextColor="#C8C8C8"
-                app:errorEnabled="true"
-                android:layout_marginVertical="10dp"
-                app:endIconMode="clear_text"
-                app:startIconDrawable="@drawable/ic_baseline_email_24"
-                app:boxStrokeColor="@color/doozez_textinputlayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingHorizontal="20dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_wb_cloudy_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome back"
+                    android:textSize="24dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_gravity="center"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:hint="@string/hint_email"
+                    app:hintTextColor="#C8C8C8"
+                    app:errorEnabled="true"
+                    android:layout_marginVertical="10dp"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_baseline_email_24"
+                    app:boxStrokeColor="@color/doozez_textinputlayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:text="@={viewmodel.email}"
+                        android:maxLines="1" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_password"
-                app:hintTextColor="#C8C8C8"
-                app:errorEnabled="true"
-                android:layout_marginVertical="10dp"
-                app:endIconMode="password_toggle"
-                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                app:boxStrokeColor="@color/doozez_textinputlayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:hint="@string/hint_password"
+                    app:hintTextColor="#C8C8C8"
+                    app:errorEnabled="true"
+                    android:layout_marginVertical="10dp"
+                    app:endIconMode="password_toggle"
+                    app:startIconDrawable="@drawable/ic_baseline_lock_24"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:text="@={viewmodel.password}"
+                        android:maxLines="1" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/login_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/action_login"
-                android:background="@drawable/shape_login_btn"
-                android:theme="@style/Widget.Doozez.Button.Login" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/login_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_login"
+                    android:onClick="@{() -> viewmodel.login()}"
+                    android:background="@drawable/shape_login_btn"
+                    android:theme="@style/Widget.Doozez.Button.Login" />
+
+                <TextView
+                    android:id="@+id/forgot_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password_question"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/doozez_purple"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/opensans_regular" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/forgot_password"
+                android:id="@+id/login_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password_question"
+                android:text="@string/new_user_question"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/doozez_purple"
                 android:textSize="16sp"
+                android:onClick="@{() -> viewmodel.register()}"
+                android:layout_marginBottom="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:fontFamily="@font/opensans_regular" />
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/login_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/new_user_question"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/doozez_purple"
-            android:textSize="16sp"
-            android:layout_marginBottom="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/opensans_regular" />
-
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

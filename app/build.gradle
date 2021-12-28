@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -33,6 +34,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
+        dataBinding true
         viewBinding true
     }
 }
@@ -81,4 +83,5 @@ dependencies {
 
     implementation 'com.diogobernardino.williamchart:tooltip-slider:3.11.0'
     implementation 'com.diogobernardino.williamchart:tooltip-points:3.11.0'
+
 }
